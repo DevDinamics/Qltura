@@ -1,0 +1,7 @@
+{
+  "name": "Q-ltura",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
