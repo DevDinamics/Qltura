@@ -1,10 +1,24 @@
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, AlertController, IonModal, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+// ⚡ IMPORTACIONES STANDALONE INDIVIDUALES DE IONIC (Resuelve el error de producción)
+import { 
+  IonContent, 
+  IonHeader, 
+  IonToolbar, 
+  IonTitle, 
+  IonButtons, 
+  IonButton, 
+  IonModal, 
+  IonToggle, 
+  IonIcon,
+  AlertController 
+} from '@ionic/angular/standalone';
+
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { ThemeService } from '../../services/theme';
 import { AuthService } from '../../services/auth.service';
@@ -46,8 +60,17 @@ export interface MenuGroup {
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
-    NavbarComponent
+    NavbarComponent,
+    // ⚡ LISTA DE COMPONENTES DE IONIC REGISTRADOS DIRECTAMENTE
+    IonContent,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
+    IonModal,
+    IonToggle,
+    IonIcon
   ]
 })
 export class MasPage implements OnInit, OnDestroy {
@@ -166,13 +189,15 @@ export class MasPage implements OnInit, OnDestroy {
     }
   }
 
+  // ⚡ Método seguro de cambio de tema compatible con eventos nativos e Ionic CustomEvent
   onThemeToggleChange(event: any) {
-    const isChecked = event.detail.checked;
+    const isChecked = event?.detail?.checked ?? event?.target?.checked ?? false;
     this.themeService.setDarkMode(isChecked);
+    this.cdr.markForCheck();
   }
 
   async toggleDesktopNotifications(event: any) {
-    const isChecked = event.detail.checked;
+    const isChecked = event?.detail?.checked ?? event?.target?.checked ?? false;
 
     if (isChecked) {
       if (!('Notification' in window)) {
