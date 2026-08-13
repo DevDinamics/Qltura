@@ -362,3 +362,84 @@ ion-router-outlet > .ion-page {
       }
     }
   }
+
+
+
+  /* =======================================================
+   ESTILOS GLOBALES PARA ALERTAS ION-ALERT (MODO OSCURO)
+   ======================================================= */
+body.dark {
+  /* Alerta nativa en modo oscuro estilo iOS Glass */
+  ion-alert.sc-ion-alert-ios,
+  ion-alert {
+    --background: #242526 !important;
+    --color: #f8fafc !important;
+
+    /* Fondo de la tarjeta de alerta */
+    .alert-wrapper {
+      background: #242526 !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+      border-radius: 20px !important;
+    }
+
+    /* Título principal (ej. "Cerrar sesión" / "Módulo en desarrollo") */
+    .alert-title {
+      color: #f8fafc !important;
+      font-weight: 800 !important;
+    }
+
+    /* Subtítulo */
+    .alert-sub-title {
+      color: #ff5500 !important; // Naranja llamativo en lugar de blanco invisible
+      font-weight: 700 !important;
+    }
+
+    /* Mensaje descriptivo */
+    .alert-message {
+      color: #b0b3b8 !important; // Gris claro para lectura óptima
+      font-size: 0.875rem !important;
+    }
+
+    /* Líneas divisorias de los botones */
+    .alert-button-group {
+      border-top-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Botones de acción */
+    .alert-button {
+      color: #3b82f6 !important; // Azul brillante por defecto para legibilidad
+      border-right-color: rgba(255, 255, 255, 0.1) !important;
+
+      /* Botón de Cancelar o secundario */
+      &.alert-button-role-cancel {
+        color: #94a3b8 !important;
+      }
+
+      /* Botón Destructivo (Cerrar sesión) */
+      &.alert-button-role-destructive {
+        color: #ef4444 !important; // Rojo vivo
+        font-weight: 800 !important;
+      }
+    }
+  }
+
+  /* Modales nativos (<ion-modal>) */
+  ion-modal {
+    --background: #18191a !important;
+
+    ion-header ion-toolbar {
+      --background: #242526 !important;
+      --color: #f8fafc !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    ion-title {
+      color: #f8fafc !important;
+    }
+
+    ion-button {
+      --color: #ff5500 !important;
+    }
+  }
+}
