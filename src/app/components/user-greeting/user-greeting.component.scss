@@ -1,0 +1,160 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.greeting-wrapper {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0.75rem 0.25rem 0.5rem 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  /* 1. Badge Pill para la fecha */
+  .greeting-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.725rem;
+    font-weight: 800;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+    transition: all 0.25s ease;
+  }
+
+  /* 2. Título de Saludo con Nombre Resaltado */
+  .greeting-title {
+    font-size: clamp(1.85rem, 3.8vw, 2.5rem);
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.4rem 0;
+    transition: color 0.25s ease;
+
+    .user-name {
+      display: inline-block;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  /* 3. Frase Motivacional en Chip Sutil */
+  .greeting-quote {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-sub, #475569);
+    background: var(--bg-surface, #f8fafc);
+    border: 1px solid var(--border-subtle, #f1f5f9);
+    padding: 0.4rem 0.85rem;
+    border-radius: 12px;
+    margin: 0;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.25s ease;
+  }
+
+  /* =======================================================
+     TEMAS DE EMPRESA DINÁMICOS
+     ======================================================= */
+  
+  /* --- VARIANTE QUALTOP (NARANJA WARM) --- */
+  &.qualtop {
+    .greeting-date {
+      color: #ff5500;
+      background: rgba(255, 85, 0, 0.08);
+      border: 1px solid rgba(255, 85, 0, 0.18);
+    }
+
+    .greeting-title .user-name {
+      background: linear-gradient(135deg, #ff5500 0%, #ff7700 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  /* --- VARIANTE SYE (AZUL / MORADO TECH) --- */
+  &.sye {
+    .greeting-date {
+      color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.18);
+    }
+
+    .greeting-title .user-name {
+      background: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 640px) {
+  .greeting-wrapper {
+    padding: 0.25rem;
+
+    .greeting-title {
+      font-size: 1.65rem;
+    }
+
+    .greeting-quote {
+      font-size: 0.825rem;
+      padding: 0.35rem 0.65rem;
+    }
+  }
+}
+
+/* =======================================================
+   SOPORTE MODO OSCURO (PALETA META DARK)
+   ======================================================= */
+:host-context(body.dark) {
+  .greeting-wrapper {
+    
+    .greeting-title {
+      color: #f8fafc;
+    }
+
+    .greeting-quote {
+      background: #242526;
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #b0b3b8;
+    }
+
+    /* Qualtop Dark */
+    &.qualtop {
+      .greeting-date {
+        color: #ff6b00;
+        background: rgba(255, 85, 0, 0.15);
+        border-color: rgba(255, 85, 0, 0.25);
+      }
+      .greeting-title .user-name {
+        background: linear-gradient(135deg, #ff5500 0%, #ff8800 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    /* SYE Dark */
+    &.sye {
+      .greeting-date {
+        color: #60a5fa;
+        background: rgba(37, 99, 235, 0.18);
+        border-color: rgba(37, 99, 235, 0.3);
+      }
+      .greeting-title .user-name {
+        background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+}

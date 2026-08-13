@@ -1,0 +1,20 @@
+<section 
+  class="greeting-wrapper" 
+  [ngClass]="company ? company.toLowerCase() : 'qualtop'">
+  
+  <!-- Pill de Fecha Dinámica -->
+  <span class="greeting-date">
+    {{ formattedDate }}
+  </span>
+
+  <!-- Saludo Principal con Nombre Resaltado -->
+  <h1 class="greeting-title">
+    {{ greetingPrefix }}, <span class="user-name">{{ userName }}</span>
+  </h1>
+
+  <!-- Chip Motivacional -->
+  <p class="greeting-quote">
+     {{ motivationalQuote }}
+  </p>
+
+</section>

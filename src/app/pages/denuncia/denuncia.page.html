@@ -1,0 +1,100 @@
+<ion-content [fullscreen]="true">
+  <!-- 1. Navbar integrado dentro de ion-content para respetar el scroll de Ionic -->
+  <app-navbar></app-navbar>
+
+  <!-- 2. Solo el contenedor principal se anima de izquierda a derecha -->
+  <main class="denuncia-container animate-content-left">
+    
+    <!-- Hero Principal -->
+    <section class="hero-denuncia-card">
+      <div class="hero-content">
+        
+        <div class="hero-badge">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>Tu voz cuenta</span>
+        </div>
+
+        <h1 class="hero-title">
+          Denuncia segura <br />
+          <span class="accent-text">y 100% confidencial</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Canal ético independiente para la prevención y reporte de actos de Antisoborno, cumplimiento NOM 035, Salud Laboral y Código de Conducta.
+        </p>
+
+        <div class="hero-actions">
+          <button type="button" class="btn-primary-cta" (click)="openDenunciaModal('qualtop')">
+            <span>Hacer una denuncia</span>
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Pilares de Privacidad -->
+    <section class="garantias-grid">
+      <div class="garantia-card">
+        <div class="garantia-icon">
+          <ion-icon name="eye-off-outline"></ion-icon>
+        </div>
+        <div>
+          <h3>100% Confidencial y Anónimo</h3>
+          <p>No rastreamos dirección IP ni datos personales salvo que decidas proporcionarlos.</p>
+        </div>
+      </div>
+
+      <div class="garantia-card">
+        <div class="garantia-icon">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+        </div>
+        <div>
+          <h3>Protección al Denunciante</h3>
+          <p>Cero tolerancia a represalias contra colaboradores que ejerzan su voz de buena fe.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL CON IFRAME ENCAPSULADO ESTILO MAC / SAFARI APP -->
+  <ion-modal [isOpen]="showModal" (didDismiss)="closeModal()" class="iframe-modal">
+    <ng-template>
+      <div class="modal-wrapper">
+        
+        <!-- Header del Modal -->
+        <div class="modal-header">
+          <div class="window-controls">
+            <span class="dot close" (click)="closeModal()"></span>
+            <span class="dot minimize"></span>
+            <span class="dot expand"></span>
+          </div>
+
+          <div class="secure-badge">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <span>Formulario Seguro Cifrado (SSL 256-bit)</span>
+          </div>
+
+          <button type="button" class="close-btn" (click)="closeModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+
+        <!-- Cuerpo del Modal con iFrame Integrado -->
+        <div class="iframe-container" *ngIf="iframeUrl">
+          <iframe 
+            [src]="iframeUrl" 
+            title="Línea de Denuncia"
+            frameborder="0"
+            scrolling="yes"
+            loading="lazy">
+          </iframe>
+        </div>
+
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <app-footer></app-footer>
+</ion-content>

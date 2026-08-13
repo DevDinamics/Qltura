@@ -1,3 +1,7 @@
+
+
+
+
 #container {
   text-align: center;
 
@@ -25,3 +29,19 @@
 #container a {
   text-decoration: none;
 }
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Espaciado limpio entre el hero slider y el feed */
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1rem 1rem 5rem 1rem;
+}
+
+ion-content {
+  --padding-bottom: 50px; /* O usa calc(60px + env(safe-area-inset-bottom)) para iOS */
+}
+
+
+

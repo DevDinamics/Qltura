@@ -1,0 +1,208 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.footer-wrapper {
+  width: 100%;
+  max-width: 1240px;
+  margin: 1.5rem auto 0 auto;
+  /* 1. CLAVE: Padding inferior que compensa la tab bar móvil en cualquier pantalla */
+  padding: 0 1rem calc(5rem + env(safe-area-inset-bottom)) 1rem;
+}
+
+/* --- TARJETA PRINCIPAL DEL FOOTER --- */
+.footer-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 20px;
+  padding: 1.75rem 2.5rem;
+  box-shadow: 
+    0 10px 30px -5px rgba(0, 0, 0, 0.03),
+    0 0 1px rgba(0, 0, 0, 0.04);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* --- DIVISORES VERTICALES --- */
+.divider {
+  width: 1px;
+  height: 52px;
+  background-color: var(--border-subtle, #f1f5f9);
+  flex-shrink: 0;
+  transition: background-color 0.25s ease;
+}
+
+/* --- COLUMNAS --- */
+.footer-col {
+  display: flex;
+  flex-direction: column;
+
+  .col-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-main, #0f172a);
+    margin-bottom: 0.6rem;
+    transition: color 0.25s ease;
+  }
+}
+
+/* Columna 1: Brand */
+.brand-col {
+  flex-direction: row;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1.1;
+
+  .brand-logo {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+    filter: none;
+    transition: filter 0.25s ease;
+  }
+
+  .brand-slogan {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-sub, #475569);
+    line-height: 1.35;
+    margin: 0;
+    transition: color 0.25s ease;
+  }
+}
+
+/* Columna 2: Redes Sociales */
+.social-col {
+  flex: 1;
+  align-items: flex-start;
+
+  .social-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    .social-link {
+      color: var(--text-main, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: transform 0.2s ease, color 0.2s ease;
+
+      ion-icon {
+        font-size: 1.45rem;
+      }
+
+      &:hover {
+        color: #ff5500;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+  }
+}
+
+/* Columna 3: Contacto */
+.contact-col {
+  flex: 1;
+
+  .contact-link {
+    font-size: 0.85rem;
+    color: var(--text-sub, #475569);
+    text-decoration: none;
+    line-height: 1.5;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #ff5500;
+    }
+  }
+}
+
+/* --- RESPONSIVE MOBILE & TABLET --- */
+@media (min-width: 769px) {
+  /* En escritorio no se necesita espacio para tab bar */
+  .footer-wrapper {
+    padding-bottom: 2rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .footer-card {
+    padding: 1.5rem 1.75rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .footer-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem 1.25rem;
+    gap: 1.25rem;
+    border-radius: 20px;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .brand-col, 
+  .social-col, 
+  .contact-col {
+    width: 100%;
+  }
+}
+
+/* =======================================================
+   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
+   ======================================================= */
+:host-context(body.dark) {
+  .footer-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .divider {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .footer-col .col-title {
+    color: #f8fafc !important;
+  }
+
+  .brand-col {
+    .brand-logo {
+      filter: none !important;
+    }
+
+    .brand-slogan {
+      color: #b0b3b8 !important;
+    }
+  }
+
+  .social-col .social-icons .social-link {
+    color: #f8fafc !important;
+
+    &:hover {
+      color: #ff5500 !important;
+    }
+  }
+
+  .contact-col .contact-link {
+    color: #b0b3b8 !important;
+
+    &:hover {
+      color: #ff5500 !important;
+    }
+  }
+}

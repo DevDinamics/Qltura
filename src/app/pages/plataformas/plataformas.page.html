@@ -1,0 +1,99 @@
+<ion-content [fullscreen]="true">
+  <!-- 1. Navbar adentro para mantener fija la estructura superior -->
+  <app-navbar></app-navbar>
+
+  <!-- 2. Transición horizontal aplicada únicamente al contenedor de plataformas -->
+  <main class="plataformas-container animate-content-left">
+    
+    <!-- Hero / Header -->
+    <header class="page-header">
+      <div class="header-text">
+        <span class="page-tag">
+          <ion-icon name="sparkles-outline"></ion-icon> ECOSISTEMA DIGITAL
+        </span>
+        <h1 class="page-title">Ecosistema & Accesos Rápidos</h1>
+        <p class="page-subtitle">Accede en un solo toque a las herramientas y aplicaciones de trabajo diario.</p>
+      </div>
+
+      <!-- Buscador Minimalista -->
+      <div class="search-box">
+        <ion-icon name="search-outline"></ion-icon>
+        <input 
+          type="text" 
+          placeholder="Buscar aplicación o plataforma..." 
+          [(ngModel)]="searchTerm" />
+      </div>
+    </header>
+
+    <!-- Filtro de Categorías / Chips estilo Apple -->
+    <section class="filters-section">
+      <div class="chips-wrapper">
+        <button 
+          *ngFor="let cat of categories" 
+          type="button" 
+          class="chip-btn" 
+          [class.active]="selectedCategory === cat"
+          (click)="filterByCategory(cat)">
+          {{ cat }}
+        </button>
+      </div>
+    </section>
+
+    <!-- Grid de Apps estilo Bento iOS -->
+    <section class="apps-grid">
+      
+      <!-- Estado Vacío -->
+      <div *ngIf="filteredPlataformas.length === 0" class="empty-state">
+        <p>No se encontraron herramientas con ese nombre.</p>
+      </div>
+
+      <!-- Tarjeta App Launcher -->
+      <article 
+        *ngFor="let item of filteredPlataformas" 
+        class="app-card"
+        (click)="openPlatform(item)">
+        
+        <!-- Header de la App Card (Icono + Botón Favorito) -->
+        <div class="app-card-top">
+          <div class="app-icon-box" [ngClass]="item.colorTheme">
+            <ion-icon [name]="item.icon"></ion-icon>
+          </div>
+
+          <button 
+            type="button" 
+            class="fav-btn" 
+            [class.is-fav]="item.isFavorite"
+            (click)="toggleFavorite($event, item)"
+            aria-label="Marcar como favorito">
+            <ion-icon [name]="item.isFavorite ? 'star' : 'star-outline'"></ion-icon>
+          </button>
+        </div>
+
+        <!-- Info de la App -->
+        <div class="app-card-content">
+          <h2 class="app-title">
+            {{ item.name }}
+          </h2>
+          <p class="app-description">{{ item.description }}</p>
+        </div>
+
+        <!-- Footer / Launcher Action -->
+        <div class="app-card-footer">
+          <span class="status-indicator" [ngClass]="item.status">
+            <span class="dot"></span> {{ item.status === 'online' ? 'Disponible' : 'Mantenimiento' }}
+          </span>
+
+          <div class="open-action">
+            <span>Abrir</span>
+            <ion-icon name="open-outline"></ion-icon>
+          </div>
+        </div>
+
+      </article>
+
+    </section>
+
+  </main>
+
+  <app-footer></app-footer>
+</ion-content>

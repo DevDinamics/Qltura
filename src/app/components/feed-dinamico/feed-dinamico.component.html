@@ -1,0 +1,67 @@
+<div class="feed-card">
+  
+  <!-- Encabezado -->
+  <header class="feed-header">
+    <h2 class="feed-title">Feed dinámico</h2>
+  </header>
+
+  <!-- Navegación por pestañas (Tabs) -->
+  <div class="feed-tabs" role="tablist">
+    <button 
+      type="button" 
+      role="tab"
+      class="tab-btn" 
+      [class.active]="activeTab === 'oficial'"
+      (click)="setTab('oficial')">
+      Oficial
+    </button>
+    
+    <button 
+      type="button" 
+      role="tab"
+      class="tab-btn" 
+      [class.active]="activeTab === 'q-experience'"
+      (click)="setTab('q-experience')">
+      Q-Experience
+    </button>
+  </div>
+
+  <!-- Lista de publicaciones (Clicables) -->
+  <div class="feed-list">
+    <article 
+      *ngFor="let item of currentItems" 
+      class="feed-item"
+      (click)="goToItemDetail(item)">
+      
+      <!-- Ícono Izquierdo -->
+      <div class="item-icon-box">
+        <ion-icon [name]="item.icon"></ion-icon>
+      </div>
+
+      <!-- Detalle de la Publicación -->
+      <div class="item-content">
+        <h3 class="item-title">{{ item.title }}</h3>
+        <p class="item-meta">
+          <span>{{ item.category }}</span>
+          <span class="dot-separator">•</span>
+          <span>{{ item.date }}</span>
+        </p>
+      </div>
+
+      <!-- Indicador de Prioridad -->
+      <div class="item-badge" [class]="item.priority">
+        <ion-icon [name]="getPriorityIcon(item.priority)"></ion-icon>
+      </div>
+
+    </article>
+  </div>
+
+  <!-- Pie de la tarjeta: CTA para ver todos -->
+  <footer class="feed-footer">
+    <button type="button" class="view-all-btn" (click)="goToAvisos()">
+      <span>Ver todos los comunicados</span>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </button>
+  </footer>
+
+</div>

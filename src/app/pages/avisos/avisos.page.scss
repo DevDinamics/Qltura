@@ -1,0 +1,422 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.calendar-container {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (min-width: 769px) {
+    padding: 2rem 1.5rem 4rem 1.5rem;
+    gap: 1.75rem;
+  }
+}
+
+/* HEADER Y TITULOS */
+.page-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  .page-tag {
+    font-size: 0.725rem;
+    font-weight: 800;
+    color: #ff5500;
+    letter-spacing: 0.08em;
+    display: block;
+  }
+
+  .page-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0.15rem 0 0 0;
+    letter-spacing: -0.025em;
+
+    @media (min-width: 769px) {
+      font-size: 2.1rem;
+    }
+  }
+}
+
+/* VIEW SWITCHER APPLE STYLE */
+.view-switcher {
+  width: 100%;
+  background: var(--bg-surface, #f1f5f9);
+  padding: 0.25rem;
+  border-radius: 16px;
+  display: flex;
+  gap: 0.25rem;
+  border: 1px solid var(--border-subtle, transparent);
+
+  @media (min-width: 600px) {
+    width: auto;
+  }
+
+  button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.55rem 1.1rem;
+    border-radius: 12px;
+    font-size: 0.825rem;
+    font-weight: 700;
+    color: var(--text-sub, #64748b);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &.active {
+      background: var(--bg-hover, #ffffff);
+      color: var(--text-main, #0f172a);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+  }
+}
+
+/* FILTROS RÁPIDOS */
+.category-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg-surface, #ffffff);
+    border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+    padding: 0.45rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-sub, #64748b);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    ion-icon { font-size: 0.95rem; }
+
+    &.active {
+      background: var(--text-main, #0f172a);
+      color: #ffffff;
+      border-color: var(--text-main, #0f172a);
+    }
+  }
+}
+
+/* LISTADO DE TARJETAS DE EVENTO */
+.events-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.event-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 24px;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.35rem;
+  align-items: center;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+
+  @media (min-width: 720px) {
+    grid-template-columns: auto 1fr auto;
+    padding: 1.75rem;
+  }
+
+  /* Bloque Fecha */
+  .event-date-badge {
+    width: 64px;
+    height: 68px;
+    background: var(--bg-hover, #f8fafc);
+    border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .month {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #ff5500;
+      letter-spacing: 0.05em;
+    }
+
+    .day {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main, #0f172a);
+      line-height: 1;
+    }
+  }
+
+  /* Bloque Contenido */
+  .event-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+
+    .event-meta-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .type-pill {
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 0.2rem 0.6rem;
+        border-radius: 8px;
+
+        &.birthday {
+          background: rgba(225, 48, 108, 0.09);
+          color: #e1306c;
+        }
+
+        &.tech {
+          background: rgba(99, 102, 241, 0.09);
+          color: #6366f1;
+        }
+
+        &.official {
+          background: rgba(255, 85, 0, 0.09);
+          color: #ff5500;
+        }
+      }
+
+      .virtual-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #2563eb;
+        background: rgba(37, 99, 235, 0.08);
+        padding: 0.2rem 0.55rem;
+        border-radius: 8px;
+      }
+    }
+
+    .event-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main, #0f172a);
+      margin: 0;
+      line-height: 1.25;
+      letter-spacing: -0.015em;
+    }
+
+    .event-desc {
+      font-size: 0.875rem;
+      color: var(--text-sub, #64748b);
+      margin: 0;
+      line-height: 1.45;
+    }
+
+    .event-details-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-top: 0.25rem;
+
+      @media (min-width: 600px) {
+        flex-direction: row;
+        align-items: center;
+        gap: 1.25rem;
+      }
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.775rem;
+        font-weight: 600;
+        color: var(--text-sub, #64748b);
+
+        ion-icon {
+          font-size: 0.95rem;
+          color: #ff5500;
+        }
+      }
+    }
+  }
+
+  /* Bloque Botón Recordatorio */
+  .event-action {
+    grid-column: 1 / -1;
+
+    @media (min-width: 720px) {
+      grid-column: auto;
+    }
+
+    .confirm-btn {
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      background: var(--bg-hover, #f8fafc);
+      border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.1));
+      border-radius: 14px;
+      padding: 0.65rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main, #0f172a);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      ion-icon { font-size: 1.1rem; }
+
+      &.confirmed {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border-color: rgba(16, 185, 129, 0.3);
+      }
+
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+/* VISTA MES PLACEHOLDER */
+.month-grid-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 24px;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+
+  .grid-header {
+    h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main, #0f172a);
+      margin: 0 0 0.35rem 0;
+    }
+    p {
+      font-size: 0.85rem;
+      color: var(--text-sub, #64748b);
+      margin: 0 0 2rem 0;
+    }
+  }
+
+  .calendar-placeholder-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    background: var(--bg-hover, #f8fafc);
+    border-radius: 18px;
+    border: 1px dashed var(--border-subtle, rgba(0, 0, 0, 0.12));
+
+    .placeholder-icon {
+      font-size: 2.5rem;
+      color: #ff5500;
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: var(--text-sub, #64748b);
+      margin: 0;
+      max-width: 360px;
+    }
+  }
+}
+
+/* =======================================================
+   RESPALDO MODO OSCURO META DARK
+   ======================================================= */
+:host-context(body.dark) {
+  .page-header .page-title { color: #f8fafc !important; }
+
+  .view-switcher {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    button {
+      color: #b0b3b8;
+      &.active {
+        background: #3a3b3c !important;
+        color: #f8fafc !important;
+      }
+    }
+  }
+
+  .category-filters .filter-chip {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #b0b3b8 !important;
+
+    &.active {
+      background: #f8fafc !important;
+      color: #0f172a !important;
+    }
+  }
+
+  .event-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .event-date-badge {
+      background: #18191a !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      .day { color: #f8fafc !important; }
+    }
+
+    .event-content {
+      .event-title { color: #f8fafc !important; }
+      .event-desc { color: #b0b3b8 !important; }
+      .event-details-row .detail-item { color: #b0b3b8 !important; }
+    }
+
+    .event-action .confirm-btn {
+      background: #3a3b3c !important;
+      border-color: rgba(255, 255, 255, 0.08) !important;
+      color: #f8fafc !important;
+
+      &.confirmed {
+        background: rgba(16, 185, 129, 0.2) !important;
+        color: #34d399 !important;
+      }
+    }
+  }
+
+  .month-grid-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .grid-header {
+      h3 { color: #f8fafc !important; }
+      p { color: #b0b3b8 !important; }
+    }
+
+    .calendar-placeholder-box {
+      background: #18191a !important;
+      border-color: rgba(255, 255, 255, 0.12) !important;
+      p { color: #b0b3b8 !important; }
+    }
+  }
+}

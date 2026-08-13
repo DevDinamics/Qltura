@@ -1,0 +1,142 @@
+<ion-content [fullscreen]="true">
+  <app-navbar></app-navbar>
+
+  <main class="calendar-container animate-content-left">
+    
+    <!-- Subheader Principal con Switcher -->
+    <header class="page-header">
+      <div class="header-titles">
+        <span class="page-tag">CALENDARIO CORPORATIVO</span>
+        <h1 class="page-title">Agenda & Actividades</h1>
+      </div>
+
+      <!-- Selector de Vista (Agenda / Mes) -->
+      <div class="view-switcher">
+        <button 
+          type="button" 
+          [class.active]="activeView === 'agenda'" 
+          (click)="activeView = 'agenda'">
+          Agenda Próxima
+        </button>
+        <button 
+          type="button" 
+          [class.active]="activeView === 'mes'" 
+          (click)="activeView = 'mes'">
+          Vista Mensual
+        </button>
+      </div>
+    </header>
+
+    <!-- FILTROS DE CATEGORÍA RÁPIDOS -->
+    <section class="category-filters" *ngIf="activeView === 'agenda'">
+      <button 
+        type="button" 
+        class="filter-chip" 
+        [class.active]="selectedFilter === 'ALL'"
+        (click)="selectedFilter = 'ALL'">
+        Todos
+      </button>
+      
+      <button 
+        type="button" 
+        class="filter-chip birthday" 
+        [class.active]="selectedFilter === 'birthday'"
+        (click)="selectedFilter = 'birthday'">
+        <ion-icon name="gift-outline"></ion-icon>
+        <span>Festejos</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="filter-chip tech" 
+        [class.active]="selectedFilter === 'tech'"
+        (click)="selectedFilter = 'tech'">
+        <ion-icon name="sparkles-outline"></ion-icon>
+        <span>Sistemas & TI</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="filter-chip culture" 
+        [class.active]="selectedFilter === 'culture'"
+        (click)="selectedFilter = 'culture'">
+        <ion-icon name="business-outline"></ion-icon>
+        <span>Cultura</span>
+      </button>
+    </section>
+
+    <!-- LISTADO DE EVENTOS (VISTA AGENDA) -->
+    <section *ngIf="activeView === 'agenda'" class="events-feed">
+      
+      <article *ngFor="let event of filteredEvents" class="event-card" [ngClass]="event.type">
+        
+        <!-- Bloque Izquierdo: Fecha Calendario -->
+        <div class="event-date-badge">
+          <span class="month">{{ event.monthShort }}</span>
+          <span class="day">{{ event.dayNumber }}</span>
+        </div>
+
+        <!-- Bloque Centro: Contenido Principal -->
+        <div class="event-content">
+          
+          <div class="event-meta-header">
+            <span class="type-pill" [ngClass]="event.type">
+              {{ event.badgeLabel }}
+            </span>
+            
+            <span *ngIf="event.isVirtual" class="virtual-pill">
+              <ion-icon name="videocam-outline"></ion-icon>
+              <span>En Línea</span>
+            </span>
+          </div>
+
+          <h2 class="event-title">{{ event.title }}</h2>
+          <p class="event-desc">{{ event.description }}</p>
+
+          <div class="event-details-row">
+            <div class="detail-item">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ event.fullDateText }} • {{ event.time }}</span>
+            </div>
+
+            <div class="detail-item">
+              <ion-icon name="location-outline"></ion-icon>
+              <span>{{ event.location }}</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bloque Derecho: Acción / Asistencia -->
+        <div class="event-action">
+          <button 
+            type="button" 
+            class="confirm-btn"
+            [class.confirmed]="event.isConfirmed"
+            (click)="toggleConfirmEvent(event)">
+            <ion-icon [name]="event.isConfirmed ? 'notifications' : 'notifications-outline'"></ion-icon>
+            <span>{{ event.isConfirmed ? 'Agendado' : 'Recordar' }}</span>
+          </button>
+        </div>
+
+      </article>
+
+    </section>
+
+    <!-- VISTA MES (PLACEHOLDER ELEGANTE TIPO CALENDARIO) -->
+    <section *ngIf="activeView === 'mes'" class="month-grid-card">
+      <div class="grid-header">
+        <h3>Agosto 2026</h3>
+        <p>Integración en tiempo real sincronizada con Google Workspace</p>
+      </div>
+
+      <div class="calendar-placeholder-box">
+        <ion-icon name="calendar-outline" class="placeholder-icon"></ion-icon>
+        <p>Los eventos sincronizados de Google Calendar se mostrarán organizados por fecha.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <app-footer></app-footer>
+</ion-content>

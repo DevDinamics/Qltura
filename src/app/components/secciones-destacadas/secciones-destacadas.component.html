@@ -1,0 +1,36 @@
+<section class="destacadas-container">
+  <div class="destacadas-card">
+    
+    <article 
+      *ngFor="let item of secciones; let last = last" 
+      class="seccion-item"
+      [class.has-divider]="!last"
+      tabindex="0"
+      role="button"
+      [attr.aria-label]="item.title + ' - ' + item.ctaText"
+      (click)="onCardClick(item)"
+      (keyup.enter)="onCardClick(item)">
+      
+      <!-- Encabezado con Ícono y Título -->
+      <div class="seccion-header">
+        <div class="icon-box" [ngClass]="item.colorClass">
+          <ion-icon [name]="item.icon" aria-hidden="true"></ion-icon>
+        </div>
+        <h3 class="seccion-title">{{ item.title }}</h3>
+      </div>
+
+      <!-- Descripción -->
+      <p class="seccion-description">
+        {{ item.description }}
+      </p>
+
+      <!-- Botón de Enlace (CTA) -->
+      <div class="seccion-cta" [ngClass]="item.colorClass">
+        <span>{{ item.ctaText }}</span>
+        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+      </div>
+
+    </article>
+
+  </div>
+</section>

@@ -1,0 +1,365 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.hero-slider-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 1.5rem auto 2.5rem auto;
+  padding: 0 1rem;
+}
+
+.hero-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- TARJETA PRINCIPAL (ESTILO APPLE CARD) --- */
+.hero-card {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 32px;
+  padding: 3.5rem 4rem 4rem 4rem;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 2.5rem;
+  box-shadow: 
+    0 20px 40px -15px rgba(0, 0, 0, 0.04),
+    0 0 1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  touch-action: pan-y; /* Habilita deslizamiento táctil horizontal sin bloquear el scroll de la página */
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Orbe ambiental sutil de fondo */
+  .ambient-mesh-glow {
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.12;
+    pointer-events: none;
+    transition: background 0.5s ease;
+  }
+
+  /* Variaciones de acento dinámico según tema */
+  &.theme-orange {
+    .ambient-mesh-glow { background: #ff5500; }
+    .hero-cta { background: #ff5500; box-shadow: 0 10px 25px -5px rgba(255, 85, 0, 0.35); }
+    .hero-cta:hover { background: #e64d00; }
+    .accent-text { color: #ff5500; }
+  }
+
+  &.theme-purple {
+    .ambient-mesh-glow { background: #6366f1; }
+    .hero-cta { background: #6366f1; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.35); }
+    .hero-cta:hover { background: #4f46e5; }
+    .accent-text { color: #6366f1; }
+  }
+
+  &.theme-blue {
+    .ambient-mesh-glow { background: #2563eb; }
+    .hero-cta { background: #2563eb; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.35); }
+    .hero-cta:hover { background: #1d4ed8; }
+    .accent-text { color: #2563eb; }
+  }
+}
+
+/* --- CONTENIDO DE TEXTO --- */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 2;
+  animation: appleSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1rem;
+
+    .hero-tag {
+      font-size: 0.725rem;
+      font-weight: 800;
+      color: var(--text-sub, #64748b);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .company-pill {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      letter-spacing: 0.03em;
+
+      &.qualtop {
+        background: rgba(255, 85, 0, 0.08);
+        color: #ff5500;
+      }
+
+      &.sye {
+        background: rgba(37, 99, 235, 0.08);
+        color: #2563eb;
+      }
+    }
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 3.2vw, 2.85rem);
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    margin: 0 0 1rem 0;
+
+    .accent-text {
+      display: block;
+      font-weight: 800;
+    }
+  }
+
+  .hero-description {
+    font-size: 0.975rem;
+    color: var(--text-sub, #64748b);
+    line-height: 1.55;
+    margin: 0 0 1.85rem 0;
+    max-width: 460px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #ffffff;
+    border: none;
+    padding: 0.9rem 1.85rem;
+    border-radius: 18px;
+    font-size: 0.925rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    ion-icon {
+      font-size: 1.15rem;
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+
+      ion-icon {
+        transform: translateX(4px);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* --- MULTIMEDIA (STAGE IMAGEN) --- */
+.hero-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  animation: appleFade 0.5s ease-out;
+
+  .image-stage {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .slide-img {
+      width: 100%;
+      max-width: 440px;
+      height: auto;
+      max-height: 310px;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08));
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+}
+
+/* --- PAGINACIÓN PÍLDORA SLIM --- */
+.hero-pagination {
+  position: absolute;
+  bottom: 1.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  z-index: 5;
+
+  .dot-pill {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border-radius: 20px;
+    border: none;
+    background: rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+
+    &.active {
+      background: var(--text-main, #0f172a);
+      width: 26px;
+    }
+  }
+}
+
+/* --- BOTONES NAVEGACIÓN FLOTANTES --- */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main, #0f172a);
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.25s ease;
+
+  ion-icon {
+    font-size: 1.15rem;
+    color: var(--text-main, #0f172a);
+  }
+
+  &:hover {
+    background: var(--bg-hover, #f8fafc);
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  &.prev-btn { left: -20px; }
+  &.next-btn { right: -20px; }
+}
+
+/* --- ANIMACIONES APPLE SMOOTH --- */
+@keyframes appleSlideIn {
+  from {
+    opacity: 0;
+    transform: cubic-bezier(0.16, 1, 0.3, 1) translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes appleFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- RESPONSIVE MOBILE & TABLET (OCULTA FLECHAS Y DEJA TOUCH) --- */
+@media (max-width: 900px) {
+  .hero-card {
+    padding: 2.5rem 2rem 3.5rem 2rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: left;
+  }
+
+  .hero-media {
+    order: -1;
+    
+    .slide-img {
+      max-height: 220px;
+    }
+  }
+
+  .nav-btn {
+    display: none !important; /* Desaparecen flechas en tablet y celular */
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-card {
+    border-radius: 24px;
+    padding: 1.75rem 1.25rem 3.25rem 1.25rem;
+  }
+
+  .hero-content {
+    .hero-title {
+      font-size: 1.65rem;
+    }
+
+    .hero-description {
+      font-size: 0.875rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .hero-cta {
+      width: 100%;
+      justify-content: center;
+      padding: 0.85rem;
+    }
+  }
+}
+
+/* =======================================================
+   RESPALDO MODO OSCURO META DARK
+   ======================================================= */
+:host-context(body.dark) {
+  .hero-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .ambient-mesh-glow {
+      opacity: 0.2;
+    }
+  }
+
+  .hero-content {
+    .hero-title { color: #f8fafc !important; }
+    .hero-description { color: #b0b3b8 !important; }
+  }
+
+  .hero-pagination .dot-pill {
+    background: rgba(255, 255, 255, 0.2);
+
+    &.active {
+      background: #f8fafc !important;
+    }
+  }
+
+  .nav-btn {
+    background: #3a3b3c !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+
+    ion-icon {
+      color: #f8fafc !important;
+    }
+  }
+}
