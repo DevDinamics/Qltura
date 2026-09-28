@@ -16,7 +16,8 @@ import {
   lockClosedOutline, 
   arrowForwardOutline, 
   logoGoogle, 
-  businessOutline 
+  businessOutline,
+  checkmarkOutline 
 } from 'ionicons/icons';
 
 @Component({
@@ -45,17 +46,25 @@ export class LoginPage {
   showCompanySelector: boolean = false;
   isLoading: boolean = false;
 
+  // Estado para la animación de bienvenida
+  isAuthenticating: boolean = false;
+  authUserData = {
+    name: 'Colaborador',
+    company: 'Qualtop',
+    avatar: 'https://i.pravatar.cc/150?img=32'
+  };
+
   constructor() {
     addIcons({
       mailOutline,
       lockClosedOutline,
       arrowForwardOutline,
       logoGoogle,
-      businessOutline
+      businessOutline,
+      checkmarkOutline
     });
   }
 
-  // Evalúa si mostrar el selector de empresa para correos generales
   onEmailChange(): void {
     const cleanEmail = this.email.toLowerCase().trim();
 
@@ -72,7 +81,7 @@ export class LoginPage {
     }
   }
 
-  // Login manual tradicional
+  // Login manual
   async onLogin(): Promise<void> {
     if (!this.email || !this.password) {
       this.presentToast('Por favor ingresa correo y contraseña', 'warning');
@@ -82,27 +91,45 @@ export class LoginPage {
     this.isLoading = true;
   
     setTimeout(() => {
-      this.authService.login(this.email, this.selectedCompany);
       this.isLoading = false;
-      this.router.navigateByUrl('/home');
-    }, 800);
+      this.authService.login(this.email, this.selectedCompany);
+      
+      // Extrae un nombre de pila a partir del correo
+      const inferredName = this.email.split('@')[0].split('.')[0];
+      const capitalized = inferredName.charAt(0).toUpperCase() + inferredName.slice(1);
+
+      this.triggerWelcomeTransition(
+        capitalized || 'Colaborador', 
+        this.selectedCompany, 
+        'https://i.pravatar.cc/150?img=32'
+      );
+    }, 600);
   }
 
-  // ⚡ ACCESO RÁPIDO PARA PROBAR LA DEMO CON UN SOLO TOQUE
+  // Acceso rápido demo
   async quickDemoLogin(userId: string): Promise<void> {
     this.isLoading = true;
     const user = this.authService.loginAsDemo(userId);
 
-    setTimeout(async () => {
+    setTimeout(() => {
       this.isLoading = false;
-      
-      await this.presentToast(
-        `¡Bienvenido(a) ${user.name}! Sesión activa para ${user.company}`, 
-        'secondary'
+      this.triggerWelcomeTransition(
+        user.name, 
+        user.company as CompanyType, 
+        user.avatar || 'https://i.pravatar.cc/150?img=32'
       );
+    }, 400);
+  }
 
+  // Ejecuta la animación de entrada al portal
+  private triggerWelcomeTransition(name: string, company: CompanyType, avatar: string): void {
+    this.authUserData = { name, company, avatar };
+    this.isAuthenticating = true;
+
+    // Transición cinematográfica fluida de 1.5s
+    setTimeout(() => {
       this.router.navigateByUrl('/home');
-    }, 500);
+    }, 1500);
   }
 
   loginWithGoogle(): void {

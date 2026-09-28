@@ -4,7 +4,7 @@
     <!-- Botón Navegación Izquierda (Solo Desktop) -->
     <button 
       type="button"
-      class="nav-btn prev-btn" 
+      class="nav-btn prev-btn desktop-only" 
       (click)="prevSlide()" 
       aria-label="Anterior slide">
       <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
@@ -13,7 +13,6 @@
     <!-- Card Principal Glass/Minimalist con Eventos Touch -->
     <article 
       class="hero-card" 
-      *ngIf="currentSlide"
       [ngClass]="'theme-' + (currentSlide.accentTheme || 'orange')"
       (touchstart)="onTouchStart($event)"
       (touchend)="onTouchEnd($event)">
@@ -52,7 +51,11 @@
         </p>
 
         <!-- Botón de Acción Principal -->
-        <button class="hero-cta" type="button">
+        <button 
+          class="hero-cta" 
+          type="button"
+          [routerLink]="currentSlide.buttonUrl"
+          *ngIf="currentSlide.buttonText">
           <span>{{ currentSlide.buttonText }}</span>
           <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
         </button>
@@ -87,7 +90,7 @@
     <!-- Botón Navegación Derecha (Solo Desktop) -->
     <button 
       type="button"
-      class="nav-btn next-btn" 
+      class="nav-btn next-btn desktop-only" 
       (click)="nextSlide()" 
       aria-label="Siguiente slide">
       <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>

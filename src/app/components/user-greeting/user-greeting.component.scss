@@ -3,157 +3,152 @@
   width: 100%;
 }
 
-.greeting-wrapper {
+.greeting-hero {
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0.75rem 0.25rem 0.5rem 0.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 1.5rem 0.5rem 1rem 0.5rem;
 
-  /* 1. Badge Pill para la fecha */
-  .greeting-date {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.725rem;
-    font-weight: 800;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 0.6rem;
-    transition: all 0.25s ease;
+  .greeting-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  /* 2. Título de Saludo con Nombre Resaltado */
-  .greeting-title {
-    font-size: clamp(1.85rem, 3.8vw, 2.5rem);
-    font-weight: 800;
-    color: var(--text-main, #0f172a);
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    margin: 0 0 0.4rem 0;
-    transition: color 0.25s ease;
+  /* 1. Fecha: Elegante, limpia y tipográfica */
+  .greeting-eyebrow {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-tertiary, #86868b);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
-    .user-name {
+    &::after {
+      content: '';
       display: inline-block;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      width: 24px;
+      height: 1px;
+      background: var(--border-subtle, rgba(0, 0, 0, 0.12));
     }
   }
 
-  /* 3. Frase Motivacional en Chip Sutil */
-  .greeting-quote {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-sub, #475569);
-    background: var(--bg-surface, #f8fafc);
-    border: 1px solid var(--border-subtle, #f1f5f9);
-    padding: 0.4rem 0.85rem;
-    border-radius: 12px;
-    margin: 0;
-    line-height: 1.4;
+  /* 2. Headline: Tipografía SF Pro Display limpia */
+  .greeting-headline {
+    margin: 0 0 0.5rem 0;
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    color: var(--text-main, #1d1d1f);
+
+    .highlight {
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+  }
+
+  /* 3. Subtexto / Cita: Integrado con barra de acento mínima */
+  .greeting-subtext {
+    margin: 0.25rem 0 0 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-sub, #6e6e73);
+    max-width: 640px;
     letter-spacing: -0.01em;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    transition: all 0.25s ease;
+    padding-left: 0.85rem;
+    border-left: 2px solid transparent;
+    transition: border-color 0.25s ease;
   }
 
   /* =======================================================
-     TEMAS DE EMPRESA DINÁMICOS
+     TEMAS DE MARCA CORPORATIVOS
      ======================================================= */
-  
-  /* --- VARIANTE QUALTOP (NARANJA WARM) --- */
+
+  /* Qualtop */
   &.qualtop {
-    .greeting-date {
+    .highlight {
       color: #ff5500;
-      background: rgba(255, 85, 0, 0.08);
-      border: 1px solid rgba(255, 85, 0, 0.18);
     }
-
-    .greeting-title .user-name {
-      background: linear-gradient(135deg, #ff5500 0%, #ff7700 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .greeting-subtext {
+      border-left-color: rgba(255, 85, 0, 0.4);
     }
   }
 
-  /* --- VARIANTE SYE (AZUL / MORADO TECH) --- */
+  /* SYE */
   &.sye {
-    .greeting-date {
-      color: #2563eb;
-      background: rgba(37, 99, 235, 0.08);
-      border: 1px solid rgba(37, 99, 235, 0.18);
+    .highlight {
+      color: #0066cc;
     }
-
-    .greeting-title .user-name {
-      background: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-}
-
-/* --- RESPONSIVE MOBILE --- */
-@media (max-width: 640px) {
-  .greeting-wrapper {
-    padding: 0.25rem;
-
-    .greeting-title {
-      font-size: 1.65rem;
-    }
-
-    .greeting-quote {
-      font-size: 0.825rem;
-      padding: 0.35rem 0.65rem;
+    .greeting-subtext {
+      border-left-color: rgba(0, 102, 204, 0.4);
     }
   }
 }
 
 /* =======================================================
-   SOPORTE MODO OSCURO (PALETA META DARK)
+   RESPONSIVE MÓVIL
+   ======================================================= */
+@media (max-width: 640px) {
+  .greeting-hero {
+    padding: 1rem 0.25rem 0.5rem 0.25rem;
+
+    .greeting-eyebrow {
+      font-size: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .greeting-headline {
+      font-size: 1.75rem;
+    }
+
+    .greeting-subtext {
+      font-size: 0.875rem;
+      padding-left: 0.65rem;
+    }
+  }
+}
+
+/* =======================================================
+   MODO OSCURO (Apple Minimal Dark)
    ======================================================= */
 :host-context(body.dark) {
-  .greeting-wrapper {
-    
-    .greeting-title {
-      color: #f8fafc;
+  .greeting-hero {
+    .greeting-eyebrow {
+      color: #a1a1a6;
+
+      &::after {
+        background: rgba(255, 255, 255, 0.15);
+      }
     }
 
-    .greeting-quote {
-      background: #242526;
-      border-color: rgba(255, 255, 255, 0.08);
-      color: #b0b3b8;
+    .greeting-headline {
+      color: #f5f5f7;
     }
 
-    /* Qualtop Dark */
+    .greeting-subtext {
+      color: #a1a1a6;
+    }
+
     &.qualtop {
-      .greeting-date {
-        color: #ff6b00;
-        background: rgba(255, 85, 0, 0.15);
-        border-color: rgba(255, 85, 0, 0.25);
+      .highlight {
+        color: #ff6a1a;
       }
-      .greeting-title .user-name {
-        background: linear-gradient(135deg, #ff5500 0%, #ff8800 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+      .greeting-subtext {
+        border-left-color: rgba(255, 106, 26, 0.5);
       }
     }
 
-    /* SYE Dark */
     &.sye {
-      .greeting-date {
-        color: #60a5fa;
-        background: rgba(37, 99, 235, 0.18);
-        border-color: rgba(37, 99, 235, 0.3);
+      .highlight {
+        color: #2997ff;
       }
-      .greeting-title .user-name {
-        background: linear-gradient(135deg, #60a5fa 0%, #818cf8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+      .greeting-subtext {
+        border-left-color: rgba(41, 151, 255, 0.5);
       }
     }
   }

@@ -18,7 +18,8 @@
     <div class="shape shape-circle-ring ring-1"></div>
   </div>
 
-  <div class="login-viewport">
+  <!-- EL VIEWPORT SE OCULTA FLUIDAMENTE AL AUTENTICAR -->
+  <div class="login-viewport" [class.form-hidden]="isAuthenticating">
     
     <!-- Branding Header -->
     <header class="brand-header">
@@ -90,7 +91,7 @@
           </div>
         </div>
 
-        <button type="submit" class="cta-submit-btn" [disabled]="isLoading">
+        <button type="submit" class="cta-submit-btn" [disabled]="isLoading || isAuthenticating">
           <span *ngIf="!isLoading">Ingresar al portal</span>
           <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
           <ion-icon *ngIf="!isLoading" name="arrow-forward-outline"></ion-icon>
@@ -119,6 +120,7 @@
           <button 
             type="button" 
             class="demo-card-btn qualtop"
+            [disabled]="isAuthenticating"
             (click)="quickDemoLogin('demo-qualtop-01')">
             <img src="https://i.pravatar.cc/150?img=32" alt="Ana López" class="demo-avatar" />
             <div class="demo-info">
@@ -130,6 +132,7 @@
           <button 
             type="button" 
             class="demo-card-btn sye"
+            [disabled]="isAuthenticating"
             (click)="quickDemoLogin('demo-sye-02')">
             <img src="https://i.pravatar.cc/150?img=11" alt="Carlos Mendoza" class="demo-avatar" />
             <div class="demo-info">
@@ -147,4 +150,23 @@
     </footer>
 
   </div>
+
+  <!-- OVERLAY DE BIENVENIDA MINIMALISTA CON ANIMACIÓN APPLE -->
+  <aside class="welcome-overlay" *ngIf="isAuthenticating">
+    <div class="welcome-card">
+      <div class="avatar-ring">
+        <img [src]="authUserData.avatar" [alt]="authUserData.name" class="user-avatar" />
+        <div class="success-badge">
+          <ion-icon name="checkmark-outline"></ion-icon>
+        </div>
+      </div>
+      
+      <span class="company-tag" [ngClass]="authUserData.company.toLowerCase()">
+        {{ authUserData.company }}
+      </span>
+      <h2 class="welcome-name">¡Hola, {{ authUserData.name.split(' ')[0] }}!</h2>
+      <p class="welcome-status">Iniciando espacio de trabajo...</p>
+    </div>
+  </aside>
+
 </ion-content>

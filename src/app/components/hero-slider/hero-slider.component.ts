@@ -2,14 +2,20 @@ import {
   Component, 
   OnInit, 
   OnDestroy, 
-  CUSTOM_ELEMENTS_SCHEMA, 
   ChangeDetectionStrategy, 
   ChangeDetectorRef, 
   NgZone 
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { chevronBackOutline, chevronForwardOutline, arrowForwardOutline, sparklesOutline } from 'ionicons/icons';
+import { 
+  chevronBackOutline, 
+  chevronForwardOutline, 
+  arrowForwardOutline, 
+  sparklesOutline 
+} from 'ionicons/icons';
 
 export interface Slide {
   id: number;
@@ -28,8 +34,7 @@ export interface Slide {
 @Component({
   selector: 'app-hero-slider',
   standalone: true,
-  imports: [CommonModule],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [CommonModule, RouterLink, IonIcon],
   templateUrl: './hero-slider.component.html',
   styleUrls: ['./hero-slider.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -50,6 +55,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
       highlightText: 'Meetup 2026',
       description: 'Conectamos ideas, compartimos conocimiento y construimos el futuro de la ingeniería juntos.',
       buttonText: 'Confirmar asistencia',
+      buttonUrl: '/avisos',
       badgeCompany: 'Qualtop',
       accentTheme: 'orange',
       imageSrc: 'assets/Diagrmas-SI/Imagen4.png',
@@ -62,6 +68,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
       highlightText: 'Sistemas Escalables',
       description: 'Aprende las mejores prácticas para diseñar microservicios y sistemas distribuidos de alto impacto.',
       buttonText: 'Explorar programa',
+      buttonUrl: '/plataformas',
       badgeCompany: 'SYE',
       accentTheme: 'purple',
       imageSrc: 'assets/Diagrmas-SI/Imagen1.png',
@@ -93,15 +100,20 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     return this.slides[this.currentIndex];
   }
 
-  public nextSlide(): void {
-    this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+  // Desplazamiento base sin disparar reinicios infinitos de timer
+  private changeSlide(delta: number): void {
+    this.currentIndex = (this.currentIndex + delta + this.slides.length) % this.slides.length;
     this.cdr.markForCheck();
+  }
+
+  // Métodos invocados por interacción del usuario (resetean el temporizador)
+  public nextSlide(): void {
+    this.changeSlide(1);
     this.resetAutoPlay();
   }
 
   public prevSlide(): void {
-    this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-    this.cdr.markForCheck();
+    this.changeSlide(-1);
     this.resetAutoPlay();
   }
 
@@ -122,19 +134,20 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   }
 
   private handleSwipe(): void {
-    const swipeThreshold = 50; // Mínimo de distancia en píxeles para validar el deslizamiento
+    const swipeThreshold = 50;
     if (this.touchStartX - this.touchEndX > swipeThreshold) {
-      this.nextSlide(); // Deslizó hacia la izquierda -> Siguiente
+      this.nextSlide();
     } else if (this.touchEndX - this.touchStartX > swipeThreshold) {
-      this.prevSlide(); // Deslizó hacia la derecha -> Anterior
+      this.prevSlide();
     }
   }
 
+  /* --- CONTROL DEL TEMPORIZADOR AUTOMÁTICO --- */
   private startAutoPlay(): void {
     this.ngZone.runOutsideAngular(() => {
       this.autoPlayInterval = setInterval(() => {
         this.ngZone.run(() => {
-          this.nextSlide();
+          this.changeSlide(1);
         });
       }, 7000);
     });
