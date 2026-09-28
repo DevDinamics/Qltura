@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,7 +6,8 @@ import {
   IonContent, 
   IonIcon, 
   IonSpinner, 
-  ToastController 
+  ToastController,
+  ViewWillEnter 
 } from '@ionic/angular/standalone';
 import { AuthService } from '../../services/auth.service';
 import { CompanyType } from '../../shared/models/user.model';
@@ -33,11 +34,12 @@ import {
     IonSpinner
   ]
 })
-export class LoginPage {
+export class LoginPage implements ViewWillEnter {
 
   private router = inject(Router);
   private authService = inject(AuthService);
   private toastCtrl = inject(ToastController);
+  private cdr = inject(ChangeDetectorRef);
 
   email: string = '';
   password: string = '';
@@ -63,6 +65,14 @@ export class LoginPage {
       businessOutline,
       checkmarkOutline
     });
+  }
+
+  // Se ejecuta automáticamente cada vez que Ionic entra a la vista (incluso tras un logout)
+  ionViewWillEnter(): void {
+    this.isAuthenticating = false;
+    this.isLoading = false;
+    this.password = '';
+    this.cdr.markForCheck();
   }
 
   onEmailChange(): void {
@@ -94,7 +104,6 @@ export class LoginPage {
       this.isLoading = false;
       this.authService.login(this.email, this.selectedCompany);
       
-      // Extrae un nombre de pila a partir del correo
       const inferredName = this.email.split('@')[0].split('.')[0];
       const capitalized = inferredName.charAt(0).toUpperCase() + inferredName.slice(1);
 
@@ -125,10 +134,14 @@ export class LoginPage {
   private triggerWelcomeTransition(name: string, company: CompanyType, avatar: string): void {
     this.authUserData = { name, company, avatar };
     this.isAuthenticating = true;
+    this.cdr.markForCheck();
 
-    // Transición cinematográfica fluida de 1.5s
     setTimeout(() => {
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/home').then(() => {
+        // Apaga la bandera para que la pantalla quede limpia al hacer logout
+        this.isAuthenticating = false;
+        this.cdr.markForCheck();
+      });
     }, 1500);
   }
 
