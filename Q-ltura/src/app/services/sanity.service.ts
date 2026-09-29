@@ -8,9 +8,9 @@ import imageUrlBuilder from '@sanity/image-url';
 })
 export class SanityService {
   private client: SanityClient = createClient({
-    projectId: 'z7rydwf1',     // Tu Project ID de la captura
+    projectId: 'z7rydwf1',    // Tu Project ID
     dataset: 'production',    // Dataset por defecto
-    useCdn: true,             // Caché rápido mundial
+    useCdn: false,            // 🔴 FALSE: Apaga la caché para tener datos en tiempo real
     apiVersion: '2024-01-01'  // Versión de la API de Sanity
   });
 
