@@ -1,0 +1,6 @@
+<ion-app>
+  <!-- El Navbar se mantiene fijo aquí y no se reinicia al navegar -->
+  <app-navbar *ngIf="showNavbar"></app-navbar>
+
+  <ion-router-outlet [animated]="false"></ion-router-outlet>
+</ion-app>

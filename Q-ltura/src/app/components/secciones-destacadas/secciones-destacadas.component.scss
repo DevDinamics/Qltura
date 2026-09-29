@@ -1,0 +1,232 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.destacadas-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* --- TARJETA CONTENEDORA PRINCIPAL --- */
+.destacadas-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 20px;
+  padding: 1.75rem 1.25rem;
+  box-shadow: 
+    0 10px 30px -5px rgba(0, 0, 0, 0.03),
+    0 0 1px rgba(0, 0, 0, 0.04);
+  
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+/* --- ÍTEM DE CADA SECCIÓN --- */
+.seccion-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  position: relative;
+  cursor: pointer;
+  border-radius: 14px;
+  outline: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    background-color: var(--bg-hover, rgba(0, 0, 0, 0.02));
+
+    .seccion-cta {
+      gap: 0.6rem;
+    }
+  }
+
+  /* Feedback de toque táctil en móviles */
+  &:active {
+    transform: scale(0.98);
+    background-color: var(--bg-hover, #f8fafc);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px #5e17eb;
+  }
+
+  /* Separador vertical entre columnas en Desktop */
+  &.has-divider::after {
+    content: '';
+    position: absolute;
+    right: -0.625rem;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background-color: var(--border-subtle, #f1f5f9);
+    transition: background-color 0.25s ease;
+  }
+}
+
+/* --- HEADER DEL ÍTEM (ÍCONO + TÍTULO) --- */
+.seccion-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+
+  .icon-box {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+      font-size: 1.35rem;
+      display: block;
+    }
+
+    /* Temas de Color para Íconos */
+    &.orange {
+      background: rgba(255, 85, 0, 0.08);
+      color: #ff5500;
+    }
+
+    &.purple {
+      background: rgba(94, 23, 235, 0.08);
+      color: #8b5cf6;
+    }
+
+    &.green {
+      background: rgba(16, 185, 129, 0.08);
+      color: #10b981;
+    }
+  }
+
+  .seccion-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main, #0f172a);
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    transition: color 0.25s ease;
+  }
+}
+
+/* --- DESCRIPCIÓN --- */
+.seccion-description {
+  font-size: 0.825rem;
+  color: var(--text-sub, #64748b);
+  line-height: 1.45;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+  transition: color 0.25s ease;
+}
+
+/* --- BOTÓN / LINK (CTA) --- */
+.seccion-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: gap 0.2s ease;
+
+  ion-icon {
+    font-size: 0.95rem;
+    display: block;
+  }
+
+  &.orange { color: #ff5500; }
+  &.purple { color: #8b5cf6; }
+  &.green  { color: #10b981; }
+}
+
+/* --- RESPONSIVE MOBILE & TABLET PRO --- */
+
+@media (max-width: 1024px) {
+  .destacadas-card {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem 1rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .seccion-item.has-divider::after {
+    display: none; 
+  }
+}
+
+@media (max-width: 640px) {
+  .destacadas-card {
+    grid-template-columns: 1fr;
+    padding: 1rem 0.75rem;
+    gap: 0.5rem;
+    border-radius: 20px;
+  }
+
+  .seccion-item {
+    padding: 1rem 0.75rem;
+    border-bottom: 1px solid var(--border-subtle, #f1f5f9);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .seccion-description {
+    margin-bottom: 0.85rem;
+  }
+}
+
+/* =======================================================
+   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
+   ======================================================= */
+:host-context(body.dark) {
+  .destacadas-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .seccion-item {
+    &:hover, &:active {
+      background-color: #3a3b3c !important;
+    }
+
+    &.has-divider::after {
+      background-color: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+
+  .seccion-header {
+    .icon-box {
+      &.orange { background: rgba(255, 85, 0, 0.15) !important; color: #ff5500 !important; }
+      &.purple { background: rgba(139, 92, 246, 0.15) !important; color: #a78bfa !important; }
+      &.green  { background: rgba(16, 185, 129, 0.15) !important; color: #34d399 !important; }
+    }
+
+    .seccion-title {
+      color: #f8fafc !important;
+    }
+  }
+
+  .seccion-description {
+    color: #b0b3b8 !important;
+  }
+
+  .seccion-cta {
+    &.orange { color: #ff5500 !important; }
+    &.purple { color: #a78bfa !important; }
+    &.green  { color: #34d399 !important; }
+  }
+
+  @media (max-width: 640px) {
+    .seccion-item {
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+}

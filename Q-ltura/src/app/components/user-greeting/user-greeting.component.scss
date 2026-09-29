@@ -1,0 +1,155 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.greeting-hero {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1.5rem 0.5rem 1rem 0.5rem;
+
+  .greeting-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* 1. Fecha: Elegante, limpia y tipográfica */
+  .greeting-eyebrow {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-tertiary, #86868b);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--border-subtle, rgba(0, 0, 0, 0.12));
+    }
+  }
+
+  /* 2. Headline: Tipografía SF Pro Display limpia */
+  .greeting-headline {
+    margin: 0 0 0.5rem 0;
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    color: var(--text-main, #1d1d1f);
+
+    .highlight {
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+  }
+
+  /* 3. Subtexto / Cita: Integrado con barra de acento mínima */
+  .greeting-subtext {
+    margin: 0.25rem 0 0 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-sub, #6e6e73);
+    max-width: 640px;
+    letter-spacing: -0.01em;
+    padding-left: 0.85rem;
+    border-left: 2px solid transparent;
+    transition: border-color 0.25s ease;
+  }
+
+  /* =======================================================
+     TEMAS DE MARCA CORPORATIVOS
+     ======================================================= */
+
+  /* Qualtop */
+  &.qualtop {
+    .highlight {
+      color: #ff5500;
+    }
+    .greeting-subtext {
+      border-left-color: rgba(255, 85, 0, 0.4);
+    }
+  }
+
+  /* SYE */
+  &.sye {
+    .highlight {
+      color: #0066cc;
+    }
+    .greeting-subtext {
+      border-left-color: rgba(0, 102, 204, 0.4);
+    }
+  }
+}
+
+/* =======================================================
+   RESPONSIVE MÓVIL
+   ======================================================= */
+@media (max-width: 640px) {
+  .greeting-hero {
+    padding: 1rem 0.25rem 0.5rem 0.25rem;
+
+    .greeting-eyebrow {
+      font-size: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .greeting-headline {
+      font-size: 1.75rem;
+    }
+
+    .greeting-subtext {
+      font-size: 0.875rem;
+      padding-left: 0.65rem;
+    }
+  }
+}
+
+/* =======================================================
+   MODO OSCURO (Apple Minimal Dark)
+   ======================================================= */
+:host-context(body.dark) {
+  .greeting-hero {
+    .greeting-eyebrow {
+      color: #a1a1a6;
+
+      &::after {
+        background: rgba(255, 255, 255, 0.15);
+      }
+    }
+
+    .greeting-headline {
+      color: #f5f5f7;
+    }
+
+    .greeting-subtext {
+      color: #a1a1a6;
+    }
+
+    &.qualtop {
+      .highlight {
+        color: #ff6a1a;
+      }
+      .greeting-subtext {
+        border-left-color: rgba(255, 106, 26, 0.5);
+      }
+    }
+
+    &.sye {
+      .highlight {
+        color: #2997ff;
+      }
+      .greeting-subtext {
+        border-left-color: rgba(41, 151, 255, 0.5);
+      }
+    }
+  }
+}

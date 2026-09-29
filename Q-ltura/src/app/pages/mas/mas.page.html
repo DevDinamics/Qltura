@@ -1,0 +1,225 @@
+<div class="ion-page" #page>
+  <ion-content [fullscreen]="true">
+
+
+    <main class="mas-container animate-content-left">
+      
+      <!-- Card de Perfil del Usuario -->
+      <section class="profile-card" *ngIf="user">
+        <div class="avatar-wrapper">
+          <img 
+            [src]="user.avatar" 
+            [alt]="user.name" 
+            loading="lazy" 
+            decoding="async" />
+        </div>
+      
+        <div class="profile-info">
+          <h1 class="user-name">{{ user.name }}</h1>
+          <p class="user-role">{{ user.role }} • {{ user.department }}</p>
+          
+          <!-- Cápsula Responsiva de Empresa (QUALTOP / SYE) -->
+          <div class="company-badge" [ngClass]="user.company ? user.company.toLowerCase() : 'qualtop'">
+            <ion-icon name="business-outline"></ion-icon>
+            <span>Empresa: <strong>{{ user.company }}</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Menús Agrupados Estilo iOS / Settings -->
+      <section class="menu-groups">
+        
+        <!-- GRUPO CONFIGURACIÓN CON SWITCH DE TEMA TIPO APPLE -->
+        <div class="menu-group">
+          <span class="group-title">CONFIGURACIÓN</span>
+
+          <div class="group-card">
+            
+            <!-- Fila de Apariencia con Switcher tipo iOS -->
+            <div class="menu-item theme-switch-item">
+              <div class="item-left">
+                <div class="icon-box dark">
+                  <ion-icon [name]="isDarkMode ? 'moon' : 'sunny-outline'"></ion-icon>
+                </div>
+                <span class="item-label">Modo Oscuro</span>
+              </div>
+
+              <div class="item-right">
+                <ion-toggle 
+                  [checked]="isDarkMode" 
+                  (ionChange)="onThemeToggleChange($event)"
+                  mode="ios">
+                </ion-toggle>
+              </div>
+            </div>
+
+            <!-- Items de cuenta con modales asignados -->
+            <div 
+              *ngFor="let item of accountItems; let last = last" 
+              class="menu-item"
+              [class.has-divider]="!last"
+              (click)="openAccountModal(item.id)">
+              
+              <div class="item-left">
+                <div class="icon-box" [ngClass]="item.colorClass">
+                  <ion-icon [name]="item.icon"></ion-icon>
+                </div>
+                <span class="item-label">{{ item.label }}</span>
+              </div>
+
+              <div class="item-right">
+                <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+                <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- OTROS GRUPOS (Soporte, Organización) -->
+        <div *ngFor="let group of menuGroups" class="menu-group">
+          <span class="group-title">{{ group.title }}</span>
+
+          <div class="group-card">
+            <div 
+              *ngFor="let item of group.items; let last = last" 
+              class="menu-item"
+              [class.has-divider]="!last"
+              (click)="onItemClick(item)">
+              
+              <div class="item-left">
+                <div class="icon-box" [ngClass]="item.colorClass">
+                  <ion-icon [name]="item.icon"></ion-icon>
+                </div>
+                <span class="item-label">{{ item.label }}</span>
+              </div>
+
+              <div class="item-right">
+                <span *ngIf="item.isBeta" class="beta-tag">BETA</span>
+                <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+                <ion-icon name="chevron-forward-outline" class="chevron"></ion-icon>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón de Cierre de Sesión -->
+        <div class="menu-group">
+          <div class="group-card">
+            <button type="button" class="logout-btn" (click)="logout()">
+              <ion-icon name="log-out-outline"></ion-icon>
+              <span>Cerrar sesión</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- MODAL 1: PERFIL Y MI CUENTA -->
+    <ion-modal #profileModal [canDismiss]="canDismiss" [presentingElement]="page">
+      <ng-template>
+        <ion-header mode="ios">
+          <ion-toolbar>
+            <ion-title>Perfil y Cuenta</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="profileModal.dismiss()">Cerrar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding modal-body-custom">
+          
+          <div class="modal-profile-header">
+            <div class="avatar-large">
+              <img [src]="user.avatar" [alt]="user.name" />
+            </div>
+            <button type="button" class="change-avatar-btn">Cambiar foto</button>
+          </div>
+
+          <form class="modal-form" (ngSubmit)="saveProfile(profileModal)">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" [(ngModel)]="editUser.name" name="userName" required />
+            </div>
+
+            <div class="form-group">
+              <label>Puesto / Rol</label>
+              <input type="text" [value]="user.role" disabled class="input-disabled" />
+              <span class="field-hint">Asignado por Recursos Humanos</span>
+            </div>
+
+            <div class="form-group">
+              <label>Empresa asignada</label>
+              <input type="text" [value]="user.company" disabled class="input-disabled" />
+            </div>
+
+            <button type="submit" class="save-btn">Guardar cambios</button>
+          </form>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <!-- MODAL 2: NOTIFICACIONES Y ALERTAS -->
+    <ion-modal #notificationsModal [canDismiss]="canDismiss" [presentingElement]="page">
+      <ng-template>
+        <ion-header mode="ios">
+          <ion-toolbar>
+            <ion-title>Notificaciones y Alertas</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="notificationsModal.dismiss()">Cerrar</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding modal-body-custom">
+          
+          <div class="settings-group">
+            <span class="settings-group-title">PERMISOS NATIVOS</span>
+            
+            <div class="settings-card">
+              <div class="setting-row">
+                <div class="row-info">
+                  <span class="row-title">Alertas en la computadora</span>
+                  <span class="row-desc">Recibe avisos visuales directos en el sistema operativo</span>
+                </div>
+                <ion-toggle 
+                  [checked]="desktopNotificationsEnabled" 
+                  (ionChange)="toggleDesktopNotifications($event)" 
+                  mode="ios">
+                </ion-toggle>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <span class="settings-group-title">PREFERENCIAS DE AVISOS</span>
+            
+            <div class="settings-card">
+              <div class="setting-row has-divider">
+                <div class="row-info">
+                  <span class="row-title">Comunicados Oficiales</span>
+                  <span class="row-desc">Boletines y avisos de Recursos Humanos</span>
+                </div>
+                <ion-toggle [(ngModel)]="notificationPreferences.official" mode="ios"></ion-toggle>
+              </div>
+
+              <div class="setting-row has-divider">
+                <div class="row-info">
+                  <span class="row-title">Eventos y Cumpleaños</span>
+                  <span class="row-desc">Recordatorios de convivencias y fechas especiales</span>
+                </div>
+                <ion-toggle [(ngModel)]="notificationPreferences.events" mode="ios"></ion-toggle>
+              </div>
+            </div>
+          </div>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+  </ion-content>
+</div>

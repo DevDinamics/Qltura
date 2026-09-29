@@ -1,0 +1,648 @@
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .login-content-wrapper {
+    --background: #f6f8fc;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* =======================================================
+     1. ORBES DE LUZ Y MESH GRADIENT
+     ======================================================= */
+  .ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.45;
+    pointer-events: none;
+  
+    &.glow-orange {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(255, 85, 0, 0.35) 0%, rgba(255, 85, 0, 0) 70%);
+      top: -100px;
+      right: -80px;
+    }
+  
+    &.glow-blue {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.3) 0%, rgba(37, 99, 235, 0) 70%);
+      bottom: -120px;
+      left: -100px;
+    }
+  
+    &.glow-amber {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, rgba(245, 158, 11, 0) 70%);
+      top: 40%;
+      left: -50px;
+    }
+  }
+  
+  /* =======================================================
+     2. PATRONES Y FIGURAS GEOMÉTRICAS TECH
+     ======================================================= */
+  .tech-bg-patterns {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  
+    .geo-pattern {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      opacity: 0.35;
+  
+      &.pattern-dots-top-left {
+        top: 5%;
+        left: 4%;
+        background-image: radial-gradient(#ff5500 2px, transparent 2px);
+        background-size: 16px 16px;
+      }
+  
+      &.pattern-dots-bottom-right {
+        bottom: 6%;
+        right: 5%;
+        background-image: radial-gradient(#0f172a 2px, transparent 2px);
+        background-size: 16px 16px;
+      }
+    }
+  
+    .shape {
+      position: absolute;
+      font-family: monospace;
+      user-select: none;
+  
+      &.shape-cross {
+        font-size: 1.5rem;
+        font-weight: 300;
+  
+        &.cross-1 {
+          top: 18%;
+          right: 12%;
+          color: #ff5500;
+          animation: floatShape 6s ease-in-out infinite;
+        }
+  
+        &.cross-2 {
+          bottom: 22%;
+          left: 10%;
+          color: #2563eb;
+          animation: floatShape 8s ease-in-out infinite reverse;
+        }
+      }
+  
+      &.shape-triangle {
+        font-size: 0.85rem;
+  
+        &.triangle-1 {
+          top: 35%;
+          left: 8%;
+          color: #0f172a;
+          opacity: 0.6;
+          transform: rotate(15deg);
+        }
+  
+        &.triangle-2 {
+          bottom: 15%;
+          right: 15%;
+          color: #ff5500;
+          opacity: 0.7;
+          transform: rotate(-30deg);
+        }
+      }
+  
+      &.shape-circle-ring {
+        width: 48px;
+        height: 48px;
+        border: 2px dashed rgba(255, 85, 0, 0.3);
+        border-radius: 50%;
+        top: 65%;
+        right: 8%;
+        animation: spinRing 20s linear infinite;
+      }
+    }
+  }
+  
+  /* =======================================================
+     3. ESTRUCTURA Y TARJETA GLASSMORPHISM
+     ======================================================= */
+  .login-viewport {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.25rem;
+    max-width: 460px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .brand-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    .logo-wrapper {
+      margin-bottom: 1.25rem;
+      padding: 0.85rem 1.6rem;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.04),
+        0 0 1px rgba(0, 0, 0, 0.08);
+  
+      .brand-logo {
+        height: 42px;
+        width: auto;
+        object-fit: contain;
+        filter: none !important;
+      }
+    }
+  
+    .portal-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #0f172a !important;
+      margin: 0 0 0.35rem 0;
+      letter-spacing: -0.025em;
+    }
+  
+    .portal-tagline {
+      font-size: 0.875rem;
+      color: #64748b !important;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+  
+  .login-card {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    border-radius: 28px;
+    padding: 2.25rem 1.85rem;
+    box-shadow: 
+      0 25px 50px -12px rgba(15, 23, 42, 0.08),
+      0 0 1px rgba(0, 0, 0, 0.05);
+  
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  
+    label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #0f172a !important;
+      letter-spacing: -0.01em;
+    }
+  
+    .input-field {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 0.85rem 1.1rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  
+      .field-icon {
+        font-size: 1.25rem;
+        color: #94a3b8;
+      }
+  
+      input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #0f172a !important;
+        outline: none;
+  
+        &::placeholder {
+          color: #cbd5e1;
+        }
+      }
+  
+      &:focus-within {
+        border-color: #ff5500;
+        box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.12);
+        background: #ffffff;
+  
+        .field-icon {
+          color: #ff5500;
+        }
+      }
+    }
+  }
+  
+  .company-group {
+    .company-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  
+      .company-hint {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #ff5500;
+      }
+    }
+  
+    .company-pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+  
+      .pill-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border-radius: 14px;
+        border: 1.5px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.9);
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s ease;
+  
+        ion-icon { font-size: 1.1rem; }
+  
+        &.qualtop.active {
+          background: rgba(255, 85, 0, 0.1);
+          color: #ff5500;
+          border-color: #ff5500;
+          box-shadow: 0 4px 12px rgba(255, 85, 0, 0.15);
+        }
+  
+        &.sye.active {
+          background: rgba(37, 99, 235, 0.1);
+          color: #2563eb;
+          border-color: #2563eb;
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+      }
+    }
+  }
+  
+  .cta-submit-btn {
+    width: 100%;
+    margin-top: 0.25rem;
+    background: linear-gradient(135deg, #ff6600 0%, #ff4400 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 16px;
+    padding: 1rem;
+    font-size: 0.975rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    box-shadow: 0 12px 24px -6px rgba(255, 85, 0, 0.4);
+    transition: all 0.25s ease;
+  
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px -4px rgba(255, 85, 0, 0.5);
+    }
+  
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  .form-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 0.2rem 0;
+  
+    &::before, &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #e2e8f0;
+    }
+  
+    span {
+      padding: 0 0.75rem;
+      font-size: 0.725rem;
+      color: #94a3b8;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+  
+  .google-workspace-btn {
+    width: 100%;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0f172a !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  
+    ion-icon { font-size: 1.25rem; }
+  
+    &:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+  }
+  
+  /* =======================================================
+     4. ESTILOS ACCESO RÁPIDO DEMO
+     ======================================================= */
+  .demo-access-section {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed #cbd5e1;
+    width: 100%;
+  
+    .demo-divider {
+      text-align: center;
+      margin-bottom: 0.5rem;
+  
+      span {
+        font-size: 0.725rem;
+        font-weight: 800;
+        color: #ff5500;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+    }
+  
+    .demo-hint {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: center;
+      margin: 0 0 0.85rem 0;
+    }
+  
+    .demo-buttons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+  
+      .demo-card-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.65rem 0.75rem;
+        background: #ffffff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 16px;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.25s ease;
+  
+        .demo-avatar {
+          width: 32px;
+          height: 32px;
+          min-width: 32px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+  
+        .demo-info {
+          display: flex;
+          flex-direction: column;
+  
+          .demo-name {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+          }
+  
+          .demo-company-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+  
+            &.qualtop { color: #ff5500; }
+            &.sye { color: #2563eb; }
+          }
+        }
+  
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.08);
+  
+          &.qualtop { border-color: #ff5500; }
+          &.sye { border-color: #2563eb; }
+        }
+      }
+    }
+  }
+  
+  .login-footer {
+    margin-top: 2rem;
+    text-align: center;
+  
+    p {
+      font-size: 0.75rem;
+      color: #94a3b8 !important;
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+  
+  /* Keyframes Animaciones */
+  @keyframes floatShape {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(10deg); }
+  }
+  
+  @keyframes spinRing {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* RESPONSIVE ESCRITORIO */
+  @media (min-width: 769px) {
+    .login-viewport {
+      max-width: 480px;
+    }
+  
+    .login-card {
+      padding: 2.5rem 2.25rem;
+    }
+  }
+  
+  /* FORZAR MODO CLARO SIEMPRE */
+  :host-context(body.dark) {
+    .login-content-wrapper {
+      --background: #f6f8fc !important;
+    }
+  }
+
+
+  /* =======================================================
+   5. ANIMACIÓN FLUIDA DE TRANSICIÓN Y BIENVENIDA APPLE
+   ======================================================= */
+
+/* Suave disolución hacia atrás del formulario */
+.login-viewport {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.form-hidden {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+    pointer-events: none;
+  }
+}
+
+/* Overlay Glassmorphism en pantalla completa */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(246, 248, 252, 0.85);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  animation: fadeInOverlay 0.3s ease-out forwards;
+
+  .welcome-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: scaleCardUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .avatar-ring {
+    position: relative;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.18);
+
+    .user-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3.5px solid #ffffff;
+      background: #e2e8f0;
+    }
+
+    .success-badge {
+      position: absolute;
+      bottom: 0px;
+      right: 0px;
+      width: 30px;
+      height: 30px;
+      background: #34c759; // Verde Apple
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 4px 10px rgba(52, 199, 89, 0.4);
+      animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 0.18s backwards;
+
+      ion-icon {
+        font-size: 1.15rem;
+        --ionicon-stroke-width: 48px;
+      }
+    }
+  }
+
+  .company-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+
+    &.qualtop { color: #ff5500; }
+    &.sye { color: #2563eb; }
+  }
+
+  .welcome-name {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+  }
+
+  .welcome-status {
+    margin: 0.35rem 0 0 0;
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+}
+
+/* Keyframes de animación */
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleCardUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes popIn {
+  0% { 
+    transform: scale(0); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: scale(1); 
+    opacity: 1; 
+  }
+}

@@ -1,0 +1,520 @@
+/* =======================================================
+   1. REGLAS BASE & CONTENCIÓN DE IONIC
+   ======================================================= */
+:host {
+  display: block;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+ion-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000 !important;
+  background-color: var(--bg-surface, rgba(255, 255, 255, 0.85)) !important;
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  
+  /* Aceleración por hardware para eliminar flickering */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+  
+  overflow: visible !important;
+  contain: none !important;
+}
+
+ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  --min-height: auto;
+  padding: 0;
+  overflow: visible !important;
+  contain: none !important;
+}
+
+.navbar-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: visible !important;
+}
+
+/* =======================================================
+   2. GRUPO IZQUIERDO (LOGO & MENÚ DESKTOP)
+   ======================================================= */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  /* Contenedor estricto para evitar saltos de layout */
+  height: 38px;
+  width: 175px; 
+  cursor: pointer;
+  opacity: 0.95;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  .brand-logo {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    object-position: left center;
+    filter: var(--logo-filter, none);
+    transition: filter 0.25s ease, transform 0.2s ease;
+  }
+}
+
+.nav-links {
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 2.2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      position: relative;
+      padding: 0.5rem 0;
+
+      a {
+        position: relative;
+        font-family: var(--font-primary);
+        text-decoration: none;
+        color: var(--text-sub, #64748b);
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        transition: color 0.2s ease;
+        padding-bottom: 0.3rem;
+
+        &:hover {
+          color: #ff5500;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 0;
+          width: 100%;
+          height: 2.5px;
+          background-color: #ff5500;
+          border-radius: 4px 4px 0 0;
+          opacity: 0;
+          transform: scaleX(0);
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+        }
+
+        &.active {
+          color: #ff5500 !important;
+          font-weight: 700;
+
+          &::after {
+            opacity: 1;
+            transform: scaleX(1);
+          }
+        }
+      }
+    }
+  }
+}
+
+/* =======================================================
+   3. ACCIONES DERECHA (BUSCADOR, NOTIFICACIONES, AVATAR)
+   ======================================================= */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  overflow: visible !important;
+
+  .action-btn {
+    background: transparent;
+    border: none;
+    padding: 0.3rem;
+    color: var(--text-main, #1d1d1f);
+    opacity: 0.85;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    ion-icon {
+      font-size: 1.25rem;
+      color: var(--text-main, #1d1d1f);
+    }
+
+    &:hover, &.active {
+      opacity: 1;
+      color: #ff5500;
+
+      ion-icon {
+        color: #ff5500;
+      }
+    }
+  }
+
+  .notification-btn {
+    position: relative;
+
+    .notification-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 8px;
+      height: 8px;
+      background-color: #ff3b30;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(255, 59, 48, 0.6);
+
+      .pulse-ring {
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 1.5px solid #ff3b30;
+        animation: pulseBadge 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
+      }
+    }
+  }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.1));
+    transition: transform 0.2s ease, border-color 0.2s ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &:hover {
+      transform: scale(1.04);
+      border-color: #ff5500;
+    }
+  }
+}
+
+/* =======================================================
+   4. ESTILOS DE ION-POPOVER DE NOTIFICACIONES (APPLE GLASS)
+   ======================================================= */
+ion-popover.custom-notif-popover {
+  --width: 360px;
+  --max-width: 90vw;
+  --background: transparent;
+  --box-shadow: none;
+
+  &::part(content) {
+    border-radius: 24px;
+    background: var(--bg-surface, rgba(255, 255, 255, 0.94));
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+    box-shadow: 
+      0 20px 40px -10px rgba(0, 0, 0, 0.15),
+      0 0 1px rgba(0, 0, 0, 0.08);
+    padding: 1.1rem;
+    overflow: hidden;
+  }
+}
+
+.notif-dropdown-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+
+  .notif-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.06));
+
+    .notif-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+
+      h3 {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--text-main, #0f172a);
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+
+      .unread-count-pill {
+        font-size: 0.7rem;
+        font-weight: 800;
+        background: rgba(255, 85, 0, 0.1);
+        color: #ff5500;
+        padding: 0.2rem 0.55rem;
+        border-radius: 10px;
+      }
+    }
+
+    .mark-read-btn {
+      background: transparent;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-sub, #64748b);
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      ion-icon { font-size: 0.9rem; }
+
+      &:hover {
+        color: #ff5500;
+      }
+    }
+  }
+
+  .notif-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 320px;
+    overflow-y: auto;
+
+    .notif-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 0.75rem;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      position: relative;
+      text-decoration: none;
+
+      &:hover {
+        background: var(--bg-hover, rgba(0, 0, 0, 0.04));
+      }
+
+      &.unread {
+        background: rgba(255, 85, 0, 0.05);
+      }
+
+      .notif-icon-box {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        ion-icon { font-size: 1.15rem; }
+
+        &.birthday { background: rgba(225, 48, 108, 0.12); color: #e1306c; }
+        &.tech { background: rgba(99, 102, 241, 0.12); color: #6366f1; }
+        &.official { background: rgba(255, 85, 0, 0.12); color: #ff5500; }
+      }
+
+      .notif-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex: 1;
+
+        .notif-text {
+          font-size: 0.825rem;
+          font-weight: 600;
+          color: var(--text-main, #0f172a);
+          margin: 0;
+          line-height: 1.4;
+        }
+
+        .notif-time {
+          font-size: 0.7rem;
+          font-weight: 500;
+          color: var(--text-sub, #94a3b8);
+        }
+      }
+
+      .unread-dot {
+        width: 7px;
+        height: 7px;
+        background: #ff5500;
+        border-radius: 50%;
+        margin-top: 6px;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .notif-footer {
+    text-align: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.06));
+
+    a {
+      font-size: 0.775rem;
+      font-weight: 700;
+      color: #ff5500;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+/* =======================================================
+   5. TAB BAR INFERIOR MÓVIL
+   ======================================================= */
+.custom-tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 52px;
+  --background: var(--bg-surface, rgba(255, 255, 255, 0.85));
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  --border: none;
+  border-top: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  padding-bottom: env(safe-area-inset-bottom);
+  z-index: 1000;
+
+  ion-tab-button {
+    --color: var(--text-sub, #86868b);
+    --color-selected: #ff5500;
+    font-family: var(--font-primary);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+
+    ion-icon {
+      font-size: 1.35rem;
+      margin-bottom: 2px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    &.tab-selected {
+      font-weight: 600;
+
+      ion-icon {
+        transform: scale(1.12);
+      }
+    }
+  }
+}
+
+/* =======================================================
+   6. ANIMACIONES KEYFRAMES
+   ======================================================= */
+@keyframes pulseBadge {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* =======================================================
+   7. MEDIA QUERIES RESPONSIVE
+   ======================================================= */
+@media (min-width: 769px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  .navbar-wrapper {
+    padding: 0.6rem 1rem;
+  }
+
+  .logo-section {
+    height: 32px;
+    width: 150px;
+  }
+}
+
+/* =======================================================
+   8. SOPORTE MODO OSCURO META DARK (#242526)
+   ======================================================= */
+:host-context(body.dark) {
+  ion-header {
+    background-color: rgba(36, 37, 38, 0.88) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Compensación visual del logo blanco para igualar proporciones */
+  .logo-section .brand-logo {
+    filter: none !important;
+    transform: scale(0.84);
+    transform-origin: left center;
+  }
+
+  .nav-links ul li a {
+    color: #b0b3b8;
+    &:hover, &.active { color: #ff5500 !important; }
+  }
+
+  .action-btn ion-icon { color: #f8fafc !important; }
+
+  /* Popover Dark */
+  ion-popover.custom-notif-popover::part(content) {
+    background: rgba(36, 37, 38, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .notif-dropdown-content {
+    .notif-header {
+      border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+      .notif-title-row h3 { color: #f8fafc !important; }
+      .mark-read-btn { color: #b0b3b8 !important; }
+    }
+
+    .notif-list .notif-item {
+      &:hover { background: rgba(255, 255, 255, 0.05) !important; }
+      &.unread { background: rgba(255, 85, 0, 0.15) !important; }
+      .notif-body .notif-text { color: #f8fafc !important; }
+      .notif-body .notif-time { color: #b0b3b8 !important; }
+    }
+
+    .notif-footer {
+      border-top-color: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+
+  .custom-tab-bar {
+    --background: rgba(36, 37, 38, 0.88) !important;
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+
+    ion-tab-button {
+      --color: #b0b3b8 !important;
+      --color-selected: #ff5500 !important;
+    }
+  }
+}

@@ -1,0 +1,445 @@
+/* --- 1. IMPORTAR FUENTE Y ESTILOS NATIVOS DE IONIC --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* --- 2. PALETA DE VARIABLES MAESTRAS (CLARO VS META DARK) --- */
+:root {
+  --font-primary: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+  
+  /* MODO CLARO (Default) */
+  --bg-main: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-hover: #f8fafc;
+  --text-main: #0f172a;
+  --text-sub: #64748b;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --logo-filter: none;
+
+  /* Variables nativas de Ionic para Modo Claro */
+  --ion-background-color: var(--bg-main);
+  --ion-text-color: var(--text-main);
+}
+
+/* MODO OSCURO META (#18191A & #242526) */
+body.dark {
+  --bg-main: #18191a;
+  --bg-surface: #242526;
+  --bg-hover: #3a3b3c;
+  --text-main: #f8fafc;
+  --text-sub: #b0b3b8;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --logo-filter: brightness(0) invert(1);
+
+  /* Sobreescritura de Variables nativas de Ionic para el lienzo global */
+  --ion-background-color: var(--bg-main) !important;
+  --ion-text-color: var(--text-main) !important;
+  --ion-item-background: var(--bg-surface) !important;
+  --ion-toolbar-background: var(--bg-surface) !important;
+  --ion-card-background: var(--bg-surface) !important;
+}
+
+/* --- 3. RESET Y APLICACIÓN AL LIENZO PRINCIPAL --- */
+html, body, ion-app, ion-content {
+  font-family: var(--font-primary) !important;
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+ion-content {
+  --background: var(--bg-main) !important;
+  --color: var(--text-main) !important;
+}
+
+button, input, select, textarea, ion-button, ion-input, ion-item {
+  font-family: var(--font-primary);
+}
+
+/* --- 4. CUSTOM ALERT APPLE PRO MAX (ADAPTABLE) --- */
+.custom-beta-alert.sc-ion-alert-ios-h {
+  --background: var(--bg-surface);
+  
+  .alert-wrapper {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 24px !important;
+    padding: 0.5rem 0.25rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .alert-title {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: var(--text-main) !important;
+  }
+
+  .alert-sub-title {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    color: #8b5cf6 !important;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  .alert-message {
+    font-size: 0.875rem !important;
+    color: var(--text-sub) !important;
+    line-height: 1.45 !important;
+  }
+
+  .alert-button-group {
+    padding: 0.5rem 1rem 0.25rem 1rem !important;
+
+    .alert-button {
+      background: #ff5500 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      border-radius: 12px !important;
+      font-size: 0.9rem !important;
+
+      .alert-button-inner {
+        justify-content: center !important;
+      }
+    }
+  }
+}
+
+/* --- 5. SCROLLBARS PERSONALIZADAS META STYLE --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 85, 0, 0.5);
+}
+
+
+
+/* --- 1. IMPORTAR FUENTE Y ESTILOS NATIVOS DE IONIC --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "@ionic/angular/css/core.css";
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/* --- 2. PALETA DE VARIABLES MAESTRAS (CLARO VS META DARK) --- */
+:root {
+  --font-primary: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+  
+  /* MODO CLARO (Default) */
+  --bg-main: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-hover: #f8fafc;
+  --text-main: #0f172a;
+  --text-sub: #64748b;
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --logo-filter: none;
+
+  /* Variables nativas de Ionic para Modo Claro */
+  --ion-background-color: var(--bg-main);
+  --ion-text-color: var(--text-main);
+}
+
+/* MODO OSCURO META (#18191A & #242526) */
+body.dark {
+  --bg-main: #18191a;
+  --bg-surface: #242526;
+  --bg-hover: #3a3b3c;
+  --text-main: #f8fafc;
+  --text-sub: #b0b3b8;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --logo-filter: brightness(0) invert(1);
+
+  /* Sobreescritura de Variables nativas de Ionic para el lienzo global */
+  --ion-background-color: var(--bg-main) !important;
+  --ion-text-color: var(--text-main) !important;
+  --ion-item-background: var(--bg-surface) !important;
+  --ion-toolbar-background: var(--bg-surface) !important;
+  --ion-card-background: var(--bg-surface) !important;
+}
+
+/* --- 3. RESET Y APLICACIÓN AL LIENZO PRINCIPAL --- */
+html, body, ion-app, ion-content {
+  font-family: var(--font-primary) !important;
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+ion-content {
+  --background: var(--bg-main) !important;
+  --color: var(--text-main) !important;
+}
+
+button, input, select, textarea, ion-button, ion-input, ion-item {
+  font-family: var(--font-primary);
+}
+
+/* --- 4. CUSTOM ALERT APPLE PRO MAX (ADAPTABLE) --- */
+.custom-beta-alert.sc-ion-alert-ios-h {
+  --background: var(--bg-surface);
+  
+  .alert-wrapper {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 24px !important;
+    padding: 0.5rem 0.25rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .alert-title {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: var(--text-main) !important;
+  }
+
+  .alert-sub-title {
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    color: #8b5cf6 !important;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  .alert-message {
+    font-size: 0.875rem !important;
+    color: var(--text-sub) !important;
+    line-height: 1.45 !important;
+  }
+
+  .alert-button-group {
+    padding: 0.5rem 1rem 0.25rem 1rem !important;
+
+    .alert-button {
+      background: #ff5500 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      border-radius: 12px !important;
+      font-size: 0.9rem !important;
+
+      .alert-button-inner {
+        justify-content: center !important;
+      }
+    }
+  }
+}
+
+/* --- 5. SCROLLBARS PERSONALIZADAS META STYLE --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 85, 0, 0.5);
+}
+
+
+
+/* =======================================================
+   ANIMACIÓN DE TRANSICIÓN PARA CONTENIDO INTERNO
+   ======================================================= */
+
+   .animate-content-left {
+    animation: slideContentFromLeft 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    will-change: transform, opacity;
+  }
+  
+  @keyframes slideContentFromLeft {
+    0% {
+      opacity: 0;
+      transform: translate3d(-30px, 0, 0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+.animate-slide-left,
+ion-router-outlet > .ion-page {
+  /* Obliga al navegador a crear una capa de composición en la GPU */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+  
+  /* Aisla el renderizado de la página para que no recalcule el Navbar */
+  contain: content; 
+}
+
+
+/* =======================================================
+   ESTILOS GLOBALES PARA ION-ALERT EN MODO OSCURO
+   ======================================================= */
+   body.dark {
+    @media (min-width: 769px) {
+      ion-modal {
+        --border-color: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 24px;
+  
+        ion-header {
+          border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+        }
+      }
+    
+  
+      /* Título del Alert */
+      .alert-title {
+        color: #f8fafc !important;
+        font-weight: 700 !important;
+      }
+  
+      /* Subtítulo del Alert */
+      .alert-sub-title {
+        color: #ff5500 !important;
+        font-weight: 600 !important;
+      }
+  
+      /* Mensaje / Cuerpo del Alert */
+      .alert-message {
+        color: #b0b3b8 !important;
+        font-size: 0.9rem !important;
+      }
+  
+      /* Botones de acción */
+      .alert-button-group {
+        border-top-color: rgba(255, 255, 255, 0.08) !important;
+  
+        .alert-button {
+          color: #ff5500 !important; /* Color corporativo en el botón 'Entendido' */
+          font-weight: 700 !important;
+  
+          &.alert-button-role-cancel {
+            color: #b0b3b8 !important;
+          }
+        }
+      }
+    }
+  }
+
+
+
+  /* =======================================================
+   ESTILOS GLOBALES PARA ALERTAS ION-ALERT (MODO OSCURO)
+   ======================================================= */
+body.dark {
+  /* Alerta nativa en modo oscuro estilo iOS Glass */
+  ion-alert.sc-ion-alert-ios,
+  ion-alert {
+    --background: #242526 !important;
+    --color: #f8fafc !important;
+
+    /* Fondo de la tarjeta de alerta */
+    .alert-wrapper {
+      background: #242526 !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+      border-radius: 20px !important;
+    }
+
+    /* Título principal (ej. "Cerrar sesión" / "Módulo en desarrollo") */
+    .alert-title {
+      color: #f8fafc !important;
+      font-weight: 800 !important;
+    }
+
+    /* Subtítulo */
+    .alert-sub-title {
+      color: #ff5500 !important; // Naranja llamativo en lugar de blanco invisible
+      font-weight: 700 !important;
+    }
+
+    /* Mensaje descriptivo */
+    .alert-message {
+      color: #b0b3b8 !important; // Gris claro para lectura óptima
+      font-size: 0.875rem !important;
+    }
+
+    /* Líneas divisorias de los botones */
+    .alert-button-group {
+      border-top-color: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    /* Botones de acción */
+    .alert-button {
+      color: #3b82f6 !important; // Azul brillante por defecto para legibilidad
+      border-right-color: rgba(255, 255, 255, 0.1) !important;
+
+      /* Botón de Cancelar o secundario */
+      &.alert-button-role-cancel {
+        color: #94a3b8 !important;
+      }
+
+      /* Botón Destructivo (Cerrar sesión) */
+      &.alert-button-role-destructive {
+        color: #ef4444 !important; // Rojo vivo
+        font-weight: 800 !important;
+      }
+    }
+  }
+
+  /* Modales nativos (<ion-modal>) */
+  ion-modal {
+    --background: #18191a !important;
+
+    ion-header ion-toolbar {
+      --background: #242526 !important;
+      --color: #f8fafc !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    ion-title {
+      color: #f8fafc !important;
+    }
+
+    ion-button {
+      --color: #ff5500 !important;
+    }
+  }
+}

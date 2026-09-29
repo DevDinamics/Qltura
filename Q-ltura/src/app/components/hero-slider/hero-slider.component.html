@@ -1,0 +1,100 @@
+<section class="hero-slider-section">
+  <div class="hero-container">
+    
+    <!-- Botón Navegación Izquierda (Solo Desktop) -->
+    <button 
+      type="button"
+      class="nav-btn prev-btn desktop-only" 
+      (click)="prevSlide()" 
+      aria-label="Anterior slide">
+      <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+    </button>
+
+    <!-- Card Principal Glass/Minimalist con Eventos Touch -->
+    <article 
+      class="hero-card" 
+      [ngClass]="'theme-' + (currentSlide.accentTheme || 'orange')"
+      (touchstart)="onTouchStart($event)"
+      (touchend)="onTouchEnd($event)">
+      
+      <!-- Fondo de Luz Ambiental Estilo Apple Mesh -->
+      <div class="ambient-mesh-glow"></div>
+
+      <!-- 1. Contenido de Texto -->
+      <div class="hero-content">
+        
+        <!-- Meta Row (Tags & Company Badge) -->
+        <div class="meta-row">
+          <span class="hero-tag" *ngIf="currentSlide.tag">
+            {{ currentSlide.tag }}
+          </span>
+          
+          <span 
+            *ngIf="currentSlide.badgeCompany" 
+            class="company-pill"
+            [ngClass]="currentSlide.badgeCompany.toLowerCase()">
+            {{ currentSlide.badgeCompany }}
+          </span>
+        </div>
+
+        <!-- Título Impresionante -->
+        <h1 class="hero-title">
+          {{ currentSlide.title }} 
+          <span class="accent-text" *ngIf="currentSlide.highlightText">
+            {{ currentSlide.highlightText }}
+          </span>
+        </h1>
+        
+        <!-- Descripción -->
+        <p class="hero-description" *ngIf="currentSlide.description">
+          {{ currentSlide.description }}
+        </p>
+
+        <!-- Botón de Acción Principal -->
+        <button 
+          class="hero-cta" 
+          type="button"
+          [routerLink]="currentSlide.buttonUrl"
+          *ngIf="currentSlide.buttonText">
+          <span>{{ currentSlide.buttonText }}</span>
+          <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+        </button>
+      </div>
+
+      <!-- 2. Ilustración / Foto de Portada -->
+      <div class="hero-media">
+        <div class="image-stage">
+          <img 
+            [src]="currentSlide.imageSrc" 
+            [alt]="currentSlide.imageAlt || 'Ilustración del slide'" 
+            class="slide-img"
+            loading="eager"
+            decoding="async" />
+        </div>
+      </div>
+
+      <!-- 3. Paginador de Indicadores Estilo Píldora -->
+      <nav class="hero-pagination" aria-label="Navegación de diapositivas">
+        <button 
+          *ngFor="let slide of slides; let i = index" 
+          type="button"
+          class="dot-pill" 
+          [class.active]="i === currentIndex"
+          [attr.aria-label]="'Ir a la diapositiva ' + (i + 1)"
+          (click)="goToSlide(i)">
+        </button>
+      </nav>
+
+    </article>
+
+    <!-- Botón Navegación Derecha (Solo Desktop) -->
+    <button 
+      type="button"
+      class="nav-btn next-btn desktop-only" 
+      (click)="nextSlide()" 
+      aria-label="Siguiente slide">
+      <ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon>
+    </button>
+
+  </div>
+</section>

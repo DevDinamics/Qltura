@@ -1,0 +1,22 @@
+<section 
+  class="greeting-hero" 
+  [ngClass]="company ? company.toLowerCase() : 'qualtop'">
+  
+  <div class="greeting-content">
+    <!-- Eyebrow: Metadato limpio estilo iOS/macOS -->
+    <p class="greeting-eyebrow">
+      <time [attr.datetime]="formattedDate">{{ formattedDate }}</time>
+    </p>
+
+    <!-- Título Principal Editorial -->
+    <h1 class="greeting-headline">
+      {{ greetingPrefix }}, <span class="highlight">{{ userName }}</span>
+    </h1>
+
+    <!-- Subtítulo editorial fluido (sin aspecto de botón o chip cerrado) -->
+    <p class="greeting-subtext">
+      {{ motivationalQuote }}
+    </p>
+  </div>
+
+</section>

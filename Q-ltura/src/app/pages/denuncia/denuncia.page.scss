@@ -1,0 +1,282 @@
+:host {
+  display: block;
+}
+
+.denuncia-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Hero & Cards */
+.hero-denuncia-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 28px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.03);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+
+  .hero-content {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(139, 92, 246, 0.08);
+    color: #8b5cf6;
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 3.8vw, 2.75rem);
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    line-height: 1.15;
+    margin: 0 0 1rem 0;
+    transition: color 0.25s ease;
+
+    .accent-text { color: #ff5500; }
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    color: var(--text-sub, #64748b);
+    line-height: 1.5;
+    margin: 0 0 1.75rem 0;
+    transition: color 0.25s ease;
+  }
+
+  .btn-primary-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ff5500;
+    color: #ffffff;
+    border: none;
+    padding: 0.9rem 1.75rem;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(255, 85, 0, 0.25);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+
+    &:hover { 
+      transform: translateY(-2px); 
+      background: #ff6611;
+    }
+  }
+}
+
+.garantias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.garantia-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 20px;
+  padding: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+
+  .garantia-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    background: var(--bg-hover, #f8fafc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8b5cf6;
+    font-size: 1.3rem;
+    transition: background-color 0.25s ease;
+  }
+
+  h3 { 
+    font-size: 0.95rem; 
+    font-weight: 700; 
+    color: var(--text-main, #0f172a); 
+    margin: 0 0 0.25rem 0; 
+    transition: color 0.25s ease;
+  }
+  
+  p { 
+    font-size: 0.825rem; 
+    color: var(--text-sub, #64748b); 
+    margin: 0; 
+    line-height: 1.4; 
+    transition: color 0.25s ease;
+  }
+}
+
+/* --- MODAL Y CONTAINER DEL IFRAME --- */
+ion-modal.iframe-modal {
+  --width: 92%;
+  --max-width: 900px;
+  --height: 85vh;
+  --border-radius: 24px;
+  --backdrop-opacity: 0.5;
+
+  .modal-wrapper {
+    width: 100%;
+    height: 100%;
+    background: var(--bg-surface, #ffffff);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Barra estilo Mac OS Safari */
+  .modal-header {
+    background: #0f172a;
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .window-controls {
+      display: flex;
+      gap: 0.45rem;
+
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &.close { background: #ff5f56; }
+        &.minimize { background: #ffbd2e; }
+        &.expand { background: #27c93f; }
+      }
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+
+      ion-icon {
+        color: #10b981;
+        font-size: 0.9rem;
+      }
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+
+      &:hover { color: #ffffff; }
+    }
+  }
+
+  /* Contenedor del Iframe con Scroll Suave */
+  .iframe-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-surface, #ffffff);
+    overflow: hidden;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--bg-surface, #ffffff);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  ion-modal.iframe-modal {
+    --width: 98%;
+    --height: 92vh;
+  }
+}
+
+/* =======================================================
+   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
+   ======================================================= */
+:host-context(body.dark) {
+  .hero-denuncia-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .hero-badge {
+      background: rgba(139, 92, 246, 0.18) !important;
+      color: #a78bfa !important;
+    }
+
+    .hero-title {
+      color: #f8fafc !important;
+    }
+
+    .hero-subtitle {
+      color: #b0b3b8 !important;
+    }
+  }
+
+  .garantia-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .garantia-icon {
+      background: #3a3b3c !important;
+      color: #a78bfa !important;
+    }
+
+    h3 {
+      color: #f8fafc !important;
+    }
+
+    p {
+      color: #b0b3b8 !important;
+    }
+  }
+
+  ion-modal.iframe-modal {
+    .modal-wrapper {
+      background: #242526 !important;
+    }
+
+    .modal-header {
+      background: #18191a !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .iframe-container, iframe {
+      background: #242526 !important;
+    }
+  }
+}
