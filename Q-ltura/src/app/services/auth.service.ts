@@ -14,10 +14,14 @@ export interface UserSession {
   token?: string;
 }
 
+// Alias para mantener compatibilidad con login.page.ts
+export type AppUser = UserSession;
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly STORAGE_KEY = 'user_session';
 
   private currentUserSubject = new BehaviorSubject<UserSession | null>(null);
   public currentUser$: Observable<UserSession | null> = this.currentUserSubject.asObservable();
@@ -49,32 +53,41 @@ export class AuthService {
   }
 
   /**
-   * Carga la sesión guardada desde localStorage al iniciar la app.
+   * Carga la sesión guardada desde localStorage al iniciar la app
    */
   private loadInitialSession(): void {
     try {
-      const saved = localStorage.getItem('user_session');
+      const saved = localStorage.getItem(this.STORAGE_KEY);
       if (saved) {
-        this.currentUserSubject.next(JSON.parse(saved));
+        const session: UserSession = JSON.parse(saved);
+        this.currentUserSubject.next(session);
+        this.applyThemeToDom(session.company);
       }
     } catch (error) {
       console.error('Error al parsear la sesión activa:', error);
-      localStorage.removeItem('user_session');
+      localStorage.removeItem(this.STORAGE_KEY);
     }
   }
 
   /**
-   * Retorna el valor actual síncrono del usuario autenticado.
+   * Retorna el valor actual síncrono del usuario autenticado
    */
   public get currentUserValue(): UserSession | null {
     return this.currentUserSubject.value;
   }
 
   /**
-   * Inicia sesión seleccionando una cuenta de prueba rápida (Ana o Carlos).
+   * Inicia sesión seleccionando una cuenta de prueba rápida.
+   * Acepta tanto el ID ('demo-qualtop-01') como alias simples ('ana', 'carlos').
    */
-  public loginAsDemo(userId: string): UserSession {
-    const user = this.demoUsers.find(u => u.id === userId) || this.demoUsers[0];
+  public loginAsDemo(key: string): UserSession {
+    const search = key.toLowerCase();
+    const user = this.demoUsers.find(u => 
+      u.id === key || 
+      (search.includes('ana') && u.company === 'Qualtop') ||
+      (search.includes('carlos') && u.company === 'SYE')
+    ) || this.demoUsers[0];
+
     this.saveSession(user);
     return user;
   }
@@ -83,7 +96,6 @@ export class AuthService {
    * Inicia sesión con correo y empresa seleccionados manualmente.
    */
   public login(email: string, company: CompanyType): UserSession {
-    // Si coincide con alguno de los correos demo, cargamos su perfil completo
     const existingDemo = this.demoUsers.find(
       u => u.email.toLowerCase() === email.trim().toLowerCase()
     );
@@ -93,7 +105,6 @@ export class AuthService {
       return existingDemo;
     }
 
-    // Si es un correo nuevo, construimos la sesión dinámicamente
     const cleanEmail = email.trim();
     const nameFromEmail = cleanEmail.split('@')[0].replace(/[._-]/g, ' ');
     const formattedName = nameFromEmail.charAt(0).toUpperCase() + nameFromEmail.slice(1);
@@ -113,18 +124,45 @@ export class AuthService {
   }
 
   /**
-   * Guarda la sesión en localStorage y notifica a los suscriptores.
+   * Alias de login() requerido por login.page.ts
+   */
+  public loginWithEmail(email: string, company: CompanyType = 'Qualtop'): UserSession {
+    return this.login(email, company);
+  }
+
+  /**
+   * Conector asíncrono preparado para Google Cloud Platform / Firebase Auth
+   */
+  public async loginWithGoogleWorkspace(googleCredential?: any): Promise<UserSession> {
+    // Al conectar GCP, aquí se procesará el token OAuth de Google Workspace
+    const mockEmail = 'diego.delgado@qualtop.com';
+    return this.login(mockEmail, 'Qualtop');
+  }
+
+  /**
+   * Guarda la sesión, aplica la colorimetría en <body> y notifica suscriptores
    */
   private saveSession(session: UserSession): void {
-    localStorage.setItem('user_session', JSON.stringify(session));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(session));
+    this.applyThemeToDom(session.company);
     this.currentUserSubject.next(session);
   }
 
   /**
-   * Cierra la sesión activa y limpia el almacenamiento local.
+   * Inyecta la clase corporativa al body (.qualtop o .sye)
+   */
+  private applyThemeToDom(company: CompanyType): void {
+    const body = document.body;
+    body.classList.remove('qualtop', 'sye');
+    body.classList.add(company.toLowerCase());
+  }
+
+  /**
+   * Cierra la sesión activa y limpia las clases de color del DOM
    */
   public logout(): void {
-    localStorage.removeItem('user_session');
+    localStorage.removeItem(this.STORAGE_KEY);
+    document.body.classList.remove('qualtop', 'sye');
     this.currentUserSubject.next(null);
   }
 }

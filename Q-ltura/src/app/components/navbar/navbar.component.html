@@ -34,23 +34,25 @@
           <ion-icon name="search-outline"></ion-icon>
         </button>
 
-        <!-- BOTÓN DE NOTIFICACIONES -->
+        <!-- BOTÓN DE NOTIFICACIONES CON CONTADOR NUMÉRICO -->
         <button 
-          class="action-btn notification-btn" 
-          (click)="openPopover($event)"
-          aria-label="Notificaciones">
-          <ion-icon name="notifications-outline"></ion-icon>
-          
-          <span class="notification-badge" *ngIf="unreadCount > 0">
-            <span class="pulse-ring"></span>
-          </span>
-        </button>
+  class="action-btn notification-btn" 
+  [class.bell-ring]="hasNewIncomingNotification"
+  (click)="openPopover($event)"
+  aria-label="Notificaciones">
+  <ion-icon [name]="unreadCount > 0 ? 'notifications' : 'notifications-outline'"></ion-icon>
+  
+  <span class="notification-badge" *ngIf="unreadCount > 0">
+    {{ unreadCount > 9 ? '9+' : unreadCount }}
+    <span class="pulse-ring"></span>
+  </span>
+</button>
 
-        <!-- POPOVER DE NOTIFICACIONES -->
+        <!-- POPOVER DE NOTIFICACIONES (APPLE GLASS) -->
         <ion-popover 
           [isOpen]="isPopoverOpen" 
           [event]="popoverEvent"
-          (didDismiss)="isPopoverOpen = false"
+          (didDismiss)="onPopoverDismiss()"
           side="bottom" 
           alignment="end" 
           mode="ios"
@@ -62,6 +64,7 @@
                 <div class="notif-title-row">
                   <h3>Notificaciones</h3>
                   <span class="unread-count-pill" *ngIf="unreadCount > 0">{{ unreadCount }} nuevas</span>
+                  <span class="all-caught-up-pill" *ngIf="unreadCount === 0">Al día</span>
                 </div>
                 
                 <button 
@@ -74,13 +77,13 @@
                 </button>
               </div>
 
+              <!-- Lista de notificaciones -->
               <div class="notif-list">
                 <div 
                   *ngFor="let item of notificationsList" 
                   class="notif-item" 
                   [class.unread]="item.unread"
-                  [routerLink]="['/avisos']"
-                  (click)="isPopoverOpen = false">
+                  (click)="onNotificationClick(item)">
                   
                   <div class="notif-icon-box" [ngClass]="item.type">
                     <ion-icon *ngIf="item.type === 'birthday'" name="gift-outline"></ion-icon>
@@ -93,7 +96,13 @@
                     <span class="notif-time">{{ item.time }}</span>
                   </div>
 
+                  <!-- Punto indicador de no leído -->
                   <span class="unread-dot" *ngIf="item.unread"></span>
+                </div>
+
+                <div class="empty-notif" *ngIf="notificationsList.length === 0">
+                  <ion-icon name="notifications-off-outline"></ion-icon>
+                  <p>No tienes notificaciones pendientes</p>
                 </div>
               </div>
 

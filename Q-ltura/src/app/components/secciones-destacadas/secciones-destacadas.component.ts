@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router'; // Importamos Router para la navegación real
 import { addIcons } from 'ionicons';
 import { 
   calendarOutline, 
   shieldCheckmarkOutline, 
   gitNetworkOutline, 
   callOutline, 
-  arrowForwardOutline 
+  arrowForwardOutline,
+  mailOutline, // Para el modal
+  logoWhatsapp // Para el modal
 } from 'ionicons/icons';
 
 export interface SeccionDestacada {
@@ -18,6 +21,7 @@ export interface SeccionDestacada {
   ctaText: string;
   colorClass: 'orange' | 'purple' | 'green';
   route?: string;
+  action?: 'modal' | 'navigate'; // Para saber qué hacer al hacer clic
 }
 
 @Component({
@@ -32,6 +36,9 @@ export interface SeccionDestacada {
 })
 export class SeccionesDestacadasComponent implements OnInit {
 
+  // Control del Modal de Contacto
+  isContactModalOpen = false;
+
   secciones: SeccionDestacada[] = [
     {
       id: 'eventos',
@@ -40,7 +47,8 @@ export class SeccionesDestacadasComponent implements OnInit {
       icon: 'calendar-outline',
       ctaText: 'Ver calendario',
       colorClass: 'orange',
-      route: '/eventos'
+      route: '/avisos',
+      action: 'navigate'
     },
     {
       id: 'politicas',
@@ -49,8 +57,11 @@ export class SeccionesDestacadasComponent implements OnInit {
       icon: 'shield-checkmark-outline',
       ctaText: 'Ir a la biblioteca',
       colorClass: 'purple',
-      route: '/politicas'
+      route: '/politicas',
+      action: 'navigate'
     },
+    /* 
+    --- ORGANIGRAMA COMENTADO PARA FUTURO USO ---
     {
       id: 'organigrama',
       title: 'Organigrama',
@@ -58,8 +69,10 @@ export class SeccionesDestacadasComponent implements OnInit {
       icon: 'git-network-outline',
       ctaText: 'Ver organigrama',
       colorClass: 'green',
-      route: '/organigrama'
+      route: '/organigrama',
+      action: 'navigate'
     },
+    */
     {
       id: 'contacto',
       title: 'Contáctanos',
@@ -67,25 +80,33 @@ export class SeccionesDestacadasComponent implements OnInit {
       icon: 'call-outline',
       ctaText: 'Ver contactos',
       colorClass: 'orange',
-      route: '/contacto'
+      action: 'modal' // Disparará el modal en lugar de navegar
     }
   ];
 
-  constructor() {
-    // REGISTRAR LOS ÍCONOS DE IONIC
+  constructor(private router: Router) {
     addIcons({
       'calendar-outline': calendarOutline,
       'shield-checkmark-outline': shieldCheckmarkOutline,
       'git-network-outline': gitNetworkOutline,
       'call-outline': callOutline,
-      'arrow-forward-outline': arrowForwardOutline
+      'arrow-forward-outline': arrowForwardOutline,
+      'mail-outline': mailOutline,
+      'logo-whatsapp': logoWhatsapp
     });
   }
 
   ngOnInit(): void {}
 
   onCardClick(seccion: SeccionDestacada) {
-    console.log('Navegando a:', seccion.route);
+    if (seccion.action === 'modal' && seccion.id === 'contacto') {
+      this.isContactModalOpen = true;
+    } else if (seccion.action === 'navigate' && seccion.route) {
+      this.router.navigate([seccion.route]);
+    }
   }
 
+  closeContactModal() {
+    this.isContactModalOpen = false;
+  }
 }

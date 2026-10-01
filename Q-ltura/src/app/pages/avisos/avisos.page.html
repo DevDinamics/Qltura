@@ -1,147 +1,193 @@
 <ion-content [fullscreen]="true">
   
-  <main class="calendar-container animate-content-left">
+  <!-- Wrapper principal para forzar al footer al fondo de la pantalla -->
+  <div class="page-wrapper">
     
-    <!-- Subheader Principal con Switcher -->
-    <header class="page-header">
-      <div class="header-titles">
-        <span class="page-tag">CALENDARIO CORPORATIVO</span>
-        <h1 class="page-title">Agenda & Actividades</h1>
-      </div>
-
-      <!-- Selector de Vista (Agenda / Mes) -->
-      <div class="view-switcher">
-        <button 
-          type="button" 
-          [class.active]="activeView === 'agenda'" 
-          (click)="activeView = 'agenda'">
-          Agenda Próxima
-        </button>
-        <button 
-          type="button" 
-          [class.active]="activeView === 'mes'" 
-          (click)="activeView = 'mes'">
-          Vista Mensual
-        </button>
-      </div>
-    </header>
-
-    <!-- FILTROS DE CATEGORÍA RÁPIDOS -->
-    <section class="category-filters" *ngIf="activeView === 'agenda'">
-      <button 
-        type="button" 
-        class="filter-chip" 
-        [class.active]="selectedFilter === 'ALL'"
-        (click)="selectedFilter = 'ALL'">
-        Todos
-      </button>
+    <main class="calendar-container animate-content-left">
       
-      <button 
-        type="button" 
-        class="filter-chip birthday" 
-        [class.active]="selectedFilter === 'birthday'"
-        (click)="selectedFilter = 'birthday'">
-        <ion-icon name="gift-outline"></ion-icon>
-        <span>Festejos</span>
-      </button>
-
-      <button 
-        type="button" 
-        class="filter-chip tech" 
-        [class.active]="selectedFilter === 'tech'"
-        (click)="selectedFilter = 'tech'">
-        <ion-icon name="sparkles-outline"></ion-icon>
-        <span>Sistemas & TI</span>
-      </button>
-
-      <button 
-        type="button" 
-        class="filter-chip culture" 
-        [class.active]="selectedFilter === 'culture'"
-        (click)="selectedFilter = 'culture'">
-        <ion-icon name="business-outline"></ion-icon>
-        <span>Cultura</span>
-      </button>
-    </section>
-
-    <!-- LISTADO DE EVENTOS (VISTA AGENDA) -->
-    <section *ngIf="activeView === 'agenda'" class="events-feed">
-      
-      <article *ngFor="let event of filteredEvents" class="event-card" [ngClass]="event.type">
-        
-        <!-- Bloque Izquierdo: Fecha Calendario -->
-        <div class="event-date-badge">
-          <span class="month">{{ event.monthShort }}</span>
-          <span class="day">{{ event.dayNumber }}</span>
+      <!-- Subheader Principal con Switcher -->
+      <header class="page-header">
+        <div class="header-titles">
+          <span class="page-tag">CALENDARIO CORPORATIVO</span>
+          <h1 class="page-title">Agenda & Actividades</h1>
         </div>
 
-        <!-- Bloque Centro: Contenido Principal -->
-        <div class="event-content">
-          
-          <div class="event-meta-header">
-            <span class="type-pill" [ngClass]="event.type">
-              {{ event.badgeLabel }}
-            </span>
-            
-            <span *ngIf="event.isVirtual" class="virtual-pill">
-              <ion-icon name="videocam-outline"></ion-icon>
-              <span>En Línea</span>
-            </span>
-          </div>
-
-          <h2 class="event-title">{{ event.title }}</h2>
-          <p class="event-desc">{{ event.description }}</p>
-
-          <div class="event-details-row">
-            <div class="detail-item">
-              <ion-icon name="time-outline"></ion-icon>
-              <span>{{ event.fullDateText }}{{ event.time ? ' • ' + event.time : '' }}</span>
-            </div>
-
-            <div class="detail-item" *ngIf="event.location">
-              <ion-icon name="location-outline"></ion-icon>
-              <span>{{ event.location }}</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Bloque Derecho: Acción / Asistencia -->
-        <div class="event-action">
+        <div class="view-switcher">
           <button 
             type="button" 
-            class="confirm-btn"
-            [class.confirmed]="event.isConfirmed"
-            (click)="toggleConfirmEvent(event)">
-            <ion-icon [name]="event.isConfirmed ? 'notifications' : 'notifications-outline'"></ion-icon>
-            <span>{{ event.isConfirmed ? 'Agendado' : 'Recordar' }}</span>
+            [class.active]="activeView === 'agenda'" 
+            (click)="activeView = 'agenda'">
+            Agenda Próxima
+          </button>
+          <button 
+            type="button" 
+            [class.active]="activeView === 'mes'" 
+            (click)="activeView = 'mes'">
+            Vista Mensual
           </button>
         </div>
+      </header>
 
-      </article>
+      <!-- FILTROS DE CATEGORÍA RÁPIDOS -->
+      <section class="category-filters" *ngIf="activeView === 'agenda'">
+        <button 
+          type="button" 
+          class="filter-chip" 
+          [class.active]="selectedFilter === 'ALL'"
+          (click)="setFilter('ALL')">
+          Todos
+        </button>
+        
+        <button 
+          type="button" 
+          class="filter-chip birthday" 
+          [class.active]="selectedFilter === 'birthday'"
+          (click)="setFilter('birthday')">
+          <ion-icon name="gift-outline"></ion-icon>
+          <span>Festejos</span>
+        </button>
 
-      <!-- Estado vacío cuando no hay avisos para la empresa/filtro -->
-      <div class="empty-state" *ngIf="filteredEvents.length === 0">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <p>No hay actividades programadas en esta categoría para tu filial.</p>
-      </div>
+        <button 
+          type="button" 
+          class="filter-chip tech" 
+          [class.active]="selectedFilter === 'tech'"
+          (click)="setFilter('tech')">
+          <ion-icon name="sparkles-outline"></ion-icon>
+          <span>Sistemas & TI</span>
+        </button>
 
-    </section>
+        <button 
+          type="button" 
+          class="filter-chip culture" 
+          [class.active]="selectedFilter === 'culture'"
+          (click)="setFilter('culture')">
+          <ion-icon name="business-outline"></ion-icon>
+          <span>Cultura</span>
+        </button>
+      </section>
 
-    <!-- VISTA MES (PLACEHOLDER ELEGANTE TIPO CALENDARIO) -->
-    <section *ngIf="activeView === 'mes'" class="month-grid-card">
-      <div class="grid-header">
-        <h3>Calendario Corporativo</h3>
-        <p>Integración en tiempo real sincronizada con Google Workspace</p>
-      </div>
+      <!-- LISTADO DE EVENTOS (VISTA AGENDA) -->
+      <section *ngIf="activeView === 'agenda'" class="events-feed">
+        
+        <!-- ESTADO DE CARGA: SKELETON LOADER -->
+        <ng-container *ngIf="isLoading">
+          <article *ngFor="let i of skeletonArray" class="event-card skeleton-card">
+            <div class="event-date-badge skeleton-box"></div>
+            <div class="event-content">
+              <div class="event-meta-header">
+                <div class="skeleton-pill skeleton-box"></div>
+                <div class="skeleton-pill skeleton-box"></div>
+              </div>
+              <div class="skeleton-title skeleton-box"></div>
+              <div class="skeleton-desc skeleton-box"></div>
+              <div class="skeleton-details skeleton-box"></div>
+            </div>
+            <div class="event-action">
+              <div class="skeleton-btn skeleton-box"></div>
+            </div>
+          </article>
+        </ng-container>
 
-      <div class="calendar-placeholder-box">
-        <ion-icon name="calendar-outline" class="placeholder-icon"></ion-icon>
-        <p>Los eventos sincronizados de Google Calendar se mostrarán organizados por fecha.</p>
-      </div>
-    </section>
+        <!-- DATOS REALES PAGINADOS (Cuando ya cargó) -->
+        <ng-container *ngIf="!isLoading">
+          <article *ngFor="let event of paginatedEvents" class="event-card" [ngClass]="event.type">
+            
+            <div class="event-date-badge">
+              <span class="month">{{ event.monthShort }}</span>
+              <span class="day">{{ event.dayNumber }}</span>
+            </div>
 
-  </main>
+            <div class="event-content">
+              <div class="event-meta-header">
+                <span class="type-pill" [ngClass]="event.type">
+                  {{ event.badgeLabel }}
+                </span>
+                <span *ngIf="event.isVirtual" class="virtual-pill">
+                  <ion-icon name="videocam-outline"></ion-icon>
+                  <span>En Línea</span>
+                </span>
+              </div>
 
-  <app-footer></app-footer>
+              <h2 class="event-title">{{ event.title }}</h2>
+              <p class="event-desc">{{ event.description }}</p>
+
+              <div class="event-details-row">
+                <div class="detail-item">
+                  <ion-icon name="time-outline"></ion-icon>
+                  <span>{{ event.fullDateText }}{{ event.time ? ' • ' + event.time : '' }}</span>
+                </div>
+                <div class="detail-item" *ngIf="event.location">
+                  <ion-icon name="location-outline"></ion-icon>
+                  <span>{{ event.location }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="event-action">
+              <button 
+                type="button" 
+                class="confirm-btn"
+                [class.confirmed]="event.isConfirmed"
+                (click)="toggleConfirmEvent(event)">
+                <ion-icon [name]="event.isConfirmed ? 'notifications' : 'notifications-outline'"></ion-icon>
+                <span>{{ event.isConfirmed ? 'Agendado' : 'Recordar' }}</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- CONTROLES DE PAGINACIÓN MINIMALISTA TIPO META -->
+          <nav class="meta-pagination" *ngIf="totalPages > 1" aria-label="Navegación de páginas">
+            <button 
+              type="button" 
+              class="page-arrow-btn" 
+              [disabled]="currentPage === 1" 
+              (click)="prevPage()" 
+              aria-label="Página anterior">
+              <ion-icon name="chevron-back-outline"></ion-icon>
+            </button>
+
+            <div class="page-indicator-pill">
+              <span class="current">{{ currentPage }}</span>
+              <span class="divider">/</span>
+              <span class="total">{{ totalPages }}</span>
+            </div>
+
+            <button 
+              type="button" 
+              class="page-arrow-btn" 
+              [disabled]="currentPage === totalPages" 
+              (click)="nextPage()" 
+              aria-label="Página siguiente">
+              <ion-icon name="chevron-forward-outline"></ion-icon>
+            </button>
+          </nav>
+
+          <!-- Estado vacío cuando no hay avisos para la empresa/filtro -->
+          <div class="empty-state" *ngIf="filteredEvents.length === 0">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <p>No hay actividades programadas en esta categoría para tu filial.</p>
+          </div>
+        </ng-container>
+
+      </section>
+
+      <!-- VISTA MES (PLACEHOLDER) -->
+      <section *ngIf="activeView === 'mes'" class="month-grid-card">
+        <div class="grid-header">
+          <h3>Calendario Corporativo</h3>
+          <p>Integración en tiempo real sincronizada con Google Workspace</p>
+        </div>
+
+        <div class="calendar-placeholder-box">
+          <ion-icon name="calendar-outline" class="placeholder-icon"></ion-icon>
+          <p>Los eventos sincronizados de Google Calendar se mostrarán organizados por fecha.</p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer empujado al fondo -->
+    <app-footer></app-footer>
+
+  </div>
 </ion-content>

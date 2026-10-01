@@ -9,8 +9,7 @@ import {
   ToastController,
   ViewWillEnter 
 } from '@ionic/angular/standalone';
-import { AuthService } from '../../services/auth.service';
-import { CompanyType } from '../../shared/models/user.model';
+import { AuthService, CompanyType, AppUser } from '../../services/auth.service';
 import { addIcons } from 'ionicons';
 import { 
   mailOutline, 
@@ -48,11 +47,11 @@ export class LoginPage implements ViewWillEnter {
   showCompanySelector: boolean = false;
   isLoading: boolean = false;
 
-  // Estado para la animación de bienvenida
+  // Estado para la animación de bienvenida cinematográfica
   isAuthenticating: boolean = false;
   authUserData = {
     name: 'Colaborador',
-    company: 'Qualtop',
+    company: 'Qualtop' as CompanyType,
     avatar: 'https://i.pravatar.cc/150?img=32'
   };
 
@@ -67,7 +66,7 @@ export class LoginPage implements ViewWillEnter {
     });
   }
 
-  // Se ejecuta automáticamente cada vez que Ionic entra a la vista (incluso tras un logout)
+  // Se ejecuta automáticamente cada vez que Ionic enfoca la vista (incluso tras un logout)
   ionViewWillEnter(): void {
     this.isAuthenticating = false;
     this.isLoading = false;
@@ -75,6 +74,7 @@ export class LoginPage implements ViewWillEnter {
     this.cdr.markForCheck();
   }
 
+  // Detección automática de dominio corporativo
   onEmailChange(): void {
     const cleanEmail = this.email.toLowerCase().trim();
 
@@ -91,7 +91,22 @@ export class LoginPage implements ViewWillEnter {
     }
   }
 
-  // Login manual
+  // 1. Acceso Rápido Demo (Ana -> Qualtop | Carlos -> SYE)
+  quickDemoLogin(profile: 'ana' | 'carlos' | string): void {
+    this.isLoading = true;
+    const user = this.authService.loginAsDemo(profile as 'ana' | 'carlos');
+
+    setTimeout(() => {
+      this.isLoading = false;
+      this.triggerWelcomeTransition(
+        user.name, 
+        user.company, 
+        user.avatar || 'https://i.pravatar.cc/150?img=32'
+      );
+    }, 300);
+  }
+
+  // 2. Login manual por credenciales
   async onLogin(): Promise<void> {
     if (!this.email || !this.password) {
       this.presentToast('Por favor ingresa correo y contraseña', 'warning');
@@ -102,35 +117,36 @@ export class LoginPage implements ViewWillEnter {
   
     setTimeout(() => {
       this.isLoading = false;
-      this.authService.login(this.email, this.selectedCompany);
-      
-      const inferredName = this.email.split('@')[0].split('.')[0];
-      const capitalized = inferredName.charAt(0).toUpperCase() + inferredName.slice(1);
+      const user = this.authService.loginWithEmail(this.email, this.selectedCompany);
 
-      this.triggerWelcomeTransition(
-        capitalized || 'Colaborador', 
-        this.selectedCompany, 
-        'https://i.pravatar.cc/150?img=32'
-      );
-    }, 600);
-  }
-
-  // Acceso rápido demo
-  async quickDemoLogin(userId: string): Promise<void> {
-    this.isLoading = true;
-    const user = this.authService.loginAsDemo(userId);
-
-    setTimeout(() => {
-      this.isLoading = false;
       this.triggerWelcomeTransition(
         user.name, 
-        user.company as CompanyType, 
+        user.company, 
         user.avatar || 'https://i.pravatar.cc/150?img=32'
       );
-    }, 400);
+    }, 500);
   }
 
-  // Ejecuta la animación de entrada al portal
+  // 3. Autenticación corporativa (Preparada para GCP / Google Workspace)
+  async loginWithGoogle(): Promise<void> {
+    this.isLoading = true;
+    try {
+      // Conector asíncrono listo para recibir credenciales de GCP / Firebase Auth
+      const user = await this.authService.loginWithGoogleWorkspace();
+      this.triggerWelcomeTransition(
+        user.name, 
+        user.company, 
+        user.avatar || 'https://i.pravatar.cc/150?img=32'
+      );
+    } catch {
+      this.presentToast('Error al conectar con Google Workspace', 'warning');
+    } finally {
+      this.isLoading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  // Dispara la animación y navega al portal
   private triggerWelcomeTransition(name: string, company: CompanyType, avatar: string): void {
     this.authUserData = { name, company, avatar };
     this.isAuthenticating = true;
@@ -142,11 +158,7 @@ export class LoginPage implements ViewWillEnter {
         this.isAuthenticating = false;
         this.cdr.markForCheck();
       });
-    }, 1500);
-  }
-
-  loginWithGoogle(): void {
-    this.presentToast('Conectando con Google Workspace...', 'secondary');
+    }, 1400);
   }
 
   private async presentToast(message: string, color: 'success' | 'warning' | 'secondary'): Promise<void> {

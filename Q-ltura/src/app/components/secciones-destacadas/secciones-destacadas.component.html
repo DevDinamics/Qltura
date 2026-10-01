@@ -1,5 +1,6 @@
 <section class="destacadas-container">
-  <div class="destacadas-card">
+  <!-- Agregamos una clase dinámica basada en el número de items activos -->
+  <div class="destacadas-card" [ngClass]="'items-' + secciones.length">
     
     <article 
       *ngFor="let item of secciones; let last = last" 
@@ -34,3 +35,84 @@
 
   </div>
 </section>
+
+<!-- =======================================================
+     MODAL DE CONTACTO (APPLE PREMIUM UI)
+     ======================================================= -->
+<ion-modal 
+  [isOpen]="isContactModalOpen" 
+  (didDismiss)="closeContactModal()"
+  class="contact-modal-apple">
+  <ng-template>
+    
+    <div class="modal-wrapper">
+      
+      <!-- Cabecera estilo Mac OS -->
+      <header class="modal-header-mac">
+        <div class="window-controls">
+          <span class="dot close" (click)="closeContactModal()"></span>
+          <span class="dot minimize"></span>
+          <span class="dot expand"></span>
+        </div>
+        <span class="modal-title-pill">Directorio de Soporte</span>
+        <button class="close-btn" (click)="closeContactModal()">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+      </header>
+
+      <!-- Contenido del Modal -->
+      <main class="modal-content-glass">
+        
+        <div class="contact-hero">
+          <div class="hero-icon-wrapper">
+            <ion-icon name="call-outline"></ion-icon>
+          </div>
+          <h2>¿Cómo podemos ayudarte?</h2>
+          <p>Selecciona el área con la que deseas comunicarte. Te responderemos lo más pronto posible.</p>
+        </div>
+
+        <div class="contact-options-grid">
+          
+          <!-- Opción 1: Recursos Humanos -->
+          <a href="mailto:rh@empresa.com" class="contact-option-card">
+            <div class="option-icon purple">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="option-info">
+              <h3>Talento & Q-ltura</h3>
+              <p>t&q&#64;@qualtop.com</p>
+            </div>
+            <ion-icon name="arrow-forward-outline" class="chevron"></ion-icon>
+          </a>
+
+          <!-- Opción 2: Soporte TI -->
+          <a href="https://wa.me/5215555555555" target="_blank" class="contact-option-card">
+            <div class="option-icon green">
+              <ion-icon name="logo-whatsapp"></ion-icon>
+            </div>
+            <div class="option-info">
+              <h3>Soporte TI (WhatsApp)</h3>
+              <p>Respuesta rápida</p>
+            </div>
+            <ion-icon name="arrow-forward-outline" class="chevron"></ion-icon>
+          </a>
+
+           <!-- Opción 3: Administración -->
+           <a href="mailto:admin@empresa.com" class="contact-option-card">
+            <div class="option-icon orange">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="option-info">
+              <h3>Administración</h3>
+              <p>admin&#64;qualtop.com</p>
+            </div>
+            <ion-icon name="arrow-forward-outline" class="chevron"></ion-icon>
+          </a>
+
+        </div>
+
+      </main>
+
+    </div>
+  </ng-template>
+</ion-modal>

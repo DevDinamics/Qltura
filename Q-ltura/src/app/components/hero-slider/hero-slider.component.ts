@@ -4,7 +4,8 @@ import {
   OnDestroy, 
   ChangeDetectionStrategy, 
   ChangeDetectorRef, 
-  NgZone 
+  NgZone,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -16,6 +17,9 @@ import {
   arrowForwardOutline, 
   sparklesOutline 
 } from 'ionicons/icons';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service'; // Asegúrate de tener la ruta correcta
 
 export interface Slide {
   id: number;
@@ -40,14 +44,21 @@ export interface Slide {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroSliderComponent implements OnInit, OnDestroy {
-  public currentIndex = 0;
-  private autoPlayInterval: any;
+  private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
+  private authService = inject(AuthService);
+  private destroy$ = new Subject<void>();
 
-  // Variables para la detección del Swipe táctil en móvil
+  public currentIndex = 0;
+  public currentCompany: string = 'qualtop'; // Clase CSS por defecto
+  public slides: Slide[] = []; // Slides filtrados que se mostrarán
+
+  private autoPlayInterval: any;
   private touchStartX = 0;
   private touchEndX = 0;
 
-  public slides: Slide[] = [
+  // Tu base de datos estática
+  private allSlides: Slide[] = [
     {
       id: 1,
       tag: 'CULTURA Y EVENTOS',
@@ -76,10 +87,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
-  ) {
+  constructor() {
     addIcons({
       chevronBackOutline,
       chevronForwardOutline,
@@ -89,24 +97,44 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.startAutoPlay();
+    // Escuchar qué usuario inició sesión
+    this.authService.currentUser$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
+        if (user && user.company) {
+          // Guardamos 'qualtop' o 'sye' en minúsculas para inyectarlo como clase CSS
+          this.currentCompany = user.company.toLowerCase(); 
+          
+          // Filtramos el arreglo estático para que solo vea los de su empresa (o los globales si tuvieras)
+          this.slides = this.allSlides.filter(
+            slide => slide.badgeCompany?.toLowerCase() === this.currentCompany
+          );
+        } else {
+          this.slides = this.allSlides; // Fallback
+        }
+        
+        this.currentIndex = 0;
+        this.cdr.markForCheck();
+        this.resetAutoPlay();
+      });
   }
 
   ngOnDestroy(): void {
     this.stopAutoPlay();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   get currentSlide(): Slide {
     return this.slides[this.currentIndex];
   }
 
-  // Desplazamiento base sin disparar reinicios infinitos de timer
   private changeSlide(delta: number): void {
+    if (this.slides.length <= 1) return;
     this.currentIndex = (this.currentIndex + delta + this.slides.length) % this.slides.length;
     this.cdr.markForCheck();
   }
 
-  // Métodos invocados por interacción del usuario (resetean el temporizador)
   public nextSlide(): void {
     this.changeSlide(1);
     this.resetAutoPlay();
@@ -123,7 +151,6 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     this.resetAutoPlay();
   }
 
-  /* --- MANEJO DE GESTOS TOUCH/SWIPE MÓVIL --- */
   public onTouchStart(event: TouchEvent): void {
     this.touchStartX = event.changedTouches[0].screenX;
   }
@@ -142,8 +169,10 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     }
   }
 
-  /* --- CONTROL DEL TEMPORIZADOR AUTOMÁTICO --- */
   private startAutoPlay(): void {
+    this.stopAutoPlay();
+    if (this.slides.length <= 1) return;
+
     this.ngZone.runOutsideAngular(() => {
       this.autoPlayInterval = setInterval(() => {
         this.ngZone.run(() => {

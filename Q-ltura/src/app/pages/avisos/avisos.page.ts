@@ -40,6 +40,7 @@ export interface CalendarEvent {
   location: string;
   type: 'birthday' | 'culture' | 'tech' | 'official';
   badgeLabel: string;
+  company: 'Qualtop' | 'SYE' | 'Ambas';
   isVirtual?: boolean;
   isConfirmed?: boolean;
 }
@@ -70,6 +71,12 @@ export class AvisosPage implements OnInit, OnDestroy {
   currentCompany: string = 'Qualtop';
 
   events: CalendarEvent[] = [];
+  isLoading: boolean = true; 
+  skeletonArray = [1, 2, 3]; 
+
+  // --- CONFIGURACIÓN DE PAGINACIÓN MINIMALISTA ---
+  readonly pageSize: number = 5;
+  currentPage: number = 1;
 
   constructor() {
     addIcons({
@@ -88,7 +95,6 @@ export class AvisosPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Escuchar el usuario activo de la sesión para filtrar por su empresa
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
@@ -105,14 +111,23 @@ export class AvisosPage implements OnInit, OnDestroy {
   }
 
   async fetchActivitiesFromSanity(): Promise<void> {
+    this.isLoading = true;
+    this.currentPage = 1; // Reiniciar página al consultar
+    this.cdr.markForCheck();
+
     try {
-      const query = `*[_type == "activity" && (company == $company || company == "Ambas")] | order(eventDate asc) {
+      const query = `*[
+        _type == "activity" && 
+        !(_id in path("drafts.**")) && 
+        (lower(company) == lower($company) || company == "Ambas")
+      ] | order(eventDate desc) {
         "id": _id,
         title,
         description,
         eventDate,
         timeRange,
         location,
+        company,
         "type": category,
         "badgeLabel": categoryLabel,
         "isVirtual": isOnline
@@ -140,23 +155,66 @@ export class AvisosPage implements OnInit, OnDestroy {
             location: item.location || 'Remoto / En línea',
             type: item.type || 'culture',
             badgeLabel: item.badgeLabel || 'Actividad Corporativa',
+            company: item.company || 'Ambas',
             isVirtual: item.isVirtual ?? false,
             isConfirmed: false
           };
         });
+      } else {
+        this.events = [];
       }
-
-      this.cdr.markForCheck();
     } catch (error) {
       console.error('Error al cargar actividades desde Sanity:', error);
+      this.events = [];
+    } finally {
+      setTimeout(() => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }, 500);
     }
   }
 
+  // --- FILTRADO Y PAGINACIÓN ---
   get filteredEvents(): CalendarEvent[] {
     if (this.selectedFilter === 'ALL') {
       return this.events;
     }
     return this.events.filter(e => e.type === this.selectedFilter);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredEvents.length / this.pageSize) || 1;
+  }
+
+  get paginatedEvents(): CalendarEvent[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.filteredEvents.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  public setFilter(filter: 'ALL' | 'birthday' | 'culture' | 'tech'): void {
+    this.selectedFilter = filter;
+    this.currentPage = 1; // Al cambiar categoría volvemos a la primera página
+    this.cdr.markForCheck();
+  }
+
+  public prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.scrollToTop();
+      this.cdr.markForCheck();
+    }
+  }
+
+  public nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.scrollToTop();
+      this.cdr.markForCheck();
+    }
+  }
+
+  private scrollToTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   async toggleConfirmEvent(event: CalendarEvent): Promise<void> {

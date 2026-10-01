@@ -2,6 +2,34 @@
   display: block;
 }
 
+/* =======================================================
+   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
+   ======================================================= */
+:host-context(body.qualtop) {
+  --brand-primary: #ff5500;
+  --brand-glow: rgba(255, 85, 0, 0.25);
+  --brand-muted: rgba(255, 85, 0, 0.08);
+}
+
+:host-context(body.sye) {
+  --brand-primary: #6366f1;
+  --brand-glow: rgba(99, 102, 241, 0.25);
+  --brand-muted: rgba(99, 102, 241, 0.08);
+}
+
+:host-context(body.dark.qualtop) {
+  --brand-primary: #ff7700;
+  --brand-glow: rgba(255, 119, 0, 0.3);
+  --brand-muted: rgba(255, 119, 0, 0.15);
+}
+
+:host-context(body.dark.sye) {
+  --brand-primary: #818cf8;
+  --brand-glow: rgba(129, 140, 248, 0.3);
+  --brand-muted: rgba(129, 140, 248, 0.15);
+}
+
+
 .denuncia-container {
   width: 100%;
   max-width: 1240px;
@@ -34,8 +62,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: rgba(139, 92, 246, 0.08);
-    color: #8b5cf6;
+    background: var(--brand-muted); /* Fondo dinámico basado en la empresa */
+    color: var(--brand-primary);    /* Texto dinámico basado en la empresa */
     padding: 0.35rem 0.85rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -51,7 +79,7 @@
     margin: 0 0 1rem 0;
     transition: color 0.25s ease;
 
-    .accent-text { color: #ff5500; }
+    .accent-text { color: var(--brand-primary); } /* Acento en el título dinámico */
   }
 
   .hero-subtitle {
@@ -66,7 +94,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: #ff5500;
+    background: var(--brand-primary); /* Fondo del botón dinámico */
     color: #ffffff;
     border: none;
     padding: 0.9rem 1.75rem;
@@ -74,12 +102,12 @@
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(255, 85, 0, 0.25);
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 8px 24px var(--brand-glow); /* Sombra del botón dinámica */
+    transition: transform 0.2s ease, opacity 0.2s ease;
 
     &:hover { 
       transform: translateY(-2px); 
-      background: #ff6611;
+      opacity: 0.9; 
     }
   }
 }
@@ -109,7 +137,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #8b5cf6;
+    color: var(--brand-primary); /* Icono de la garantía dinámico */
     font-size: 1.3rem;
     transition: background-color 0.25s ease;
   }
@@ -234,8 +262,8 @@ ion-modal.iframe-modal {
     border-color: rgba(255, 255, 255, 0.08) !important;
 
     .hero-badge {
-      background: rgba(139, 92, 246, 0.18) !important;
-      color: #a78bfa !important;
+      background: var(--brand-muted) !important; /* Mantenemos consistencia con la empresa en dark mode */
+      color: var(--brand-primary) !important;
     }
 
     .hero-title {
@@ -253,7 +281,7 @@ ion-modal.iframe-modal {
 
     .garantia-icon {
       background: #3a3b3c !important;
-      color: #a78bfa !important;
+      color: var(--brand-primary) !important;
     }
 
     h3 {

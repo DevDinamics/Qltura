@@ -1,2 +1,33 @@
-// For information on how to create your own theme, please refer to:
-// https://ionicframework.com/docs/theming/
+/* =======================================================
+   PALETAS CORPORATIVAS MULTI-TENANT
+   ======================================================= */
+
+/* --- QUALTOP (Naranja) --- */
+body.qualtop {
+    --brand-primary: #ff5500;
+    --brand-gradient: linear-gradient(135deg, #ff6600 0%, #ff3300 100%);
+    --brand-glow: rgba(255, 85, 0, 0.4);
+    --brand-muted: rgba(255, 85, 0, 0.1);
+    --brand-border: rgba(255, 85, 0, 0.25);
+  }
+  
+  /* --- SYE (Lila / Púrpura) --- */
+  body.sye {
+    --brand-primary: #6366f1;
+    --brand-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --brand-glow: rgba(99, 102, 241, 0.4);
+    --brand-muted: rgba(99, 102, 241, 0.1);
+    --brand-border: rgba(99, 102, 241, 0.25);
+  }
+  
+  /* Respaldo para Modo Oscuro */
+  body.dark {
+    &.qualtop {
+      --brand-primary: #ff7700;
+      --brand-glow: rgba(255, 119, 0, 0.25);
+    }
+    &.sye {
+      --brand-primary: #818cf8;
+      --brand-glow: rgba(129, 140, 248, 0.25);
+    }
+  }

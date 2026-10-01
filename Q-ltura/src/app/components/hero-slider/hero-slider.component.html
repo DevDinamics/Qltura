@@ -1,8 +1,11 @@
-<section class="hero-slider-section">
-  <div class="hero-container">
+<!-- La clase dinámica pinta todo de Naranja (Qualtop) o Lila (SYE) -->
+<section class="hero-slider-section" [ngClass]="currentCompany">
+  
+  <div class="hero-container" *ngIf="slides.length > 0">
     
-    <!-- Botón Navegación Izquierda (Solo Desktop) -->
+    <!-- Botón Navegación Izquierda -->
     <button 
+      *ngIf="slides.length > 1"
       type="button"
       class="nav-btn prev-btn desktop-only" 
       (click)="prevSlide()" 
@@ -10,10 +13,9 @@
       <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
     </button>
 
-    <!-- Card Principal Glass/Minimalist con Eventos Touch -->
+    <!-- Card Principal Glass/Minimalist -->
     <article 
       class="hero-card" 
-      [ngClass]="'theme-' + (currentSlide.accentTheme || 'orange')"
       (touchstart)="onTouchStart($event)"
       (touchend)="onTouchEnd($event)">
       
@@ -23,7 +25,6 @@
       <!-- 1. Contenido de Texto -->
       <div class="hero-content">
         
-        <!-- Meta Row (Tags & Company Badge) -->
         <div class="meta-row">
           <span class="hero-tag" *ngIf="currentSlide.tag">
             {{ currentSlide.tag }}
@@ -31,26 +32,23 @@
           
           <span 
             *ngIf="currentSlide.badgeCompany" 
-            class="company-pill"
-            [ngClass]="currentSlide.badgeCompany.toLowerCase()">
+            class="company-pill">
             {{ currentSlide.badgeCompany }}
           </span>
         </div>
 
-        <!-- Título Impresionante -->
         <h1 class="hero-title">
           {{ currentSlide.title }} 
           <span class="accent-text" *ngIf="currentSlide.highlightText">
+            <br>
             {{ currentSlide.highlightText }}
           </span>
         </h1>
         
-        <!-- Descripción -->
         <p class="hero-description" *ngIf="currentSlide.description">
           {{ currentSlide.description }}
         </p>
 
-        <!-- Botón de Acción Principal -->
         <button 
           class="hero-cta" 
           type="button"
@@ -73,8 +71,8 @@
         </div>
       </div>
 
-      <!-- 3. Paginador de Indicadores Estilo Píldora -->
-      <nav class="hero-pagination" aria-label="Navegación de diapositivas">
+      <!-- 3. Paginador de Indicadores -->
+      <nav class="hero-pagination" aria-label="Navegación de diapositivas" *ngIf="slides.length > 1">
         <button 
           *ngFor="let slide of slides; let i = index" 
           type="button"
@@ -87,8 +85,9 @@
 
     </article>
 
-    <!-- Botón Navegación Derecha (Solo Desktop) -->
+    <!-- Botón Navegación Derecha -->
     <button 
+      *ngIf="slides.length > 1"
       type="button"
       class="nav-btn next-btn desktop-only" 
       (click)="nextSlide()" 

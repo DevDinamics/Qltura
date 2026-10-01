@@ -3,6 +3,33 @@
   width: 100%;
 }
 
+/* =======================================================
+   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
+   ======================================================= */
+:host-context(body.qualtop) {
+  --brand-primary: #ff5500;
+  --brand-glow: rgba(255, 85, 0, 0.35);
+  --brand-muted: rgba(255, 85, 0, 0.09);
+  --brand-border: rgba(255, 85, 0, 0.2);
+}
+
+:host-context(body.sye) {
+  --brand-primary: #6366f1;
+  --brand-glow: rgba(99, 102, 241, 0.35);
+  --brand-muted: rgba(99, 102, 241, 0.09);
+  --brand-border: rgba(99, 102, 241, 0.2);
+}
+
+:host-context(body.dark.qualtop) {
+  --brand-primary: #ff7700;
+  --brand-glow: rgba(255, 119, 0, 0.45);
+}
+
+:host-context(body.dark.sye) {
+  --brand-primary: #818cf8;
+  --brand-glow: rgba(129, 140, 248, 0.45);
+}
+
 .mas-container {
   width: 100%;
   max-width: 800px;
@@ -60,7 +87,7 @@
       transition: color 0.25s ease;
     }
 
-    /* CÁPSULA MODERNA DE EMPRESA */
+    /* CÁPSULA MODERNA DE EMPRESA (Dinámica) */
     .company-badge {
       display: inline-flex;
       align-items: center;
@@ -70,6 +97,10 @@
       border-radius: 20px;
       align-self: flex-start;
       transition: all 0.25s ease;
+      /* Aplica las variables locales según la empresa activa */
+      background: var(--brand-muted);
+      color: var(--brand-primary);
+      border: 1px solid var(--brand-border);
 
       ion-icon {
         font-size: 0.9rem;
@@ -78,20 +109,6 @@
       strong {
         font-weight: 800;
         letter-spacing: 0.02em;
-      }
-
-      /* Variante QUALTOP (Naranja Warm) */
-      &.qualtop {
-        background: rgba(255, 85, 0, 0.09);
-        color: #ff5500;
-        border: 1px solid rgba(255, 85, 0, 0.2);
-      }
-
-      /* Variante SYE (Azul Tech) */
-      &.sye {
-        background: rgba(37, 99, 235, 0.09);
-        color: #2563eb;
-        border: 1px solid rgba(37, 99, 235, 0.2);
       }
     }
   }
@@ -161,6 +178,7 @@
 
     ion-icon { font-size: 1.2rem; }
 
+    /* Mantenemos los colores originales de los iconos estáticos */
     &.purple { background: rgba(139, 92, 246, 0.08); color: #8b5cf6; }
     &.orange { background: rgba(255, 85, 0, 0.08); color: #ff5500; }
     &.blue   { background: rgba(37, 99, 235, 0.08); color: #3b82f6; }
@@ -194,9 +212,10 @@
   }
 
   .beta-tag {
-    background: rgba(139, 92, 246, 0.08);
-    color: #8b5cf6;
-    border: 1px solid rgba(139, 92, 246, 0.15);
+    /* Color de tag de Beta dinámico si lo prefieres, o mantenlo en un lila neutro */
+    background: var(--brand-muted);
+    color: var(--brand-primary);
+    border: 1px solid var(--brand-border);
     font-size: 0.68rem;
     font-weight: 800;
     padding: 0.15rem 0.55rem;
@@ -292,9 +311,9 @@
   }
 
   .change-avatar-btn {
-    background: rgba(255, 85, 0, 0.08);
-    border: 1px solid rgba(255, 85, 0, 0.2);
-    color: #ff5500;
+    background: var(--brand-muted);
+    border: 1px solid var(--brand-border);
+    color: var(--brand-primary);
     font-size: 0.8rem;
     font-weight: 700;
     padding: 0.4rem 1rem;
@@ -303,7 +322,7 @@
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 85, 0, 0.15);
+      background: var(--brand-glow);
       transform: translateY(-1px);
     }
 
@@ -343,8 +362,8 @@
       transition: all 0.2s ease;
 
       &:focus {
-        border-color: #ff5500;
-        box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.12);
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 4px var(--brand-muted);
       }
 
       &.input-disabled {
@@ -365,7 +384,7 @@
 
   .save-btn {
     margin-top: 1.25rem;
-    background: #ff5500;
+    background: var(--brand-primary); /* Color dinámico */
     color: #ffffff;
     border: none;
     border-radius: 16px;
@@ -373,13 +392,13 @@
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 10px 25px -5px rgba(255, 85, 0, 0.35);
+    box-shadow: 0 10px 25px -5px var(--brand-glow);
     transition: all 0.2s ease;
 
     &:hover {
-      background: #e64d00;
+      opacity: 0.9;
       transform: translateY(-2px);
-      box-shadow: 0 14px 28px -4px rgba(255, 85, 0, 0.45);
+      box-shadow: 0 14px 28px -4px var(--brand-glow);
     }
 
     &:active {
@@ -505,9 +524,9 @@
     }
 
     .beta-tag {
-      background: rgba(139, 92, 246, 0.18) !important;
-      color: #a78bfa !important;
-      border-color: rgba(139, 92, 246, 0.3) !important;
+      background: var(--brand-muted) !important;
+      color: var(--brand-primary) !important;
+      border-color: var(--brand-border) !important;
     }
 
     .chevron {
@@ -538,8 +557,8 @@
       color: #f8fafc !important;
 
       &:focus {
-        border-color: #ff5500 !important;
-        box-shadow: 0 0 0 4px rgba(255, 85, 0, 0.25) !important;
+        border-color: var(--brand-primary) !important;
+        box-shadow: 0 0 0 4px var(--brand-muted) !important;
       }
 
       &.input-disabled {

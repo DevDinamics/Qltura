@@ -3,11 +3,28 @@
   width: 100%;
 }
 
+/* =======================================================
+   SISTEMA DE VARIABLES POR EMPRESA
+   ======================================================= */
 .hero-slider-section {
   width: 100%;
   max-width: 1200px;
   margin: 1.5rem auto 2.5rem auto;
   padding: 0 1rem;
+
+  /* VARIABLES POR DEFECTO (QUALTOP - NARANJA) */
+  --theme-main: #ff5500;
+  --theme-gradient: linear-gradient(135deg, #ff6600 0%, #ff3300 100%);
+  --theme-glow: rgba(255, 85, 0, 0.4);
+  --theme-muted: rgba(255, 85, 0, 0.08);
+
+  /* MODIFICADOR SYE (LILA/PÚRPURA) */
+  &.sye {
+    --theme-main: #6366f1;
+    --theme-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --theme-glow: rgba(99, 102, 241, 0.4);
+    --theme-muted: rgba(99, 102, 241, 0.08);
+  }
 }
 
 .hero-container {
@@ -17,7 +34,7 @@
   justify-content: center;
 }
 
-/* --- TARJETA PRINCIPAL (ESTILO APPLE CARD) --- */
+/* --- TARJETA PRINCIPAL --- */
 .hero-card {
   position: relative;
   width: 100%;
@@ -34,7 +51,7 @@
     0 20px 40px -15px rgba(0, 0, 0, 0.04),
     0 0 1px rgba(0, 0, 0, 0.06);
   overflow: hidden;
-  touch-action: pan-y; /* Habilita deslizamiento táctil horizontal sin bloquear el scroll de la página */
+  touch-action: pan-y;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Orbe ambiental sutil de fondo */
@@ -48,29 +65,8 @@
     filter: blur(90px);
     opacity: 0.12;
     pointer-events: none;
+    background: var(--theme-main); /* Toma el color de la empresa */
     transition: background 0.5s ease;
-  }
-
-  /* Variaciones de acento dinámico según tema */
-  &.theme-orange {
-    .ambient-mesh-glow { background: #ff5500; }
-    .hero-cta { background: #ff5500; box-shadow: 0 10px 25px -5px rgba(255, 85, 0, 0.35); }
-    .hero-cta:hover { background: #e64d00; }
-    .accent-text { color: #ff5500; }
-  }
-
-  &.theme-purple {
-    .ambient-mesh-glow { background: #6366f1; }
-    .hero-cta { background: #6366f1; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.35); }
-    .hero-cta:hover { background: #4f46e5; }
-    .accent-text { color: #6366f1; }
-  }
-
-  &.theme-blue {
-    .ambient-mesh-glow { background: #2563eb; }
-    .hero-cta { background: #2563eb; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.35); }
-    .hero-cta:hover { background: #1d4ed8; }
-    .accent-text { color: #2563eb; }
   }
 }
 
@@ -102,16 +98,8 @@
       padding: 0.2rem 0.6rem;
       border-radius: 12px;
       letter-spacing: 0.03em;
-
-      &.qualtop {
-        background: rgba(255, 85, 0, 0.08);
-        color: #ff5500;
-      }
-
-      &.sye {
-        background: rgba(37, 99, 235, 0.08);
-        color: #2563eb;
-      }
+      background: var(--theme-muted);
+      color: var(--theme-main);
     }
   }
 
@@ -126,6 +114,8 @@
     .accent-text {
       display: block;
       font-weight: 800;
+      color: var(--theme-main);
+      transition: color 0.3s ease;
     }
   }
 
@@ -149,6 +139,8 @@
     font-size: 0.925rem;
     font-weight: 700;
     cursor: pointer;
+    background: var(--theme-gradient);
+    box-shadow: 0 10px 25px -5px var(--theme-glow);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
     ion-icon {
@@ -158,10 +150,8 @@
 
     &:hover {
       transform: translateY(-2px);
-
-      ion-icon {
-        transform: translateX(4px);
-      }
+      box-shadow: 0 14px 28px -4px var(--theme-glow);
+      ion-icon { transform: translateX(4px); }
     }
 
     &:active {
@@ -170,7 +160,7 @@
   }
 }
 
-/* --- MULTIMEDIA (STAGE IMAGEN) --- */
+/* --- MULTIMEDIA --- */
 .hero-media {
   display: flex;
   justify-content: center;
@@ -196,14 +186,12 @@
       filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08));
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 
-      &:hover {
-        transform: scale(1.02);
-      }
+      &:hover { transform: scale(1.02); }
     }
   }
 }
 
-/* --- PAGINACIÓN PÍLDORA SLIM --- */
+/* --- PAGINACIÓN --- */
 .hero-pagination {
   position: absolute;
   bottom: 1.35rem;
@@ -225,7 +213,7 @@
     cursor: pointer;
 
     &.active {
-      background: var(--text-main, #0f172a);
+      background: var(--theme-main);
       width: 26px;
     }
   }
@@ -265,16 +253,10 @@
   &.next-btn { right: -20px; }
 }
 
-/* --- ANIMACIONES APPLE SMOOTH --- */
+/* --- ANIMACIONES --- */
 @keyframes appleSlideIn {
-  from {
-    opacity: 0;
-    transform: cubic-bezier(0.16, 1, 0.3, 1) translate3d(0, 12px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
+  from { opacity: 0; transform: cubic-bezier(0.16, 1, 0.3, 1) translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
 @keyframes appleFade {
@@ -282,7 +264,7 @@
   to { opacity: 1; }
 }
 
-/* --- RESPONSIVE MOBILE & TABLET (OCULTA FLECHAS Y DEJA TOUCH) --- */
+/* --- RESPONSIVE MOBILE & TABLET --- */
 @media (max-width: 900px) {
   .hero-card {
     padding: 2.5rem 2rem 3.5rem 2rem;
@@ -293,15 +275,10 @@
 
   .hero-media {
     order: -1;
-    
-    .slide-img {
-      max-height: 220px;
-    }
+    .slide-img { max-height: 220px; }
   }
 
-  .nav-btn {
-    display: none !important; /* Desaparecen flechas en tablet y celular */
-  }
+  .nav-btn { display: none !important; }
 }
 
 @media (max-width: 640px) {
@@ -311,34 +288,33 @@
   }
 
   .hero-content {
-    .hero-title {
-      font-size: 1.65rem;
-    }
-
-    .hero-description {
-      font-size: 0.875rem;
-      margin-bottom: 1.35rem;
-    }
-
-    .hero-cta {
-      width: 100%;
-      justify-content: center;
-      padding: 0.85rem;
-    }
+    .hero-title { font-size: 1.65rem; }
+    .hero-description { font-size: 0.875rem; margin-bottom: 1.35rem; }
+    .hero-cta { width: 100%; justify-content: center; padding: 0.85rem; }
   }
 }
 
 /* =======================================================
-   RESPALDO MODO OSCURO META DARK
+   SOPORTE MODO OSCURO (META DARK) 
    ======================================================= */
 :host-context(body.dark) {
+  .hero-slider-section {
+    &.qualtop {
+      --theme-main: #ff7700;
+      --theme-glow: rgba(255, 119, 0, 0.25);
+    }
+    
+    &.sye {
+      --theme-main: #818cf8;
+      --theme-glow: rgba(129, 140, 248, 0.25);
+    }
+  }
+
   .hero-card {
     background: #242526 !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
 
-    .ambient-mesh-glow {
-      opacity: 0.2;
-    }
+    .ambient-mesh-glow { opacity: 0.15; }
   }
 
   .hero-content {
@@ -348,18 +324,11 @@
 
   .hero-pagination .dot-pill {
     background: rgba(255, 255, 255, 0.2);
-
-    &.active {
-      background: #f8fafc !important;
-    }
   }
 
   .nav-btn {
     background: #3a3b3c !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
-
-    ion-icon {
-      color: #f8fafc !important;
-    }
+    ion-icon { color: #f8fafc !important; }
   }
 }

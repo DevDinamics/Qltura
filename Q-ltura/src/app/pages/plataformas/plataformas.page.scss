@@ -2,6 +2,29 @@
   display: block;
 }
 
+/* =======================================================
+   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
+   ======================================================= */
+:host-context(body.qualtop) {
+  --brand-primary: #ff5500;
+  --brand-glow: rgba(255, 85, 0, 0.25);
+}
+
+:host-context(body.sye) {
+  --brand-primary: #6366f1;
+  --brand-glow: rgba(99, 102, 241, 0.25);
+}
+
+:host-context(body.dark.qualtop) {
+  --brand-primary: #ff7700;
+  --brand-glow: rgba(255, 119, 0, 0.3);
+}
+
+:host-context(body.dark.sye) {
+  --brand-primary: #818cf8;
+  --brand-glow: rgba(129, 140, 248, 0.3);
+}
+
 .plataformas-container {
   width: 100%;
   max-width: 1240px;
@@ -29,7 +52,7 @@
       gap: 0.35rem;
       font-size: 0.75rem;
       font-weight: 800;
-      color: #8b5cf6;
+      color: var(--brand-primary); /* Color dinámico para la etiqueta superior */
       letter-spacing: 0.08em;
       text-transform: uppercase;
 
@@ -123,10 +146,10 @@
       }
 
       &.active {
-        background: #ff5500;
+        background: var(--brand-primary); /* Color dinámico para el botón de filtro activo */
         color: #ffffff;
-        border-color: #ff5500;
-        box-shadow: 0 4px 12px rgba(255, 85, 0, 0.25);
+        border-color: var(--brand-primary); /* Color dinámico para el borde del botón activo */
+        box-shadow: 0 4px 12px var(--brand-glow); /* Sombra dinámica */
       }
     }
   }
@@ -153,15 +176,16 @@
   border-radius: 20px;
   padding: 1.25rem;
   cursor: pointer;
-  contain: content; // <-- Optimiza el repintado de la tarjeta durante la transición
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.25s ease;
+  contain: content; 
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.25s ease;
+  
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.08);
-    border-color: rgba(255, 85, 0, 0.3);
+    border-color: var(--brand-glow); /* Borde dinámico al pasar el cursor */
 
     .open-action {
-      color: #ff5500;
+      color: var(--brand-primary); /* Texto dinámico en la acción al pasar el cursor */
       gap: 0.45rem;
     }
   }
@@ -333,10 +357,6 @@
    ======================================================= */
 :host-context(body.dark) {
   .page-header .header-text {
-    .page-tag {
-      color: #a78bfa !important;
-    }
-
     .page-title {
       color: #f8fafc !important;
     }
@@ -374,10 +394,10 @@
     }
 
     &.active {
-      background: #ff5500 !important;
+      background: var(--brand-primary) !important; /* Color dinámico en modo oscuro */
       color: #ffffff !important;
-      border-color: #ff5500 !important;
-      box-shadow: 0 4px 12px rgba(255, 85, 0, 0.3) !important;
+      border-color: var(--brand-primary) !important; /* Borde dinámico en modo oscuro */
+      box-shadow: 0 4px 12px var(--brand-glow) !important; /* Sombra dinámica en modo oscuro */
     }
   }
 
@@ -386,10 +406,10 @@
     border-color: rgba(255, 255, 255, 0.08) !important;
 
     &:hover {
-      border-color: rgba(255, 85, 0, 0.4) !important;
+      border-color: var(--brand-glow) !important; /* Borde dinámico en hover en modo oscuro */
 
       .open-action {
-        color: #ff5500 !important;
+        color: var(--brand-primary) !important; /* Texto dinámico en la acción al pasar el cursor en modo oscuro */
       }
     }
   }
