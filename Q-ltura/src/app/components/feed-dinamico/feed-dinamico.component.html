@@ -5,7 +5,7 @@
     <h2 class="feed-title">Feed dinámico</h2>
   </header>
 
-  <!-- Navegación por pestañas (Tabs) -->
+  <!-- Navegación por pestañas (Tabs con pestaña de recordatorios) -->
   <div class="feed-tabs" role="tablist">
     <button 
       type="button" 
@@ -24,21 +24,29 @@
       (click)="setTab('q-experience')">
       Q-Experience
     </button>
+
+    <button 
+      type="button" 
+      role="tab"
+      class="tab-btn reminder-tab" 
+      [class.active]="activeTab === 'recordatorios'"
+      (click)="setTab('recordatorios')">
+      <span>Recordatorios</span>
+      <span class="tab-badge" *ngIf="reminderCount > 0">{{ reminderCount }}</span>
+    </button>
   </div>
 
-  <!-- Lista de publicaciones (Clicables) -->
-  <div class="feed-list">
+  <!-- VISTA 1 & 2: Publicaciones Generales (Oficial / Q-Experience) -->
+  <div class="feed-list" *ngIf="activeTab !== 'recordatorios'">
     <article 
       *ngFor="let item of currentItems" 
       class="feed-item"
       (click)="goToItemDetail(item)">
       
-      <!-- Ícono Izquierdo -->
       <div class="item-icon-box">
         <ion-icon [name]="item.icon"></ion-icon>
       </div>
 
-      <!-- Detalle de la Publicación -->
       <div class="item-content">
         <h3 class="item-title">{{ item.title }}</h3>
         <p class="item-meta">
@@ -48,7 +56,6 @@
         </p>
       </div>
 
-      <!-- Indicador de Prioridad -->
       <div class="item-badge" [class]="item.priority">
         <ion-icon [name]="getPriorityIcon(item.priority)"></ion-icon>
       </div>
@@ -56,7 +63,89 @@
     </article>
   </div>
 
-  <!-- Pie de la tarjeta: CTA para ver todos -->
+  <!-- VISTA 3: Recordatorios Activos Guardados por el Usuario -->
+  <div class="reminders-feed" *ngIf="activeTab === 'recordatorios'">
+    
+    <!-- Esqueleto de carga -->
+    <div class="reminders-loading" *ngIf="isLoadingReminders">
+      <div class="reminder-skeleton" *ngFor="let s of [1, 2]"></div>
+    </div>
+
+    <!-- Lista de tarjetas de recordatorio -->
+    <ng-container *ngIf="!isLoadingReminders">
+      <article 
+        *ngFor="let reminder of reminderEvents" 
+        class="reminder-card" 
+        [class.is-today]="reminder.isToday"
+        (click)="goToAvisos()">
+
+        <!-- Barra superior del recordatorio: Insignia de tiempo + Quitar -->
+        <div class="reminder-top-row">
+          
+          <div class="countdown-badge" [class.today-glow]="reminder.isToday">
+            <span class="pulse-dot" *ngIf="reminder.isToday"></span>
+            <span class="badge-text">{{ reminder.daysRemainingText }}</span>
+          </div>
+
+          <!-- Insignia en vivo / Sesión online -->
+          <div class="live-indicator-pill" *ngIf="reminder.isOnline">
+            <span class="live-radar"></span>
+            <span>En Línea</span>
+          </div>
+
+          <button 
+            type="button" 
+            class="remove-reminder-btn" 
+            (click)="removeReminder(reminder.id, $event)"
+            title="Quitar recordatorio">
+            <ion-icon name="notifications-off-outline"></ion-icon>
+          </button>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="reminder-body">
+          <h3 class="reminder-title">{{ reminder.title }}</h3>
+          <p class="reminder-motivational">{{ reminder.motivationalText }}</p>
+
+          <div class="reminder-meta-row" *ngIf="reminder.timeRange || reminder.location">
+            <span class="meta-item" *ngIf="reminder.timeRange">
+              <ion-icon name="time-outline"></ion-icon>
+              <span>{{ reminder.timeRange }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Botón de acceso a la sesión (si es en línea y cuenta con link) -->
+        <div class="reminder-action-bar" *ngIf="reminder.isOnline && reminder.meetingUrl">
+          <button 
+            type="button" 
+            class="join-session-btn" 
+            (click)="openSessionUrl(reminder.meetingUrl, $event)">
+            <ion-icon name="videocam"></ion-icon>
+            <span>Unirse a la sesión</span>
+            <span class="live-shimmer"></span>
+          </button>
+        </div>
+
+      </article>
+
+      <!-- Estado vacío si no hay recordatorios -->
+      <div class="empty-reminders" *ngIf="reminderEvents.length === 0">
+        <div class="empty-icon-box">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </div>
+        <h4>No tienes recordatorios pendientes</h4>
+        <p>Entra a la Agenda y pulsa «Recordar» en las actividades que no te quieras perder.</p>
+        <button type="button" class="explore-btn" (click)="goToAvisos()">
+          <span>Explorar actividades</span>
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+      </div>
+    </ng-container>
+
+  </div>
+
+  <!-- Pie de la tarjeta -->
   <footer class="feed-footer">
     <button type="button" class="view-all-btn" (click)="goToAvisos()">
       <span>Ver todos los comunicados</span>

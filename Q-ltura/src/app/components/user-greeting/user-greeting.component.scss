@@ -9,13 +9,21 @@
   margin: 0 auto;
   padding: 1.5rem 0.5rem 1rem 0.5rem;
 
+  .greeting-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
   .greeting-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    flex: 1; 
   }
 
-  /* 1. Fecha: Elegante, limpia y tipográfica */
+  /* 1. Textos */
   .greeting-eyebrow {
     margin: 0 0 0.5rem 0;
     font-size: 0.8125rem;
@@ -36,10 +44,9 @@
     }
   }
 
-  /* 2. Headline: Tipografía SF Pro Display limpia */
   .greeting-headline {
     margin: 0 0 0.5rem 0;
-    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-size: clamp(1.85rem, 3.5vw, 2.75rem);
     font-weight: 700;
     letter-spacing: -0.03em;
     line-height: 1.12;
@@ -52,7 +59,6 @@
     }
   }
 
-  /* 3. Subtexto / Cita: Integrado con barra de acento mínima */
   .greeting-subtext {
     margin: 0.25rem 0 0 0;
     font-size: 1rem;
@@ -67,28 +73,156 @@
   }
 
   /* =======================================================
-     TEMAS DE MARCA CORPORATIVOS
+     WIDGET ANIMADO (Lado Derecho)
      ======================================================= */
+  .scenic-window {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+    border-radius: 32px; /* Curva estilo Apple Widget */
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+      inset 0 0 0 1px rgba(255, 255, 255, 0.2),
+      0 10px 25px -5px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Qualtop (Naranja) */
+    &:hover {
+      transform: scale(1.03);
+    }
+
+    /* ESCENA 1: MAÑANA */
+    &.morning {
+      background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%);
+      
+      .morning-sun {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 36px;
+        height: 36px;
+        background: #fef08a;
+        border-radius: 50%;
+        box-shadow: 0 0 25px rgba(254, 240, 138, 0.8);
+        animation: pulseSun 4s infinite alternate ease-in-out;
+      }
+
+      .cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        animation: driftLinear linear infinite;
+      }
+      .cloud-1 { width: 45px; height: 14px; top: 40px; left: -50px; animation-duration: 20s; }
+      .cloud-2 { width: 30px; height: 10px; top: 70px; left: -40px; animation-duration: 15s; animation-delay: 5s; opacity: 0.7; }
+    }
+
+    /* ESCENA 2: TARDE (Golden Hour) */
+    &.afternoon {
+      background: linear-gradient(135deg, #fbbf24 0%, #f43f5e 100%);
+      
+      .afternoon-sun {
+        position: absolute;
+        bottom: -10px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+        background: #fde047;
+        border-radius: 50%;
+        box-shadow: 0 0 35px rgba(253, 224, 71, 0.6);
+        animation: pulseSun 5s infinite alternate ease-in-out;
+      }
+
+      .cloud-warm {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 20px;
+        width: 55px; height: 16px; top: 30px; left: -60px;
+        animation: driftLinear 25s linear infinite;
+      }
+    }
+
+    /* ESCENA 3: NOCHE (Estrellas y Fugaces) */
+    &.night {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+
+      .moon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 32px;
+        height: 32px;
+        background: #e2e8f0;
+        border-radius: 50%;
+        box-shadow: 0 0 20px rgba(226, 232, 240, 0.5);
+      }
+
+      /* Puntos estáticos simulando estrellas con sombras */
+      .stars {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: transparent;
+        box-shadow: 
+          15px 15px #fff, 30px 40px #fff, 80px 20px #fff, 
+          100px 70px #fff, 20px 90px #fff, 60px 100px #fff;
+        opacity: 0.5;
+        animation: twinkle 3s infinite alternate;
+      }
+
+      /* Estrellas Fugaces */
+      .shooting-star {
+        position: absolute;
+        width: 2px;
+        height: 45px;
+        background: linear-gradient(to bottom, rgba(255,255,255,1), transparent);
+        border-radius: 2px;
+        transform: rotate(-45deg);
+        opacity: 0;
+      }
+
+      .st-1 { top: -20px; left: 80%; animation: shooting 6s infinite 1s; }
+      .st-2 { top: -20px; left: 40%; animation: shooting 8s infinite 4s; }
+      .st-3 { top: -20px; left: 110%; animation: shooting 7s infinite 2s; }
+    }
+  }
+
+  /* =======================================================
+     TEMAS DE EMPRESA (Aplica a los textos)
+     ======================================================= */
   &.qualtop {
-    .highlight {
-      color: #ff5500;
-    }
-    .greeting-subtext {
-      border-left-color: rgba(255, 85, 0, 0.4);
-    }
+    .highlight { color: #ff5500; }
+    .greeting-subtext { border-left-color: rgba(255, 85, 0, 0.4); }
   }
 
-  /* SYE (Lila/Púrpura) */
   &.sye {
-    .highlight {
-      color: #6366f1; /* Tono lila principal */
-    }
-    .greeting-subtext {
-      border-left-color: rgba(99, 102, 241, 0.4); /* Línea lila con transparencia */
-    }
+    .highlight { color: #6366f1; }
+    .greeting-subtext { border-left-color: rgba(99, 102, 241, 0.4); }
   }
+}
+
+/* =======================================================
+   ANIMACIONES KEYFRAMES
+   ======================================================= */
+@keyframes pulseSun {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes driftLinear {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(200px); }
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes shooting {
+  0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+  15% { transform: translate(-100px, 100px) rotate(-45deg); opacity: 0; }
+  100% { opacity: 0; }
 }
 
 /* =======================================================
@@ -96,7 +230,11 @@
    ======================================================= */
 @media (max-width: 640px) {
   .greeting-hero {
-    padding: 1rem 0.25rem 0.5rem 0.25rem;
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+
+    .greeting-wrapper {
+      gap: 1rem;
+    }
 
     .greeting-eyebrow {
       font-size: 0.75rem;
@@ -104,12 +242,24 @@
     }
 
     .greeting-headline {
-      font-size: 1.75rem;
+      font-size: 1.55rem;
     }
 
     .greeting-subtext {
       font-size: 0.875rem;
       padding-left: 0.65rem;
+    }
+
+    .scenic-window {
+      width: 75px;
+      height: 75px;
+      min-width: 75px;
+      border-radius: 22px;
+
+      &.morning .morning-sun { width: 24px; height: 24px; top: 10px; right: 10px; }
+      &.afternoon .afternoon-sun { width: 32px; height: 32px; bottom: -5px; right: 10px; }
+      &.night .moon { width: 22px; height: 22px; top: 10px; right: 10px; }
+      &.night .shooting-star { height: 25px; }
     }
   }
 }
@@ -121,36 +271,26 @@
   .greeting-hero {
     .greeting-eyebrow {
       color: #a1a1a6;
-
-      &::after {
-        background: rgba(255, 255, 255, 0.15);
-      }
+      &::after { background: rgba(255, 255, 255, 0.15); }
     }
 
-    .greeting-headline {
-      color: #f5f5f7;
-    }
+    .greeting-headline { color: #f5f5f7; }
+    .greeting-subtext { color: #a1a1a6; }
 
-    .greeting-subtext {
-      color: #a1a1a6;
+    /* Reducimos ligeramente el brillo del widget en modo oscuro 
+       para no encandilar la vista del usuario */
+    .scenic-window {
+      opacity: 0.9;
     }
 
     &.qualtop {
-      .highlight {
-        color: #ff6a1a;
-      }
-      .greeting-subtext {
-        border-left-color: rgba(255, 106, 26, 0.5);
-      }
+      .highlight { color: #ff6a1a; }
+      .greeting-subtext { border-left-color: rgba(255, 106, 26, 0.5); }
     }
 
     &.sye {
-      .highlight {
-        color: #818cf8; /* Tono lila adaptado para modo oscuro */
-      }
-      .greeting-subtext {
-        border-left-color: rgba(129, 140, 248, 0.5);
-      }
+      .highlight { color: #818cf8; }
+      .greeting-subtext { border-left-color: rgba(129, 140, 248, 0.5); }
     }
   }
 }

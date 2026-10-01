@@ -14,6 +14,7 @@ import { takeUntil } from 'rxjs/operators';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { AuthService } from '../../services/auth.service';
 import { SanityService } from '../../services/sanity.service';
+import { ReminderService } from '../../services/reminder.service';
 import { addIcons } from 'ionicons';
 import { 
   calendarOutline, 
@@ -65,6 +66,7 @@ export class AvisosPage implements OnInit, OnDestroy {
   private toastCtrl = inject(ToastController);
   private authService = inject(AuthService);
   private sanityService = inject(SanityService);
+  private reminderService = inject(ReminderService);
 
   activeView: 'agenda' | 'mes' = 'agenda';
   selectedFilter: 'ALL' | 'birthday' | 'culture' | 'tech' = 'ALL';
@@ -95,6 +97,7 @@ export class AvisosPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // 1. Escuchar la sesión activa (filtra por filial: Qualtop o SYE)
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
@@ -102,6 +105,18 @@ export class AvisosPage implements OnInit, OnDestroy {
           this.currentCompany = user.company;
         }
         this.fetchActivitiesFromSanity();
+      });
+
+    // 2. Sincronización bidireccional de recordatorios con el Feed Dinámico
+    this.reminderService.reminderIds$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((ids) => {
+        if (this.events.length > 0) {
+          this.events.forEach(event => {
+            event.isConfirmed = ids.includes(event.id);
+          });
+          this.cdr.markForCheck();
+        }
       });
   }
 
@@ -112,7 +127,7 @@ export class AvisosPage implements OnInit, OnDestroy {
 
   async fetchActivitiesFromSanity(): Promise<void> {
     this.isLoading = true;
-    this.currentPage = 1; // Reiniciar página al consultar
+    this.currentPage = 1;
     this.cdr.markForCheck();
 
     try {
@@ -157,7 +172,8 @@ export class AvisosPage implements OnInit, OnDestroy {
             badgeLabel: item.badgeLabel || 'Actividad Corporativa',
             company: item.company || 'Ambas',
             isVirtual: item.isVirtual ?? false,
-            isConfirmed: false
+            // Consulta el estado guardado en ReminderService
+            isConfirmed: this.reminderService.isReminded(item.id)
           };
         });
       } else {
@@ -193,7 +209,7 @@ export class AvisosPage implements OnInit, OnDestroy {
 
   public setFilter(filter: 'ALL' | 'birthday' | 'culture' | 'tech'): void {
     this.selectedFilter = filter;
-    this.currentPage = 1; // Al cambiar categoría volvemos a la primera página
+    this.currentPage = 1;
     this.cdr.markForCheck();
   }
 
@@ -218,17 +234,19 @@ export class AvisosPage implements OnInit, OnDestroy {
   }
 
   async toggleConfirmEvent(event: CalendarEvent): Promise<void> {
-    event.isConfirmed = !event.isConfirmed;
+    // Guarda o remueve en ReminderService y sincroniza el Feed dinámico
+    const isNowConfirmed = this.reminderService.toggleReminder(event.id);
+    event.isConfirmed = isNowConfirmed;
     this.cdr.markForCheck();
 
-    const msg = event.isConfirmed 
+    const msg = isNowConfirmed 
       ? `Añadido a tus recordatorios: ${event.title}` 
       : 'Recordatorio removido';
 
     const toast = await this.toastCtrl.create({
       message: msg,
       duration: 2000,
-      color: event.isConfirmed ? 'success' : 'medium',
+      color: isNowConfirmed ? 'success' : 'medium',
       position: 'top',
       mode: 'ios'
     });

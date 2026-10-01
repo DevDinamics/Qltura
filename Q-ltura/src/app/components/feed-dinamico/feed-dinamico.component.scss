@@ -8,18 +8,26 @@
    ======================================================= */
 :host-context(body.qualtop) {
   --brand-primary: #ff5500;
+  --brand-muted: rgba(255, 85, 0, 0.1);
+  --brand-glow: rgba(255, 85, 0, 0.35);
 }
 
 :host-context(body.sye) {
   --brand-primary: #6366f1;
+  --brand-muted: rgba(99, 102, 241, 0.1);
+  --brand-glow: rgba(99, 102, 241, 0.35);
 }
 
 :host-context(body.dark.qualtop) {
   --brand-primary: #ff7700;
+  --brand-muted: rgba(255, 119, 0, 0.15);
+  --brand-glow: rgba(255, 119, 0, 0.45);
 }
 
 :host-context(body.dark.sye) {
   --brand-primary: #818cf8;
+  --brand-muted: rgba(129, 140, 248, 0.15);
+  --brand-glow: rgba(129, 140, 248, 0.45);
 }
 
 /* Contenedor principal */
@@ -51,7 +59,7 @@
 .feed-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-subtle, #f1f5f9);
-  gap: 1.5rem;
+  gap: 1.25rem;
 
   .tab-btn {
     background: none;
@@ -62,6 +70,9 @@
     color: var(--text-sub, #64748b);
     cursor: pointer;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     transition: color 0.2s ease;
 
     &:hover {
@@ -69,8 +80,7 @@
     }
 
     &.active {
-      /* Color dinámico según la empresa en sesión */
-      color: var(--brand-primary, #ff5500);
+      color: var(--brand-primary);
       
       &::after {
         content: '';
@@ -79,14 +89,27 @@
         left: 0;
         width: 100%;
         height: 2.5px;
-        background-color: var(--brand-primary, #ff5500);
+        background-color: var(--brand-primary);
         border-radius: 2px 2px 0 0;
         transition: background-color 0.25s ease;
       }
     }
+
+    .tab-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      background: var(--brand-muted);
+      color: var(--brand-primary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      line-height: 1;
+    }
   }
 }
 
+/* =======================================================
+   LISTA DE PUBLICACIONES REGULARES
+   ======================================================= */
 .feed-list {
   display: flex;
   flex-direction: column;
@@ -142,7 +165,6 @@
     color: var(--text-main, #1e293b);
     margin: 0;
     line-height: 1.3;
-
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -179,6 +201,274 @@
   &.info { color: #3b82f6; }
 }
 
+/* =======================================================
+   DISEÑO MINIMALISTA DE RECORDATORIOS (META / APPLE UI)
+   ======================================================= */
+.reminders-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.reminder-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 16px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--brand-primary);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06);
+  }
+
+  &.is-today {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: linear-gradient(to bottom right, var(--bg-surface, #ffffff), rgba(16, 185, 129, 0.02));
+  }
+}
+
+.reminder-top-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  .countdown-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    background: var(--brand-muted);
+    color: var(--brand-primary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+
+    &.today-glow {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10b981;
+
+      .pulse-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+        animation: radarPulse 1.8s infinite;
+      }
+    }
+  }
+
+  .live-indicator-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    .live-radar {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2563eb;
+      animation: radarPulse 1.6s infinite;
+    }
+  }
+
+  .remove-reminder-btn {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: var(--text-sub, #94a3b8);
+    cursor: pointer;
+    padding: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+
+    ion-icon {
+      font-size: 1.15rem;
+    }
+
+    &:hover {
+      color: #ef4444;
+      background-color: rgba(239, 68, 68, 0.08);
+    }
+  }
+}
+
+.reminder-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .reminder-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main, #0f172a);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .reminder-motivational {
+    font-size: 0.8rem;
+    color: var(--text-sub, #64748b);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .reminder-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 0.35rem;
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-sub, #64748b);
+
+      ion-icon {
+        font-size: 0.9rem;
+        color: var(--brand-primary);
+      }
+    }
+  }
+}
+
+/* Botón interactivo para unirse a la sesión */
+.reminder-action-bar {
+  padding-top: 0.35rem;
+
+  .join-session-btn {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: var(--brand-primary);
+    color: #ffffff;
+    border: none;
+    padding: 0.65rem 1rem;
+    border-radius: 12px;
+    font-size: 0.825rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px var(--brand-glow);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    ion-icon {
+      font-size: 1.1rem;
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      opacity: 0.94;
+    }
+
+    &:active {
+      transform: scale(0.99);
+    }
+
+    /* Brillo de sesión en vivo */
+    .live-shimmer {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      animation: sessionShimmer 2.8s infinite;
+    }
+  }
+}
+
+/* Estado vacío */
+.empty-reminders {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+
+  .empty-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-hover, #f8fafc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-sub, #94a3b8);
+    margin-bottom: 0.35rem;
+
+    ion-icon {
+      font-size: 1.5rem;
+    }
+  }
+
+  h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main, #0f172a);
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.8rem;
+    color: var(--text-sub, #64748b);
+    max-width: 320px;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
+  }
+
+  .explore-btn {
+    background: none;
+    border: none;
+    color: var(--brand-primary);
+    font-size: 0.825rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* Esqueleto de carga para recordatorios */
+.reminder-skeleton {
+  height: 80px;
+  border-radius: 14px;
+  background: #f1f2f4;
+  animation: pulseSkeleton 1.4s infinite ease-in-out;
+}
+
+/* =======================================================
+   FOOTER CTA
+   ======================================================= */
 .feed-footer {
   display: flex;
   justify-content: center;
@@ -187,8 +477,7 @@
   .view-all-btn {
     background: none;
     border: none;
-    /* Color dinámico para el botón inferior */
-    color: var(--brand-primary, #ff5500);
+    color: var(--brand-primary);
     font-size: 0.88rem;
     font-weight: 600;
     display: inline-flex;
@@ -209,7 +498,27 @@
 }
 
 /* =======================================================
-   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
+   KEYFRAMES
+   ======================================================= */
+@keyframes radarPulse {
+  0% { transform: scale(0.9); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.4; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+@keyframes sessionShimmer {
+  0% { left: -100%; }
+  100% { left: 160%; }
+}
+
+@keyframes pulseSkeleton {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.6; }
+}
+
+/* =======================================================
+   RESPALDO MODO OSCURO META DARK (#242526 & #3A3B3C)
    ======================================================= */
 :host-context(body.dark) {
   .feed-card {
@@ -232,10 +541,10 @@
       }
 
       &.active {
-        color: var(--brand-primary, #ff7700) !important;
+        color: var(--brand-primary) !important;
 
         &::after {
-          background-color: var(--brand-primary, #ff7700) !important;
+          background-color: var(--brand-primary) !important;
         }
       }
     }
@@ -265,7 +574,37 @@
     }
   }
 
-  .feed-footer .view-all-btn {
-    color: var(--brand-primary, #ff7700) !important;
+  .reminder-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    &:hover {
+      border-color: var(--brand-primary) !important;
+      background: #2c2d2e !important;
+    }
+
+    &.is-today {
+      border-color: rgba(16, 185, 129, 0.4) !important;
+      background: #242826 !important;
+    }
+
+    .reminder-body {
+      .reminder-title { color: #f8fafc !important; }
+      .reminder-motivational { color: #b0b3b8 !important; }
+      .reminder-meta-row .meta-item { color: #b0b3b8 !important; }
+    }
+  }
+
+  .empty-reminders {
+    .empty-icon-box {
+      background: #3a3b3c !important;
+      color: #b0b3b8 !important;
+    }
+    h4 { color: #f8fafc !important; }
+    p { color: #b0b3b8 !important; }
+  }
+
+  .reminder-skeleton {
+    background: #3a3b3c !important;
   }
 }

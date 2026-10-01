@@ -2,21 +2,51 @@
   class="greeting-hero" 
   [ngClass]="company ? company.toLowerCase() : 'qualtop'">
   
-  <div class="greeting-content">
-    <!-- Eyebrow: Metadato limpio estilo iOS/macOS -->
-    <p class="greeting-eyebrow">
-      <time [attr.datetime]="formattedDate">{{ formattedDate }}</time>
-    </p>
+  <div class="greeting-wrapper">
+    
+    <!-- Bloque de Texto (Izquierda) -->
+    <div class="greeting-content">
+      <p class="greeting-eyebrow">
+        <time [attr.datetime]="formattedDate">{{ formattedDate }}</time>
+      </p>
 
-    <!-- Título Principal Editorial -->
-    <h1 class="greeting-headline">
-      {{ greetingPrefix }}, <span class="highlight">{{ userName }}</span>
-    </h1>
+      <h1 class="greeting-headline">
+        {{ greetingPrefix }}, <span class="highlight">{{ userName }}</span>
+      </h1>
 
-    <!-- Subtítulo editorial fluido (sin aspecto de botón o chip cerrado) -->
-    <p class="greeting-subtext">
-      {{ motivationalQuote }}
-    </p>
+      <p class="greeting-subtext">
+        {{ motivationalQuote }}
+      </p>
+    </div>
+
+    <!-- WIDGET ANIMADO (Derecha) -->
+    <div class="scenic-window" [ngClass]="timePeriod">
+      
+      <!-- ESCENA: MAÑANA -->
+      <ng-container *ngIf="timePeriod === 'morning'">
+        <div class="sun morning-sun"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+      </ng-container>
+
+      <!-- ESCENA: TARDE -->
+      <ng-container *ngIf="timePeriod === 'afternoon'">
+        <div class="sun afternoon-sun"></div>
+        <div class="cloud cloud-warm"></div>
+      </ng-container>
+
+      <!-- ESCENA: NOCHE -->
+      <ng-container *ngIf="timePeriod === 'night'">
+        <div class="moon"></div>
+        <div class="stars"></div>
+        <!-- Estrellas fugaces -->
+        <div class="shooting-star st-1"></div>
+        <div class="shooting-star st-2"></div>
+        <div class="shooting-star st-3"></div>
+      </ng-container>
+
+    </div>
+
   </div>
 
 </section>

@@ -4,13 +4,14 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { CompanyType } from '../../shared/models/user.model';
+import { IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-user-greeting',
   templateUrl: './user-greeting.component.html',
   styleUrls: ['./user-greeting.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [IonIcon, CommonModule]
 })
 export class UserGreetingComponent implements OnInit, OnDestroy {
 
@@ -24,6 +25,9 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
   formattedDate: string = '';
   greetingPrefix: string = 'Hola';
   motivationalQuote: string = '';
+  
+  // Variable para controlar la animación del widget derecho
+  timePeriod: 'morning' | 'afternoon' | 'night' = 'morning';
 
   private quotes: string[] = [
     'Construyamos cosas increíbles juntos hoy.',
@@ -40,12 +44,12 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
     this.setGreetingByTime();
     this.setDailyQuote();
 
-    // ⚡ CONEXIÓN CON AUTH SERVICE: Lee la sesión activa
+    // Sincronización en tiempo real
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         if (user) {
-          this.userName = user.name.split(' ')[0]; // Toma solo el primer nombre (ej: "Ana" o "Carlos")
+          this.userName = user.name.split(' ')[0]; 
           this.company = user.company;
           this.cdr.markForCheck();
         }
@@ -70,12 +74,16 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
 
   private setGreetingByTime(): void {
     const hour = new Date().getHours();
+    
     if (hour >= 6 && hour < 12) {
       this.greetingPrefix = 'Buenos días';
+      this.timePeriod = 'morning';
     } else if (hour >= 12 && hour < 20) {
       this.greetingPrefix = 'Buenas tardes';
+      this.timePeriod = 'afternoon';
     } else {
       this.greetingPrefix = 'Buenas noches';
+      this.timePeriod = 'night';
     }
   }
 
