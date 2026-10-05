@@ -1,0 +1,201 @@
+:host-context(body.qualtop) .page-container {
+  --brand-primary: #ff5500;
+  --brand-muted: rgba(255, 85, 0, 0.08);
+}
+
+:host-context(body.sye) .page-container {
+  --brand-primary: #6366f1;
+  --brand-muted: rgba(99, 102, 241, 0.08);
+}
+
+:host-context(body.dark.qualtop) .page-container {
+  --brand-primary: #ff7700;
+  --brand-muted: rgba(255, 119, 0, 0.15);
+}
+
+:host-context(body.dark.sye) .page-container {
+  --brand-primary: #818cf8;
+  --brand-muted: rgba(129, 140, 248, 0.15);
+}
+
+ion-content.main-bg {
+  --background: var(--bg-main, #f8fafc);
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem 1.5rem;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3rem auto;
+
+  .header-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.725rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-primary);
+    background: var(--brand-muted);
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    margin-bottom: 0.85rem;
+
+    ion-icon {
+      font-size: 0.85rem;
+    }
+  }
+
+  .headline {
+    font-size: clamp(1.85rem, 3.2vw, 2.5rem);
+    font-weight: 800;
+    color: var(--text-main, #0f172a);
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.025em;
+  }
+
+  .subline {
+    font-size: 0.95rem;
+    color: var(--text-sub, #64748b);
+    line-height: 1.55;
+    margin: 0;
+  }
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.benefit-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--brand-primary);
+    box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.06);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .icon-bubble {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--brand-muted);
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ion-icon {
+        font-size: 1.5rem;
+      }
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-sub, #64748b);
+      background: rgba(0, 0, 0, 0.04);
+      padding: 0.2rem 0.6rem;
+      border-radius: 10px;
+    }
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    .category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--brand-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main, #0f172a);
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .description {
+      font-size: 0.85rem;
+      color: var(--text-sub, #64748b);
+      line-height: 1.5;
+      margin: 0.25rem 0 0 0;
+    }
+  }
+
+  .card-footer {
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.05));
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #10b981;
+
+      ion-icon {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+/* =======================================================
+   MODO OSCURO
+   ======================================================= */
+:host-context(body.dark) {
+  .section-header {
+    .headline { color: #f8fafc !important; }
+    .subline { color: #b0b3b8 !important; }
+  }
+
+  .benefit-card {
+    background: #242526 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+
+    .card-top .badge {
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: #b0b3b8 !important;
+    }
+
+    .card-body {
+      .title { color: #f8fafc !important; }
+      .description { color: #b0b3b8 !important; }
+    }
+
+    .card-footer {
+      border-top-color: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+}

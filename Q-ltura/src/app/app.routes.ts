@@ -3,11 +3,11 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login', // 1. Redirige por defecto a login al abrir la app
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
-    path: 'login', // 2. Se coloca antes de las demás rutas
+    path: 'login',
     loadComponent: () => import('./pages/login/login.page').then((m) => m.LoginPage),
     data: { animation: 'LoginPage' }
   },
@@ -36,8 +36,20 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/mas/mas.page').then((m) => m.MasPage),
     data: { animation: 'MasPage' }
   },
+  // 👇 AQUÍ: antes del comodín
   {
-    path: '**', // 3. El comodín SIEMPRE debe ir al final absoluto
+    path: 'reconocimientos',
+    loadComponent: () => import('./pages/reconocimientos/reconocimientos.page').then((m) => m.ReconocimientosPage),
+    data: { animation: 'ReconocimientosPage' }
+  },
+  
+  {
+    path: 'beneficios',
+    loadComponent: () => import('./pages/beneficios/beneficios.page').then( m => m.BeneficiosPage)
+  },
+
+  {
+    path: '**',
     redirectTo: 'login',
   }
 ];

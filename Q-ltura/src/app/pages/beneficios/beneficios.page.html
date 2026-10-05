@@ -1,0 +1,50 @@
+
+
+<ion-content [fullscreen]="true" class="main-bg">
+  <main class="page-container" [ngClass]="currentCompany ? currentCompany.toLowerCase() : 'qualtop'">
+    
+    <!-- Encabezado con Empresa Dinámica -->
+    <header class="section-header">
+      <div class="header-pill">
+        <ion-icon name="sparkles-outline"></ion-icon>
+        <span>VENTAJAS & BIENESTAR • {{ currentCompany | uppercase }}</span>
+      </div>
+      
+      <h1 class="headline">Beneficios & Wellness</h1>
+      
+      <p class="subline">
+        Programas, facilidades y prestaciones exclusivas diseñadas para impulsar el bienestar de nuestro equipo en <strong>{{ currentCompany }}</strong>.
+      </p>
+    </header>
+
+    <!-- Grid de tarjetas filtradas por empresa -->
+    <section class="benefits-grid">
+      <article *ngFor="let item of currentBenefits" class="benefit-card">
+        
+        <div class="card-top">
+          <div class="icon-bubble">
+            <ion-icon [name]="item.icon"></ion-icon>
+          </div>
+          <span class="badge">{{ item.tag }}</span>
+        </div>
+
+        <div class="card-body">
+          <span class="category">{{ item.category }}</span>
+          <h2 class="title">{{ item.title }}</h2>
+          <p class="description">{{ item.description }}</p>
+        </div>
+
+        <div class="card-footer">
+          <span class="status-indicator">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            <span>Vigente para {{ item.company === 'Ambas' ? 'todo el equipo' : item.company }}</span>
+          </span>
+        </div>
+
+      </article>
+    </section>
+
+  </main>
+
+  <app-footer></app-footer>
+</ion-content>

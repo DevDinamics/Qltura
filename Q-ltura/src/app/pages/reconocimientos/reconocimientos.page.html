@@ -1,0 +1,27 @@
+
+
+<ion-content [fullscreen]="true" class="main-bg">
+  <main class="page-container animate-fade-in" [ngClass]="currentCompany ? currentCompany.toLowerCase() : 'qualtop'">
+    
+    <div class="empty-state-card">
+      <div class="icon-ring">
+        <ion-icon name="trophy-outline" class="main-icon"></ion-icon>
+        <ion-icon name="sparkles-outline" class="sparkle-icon top-right"></ion-icon>
+        <ion-icon name="sparkles-outline" class="sparkle-icon bottom-left"></ion-icon>
+      </div>
+
+      <h1 class="page-title">Muro de Reconocimientos</h1>
+      
+      <p class="page-description">
+        Estamos preparando un espacio especial para celebrar el talento, el esfuerzo y los grandes logros de nuestro equipo.
+      </p>
+
+      <div class="coming-soon-pill">
+        Próximamente
+      </div>
+    </div>
+
+  </main>
+
+  <app-footer></app-footer>
+</ion-content>
