@@ -1,52 +1,108 @@
 <footer class="footer-wrapper">
   <div class="footer-card">
     
-    <!-- Columna 1: Isotipo + Slogan -->
-    <div class="footer-col brand-col">
-      <img 
-        src="assets/Logotipo_/SI_negro_-01.svg" 
-        alt="Isotipo Software Innovators" 
-        class="brand-logo" />
-      <p class="brand-slogan">
-        Conectados para <br /> crear valor juntos.
-      </p>
+    <!-- Columna 1: Soporte Interno -->
+    <div class="footer-col">
+      <div class="col-header">
+        <ion-icon name="help-buoy-outline" class="col-header-icon"></ion-icon>
+        <span class="col-title">Soporte Interno</span>
+      </div>
+      
+      <ul class="footer-links">
+        <li>
+          <a href="mailto:soporte@empresa.com" class="footer-link">
+            <ion-icon name="hardware-chip-outline"></ion-icon>
+            <span>Mesa de Ayuda TI (Helpdesk)</span>
+          </a>
+        </li>
+        <li>
+          <a href="mailto:capitalhumano@empresa.com" class="footer-link">
+            <ion-icon name="people-outline"></ion-icon>
+            <span>Gestión de Talento & RH</span>
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/plataformas']" class="footer-link">
+            <ion-icon name="apps-outline"></ion-icon>
+            <span>Accesos & Plataformas SGI</span>
+          </a>
+        </li>
+      </ul>
     </div>
 
-    <!-- Separador 1 -->
+    <!-- Divisor 1 -->
     <div class="divider"></div>
 
-    <!-- Columna 2: Síguenos -->
-    <div class="footer-col social-col">
-      <span class="col-title">Síguenos</span>
-      <div class="social-icons">
-        <a href="#" aria-label="LinkedIn" class="social-link">
-          <ion-icon name="logo-linkedin"></ion-icon>
-        </a>
-        <a href="#" aria-label="Facebook" class="social-link">
-          <ion-icon name="logo-facebook"></ion-icon>
-        </a>
-        <a href="#" aria-label="Instagram" class="social-link">
-          <ion-icon name="logo-instagram"></ion-icon>
-        </a>
-        <a href="#" aria-label="YouTube" class="social-link">
-          <ion-icon name="logo-youtube"></ion-icon>
-        </a>
+    <!-- Columna 2: Cultura & Ética -->
+    <div class="footer-col">
+      <div class="col-header">
+        <ion-icon name="shield-checkmark-outline" class="col-header-icon"></ion-icon>
+        <span class="col-title">Cultura & Ética</span>
+      </div>
+
+      <ul class="footer-links">
+        <li>
+          <a [routerLink]="['/denuncia']" class="footer-link ethics-pill-link">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+            <span>Buzón de Denuncia Anónima</span>
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/mas']" class="footer-link">
+            <ion-icon name="document-text-outline"></ion-icon>
+            <span>Código de Conducta & Valores</span>
+          </a>
+        </li>
+        <li>
+          <a [routerLink]="['/home']" class="footer-link">
+            <ion-icon name="ribbon-outline"></ion-icon>
+            <span>Comité de Integridad Laboral</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Divisor 2 -->
+    <div class="divider"></div>
+
+    <!-- Columna 3: Directorio de Correos -->
+    <div class="footer-col directory-col">
+      <div class="col-header">
+        <ion-icon name="mail-unread-outline" class="col-header-icon"></ion-icon>
+        <span class="col-title">Directorio de Correos</span>
+      </div>
+
+      <div class="directory-list">
+        <div class="directory-item">
+          <span class="dept-label">Mesa TI:</span>
+          <a href="mailto:soporte@empresa.com" class="directory-email">soporte@empresa.com</a>
+        </div>
+
+        <div class="directory-item">
+          <span class="dept-label">Talento & RH:</span>
+          <a href="mailto:capitalhumano@empresa.com" class="directory-email">capitalhumano@empresa.com</a>
+        </div>
+
+        <div class="directory-item">
+          <span class="dept-label">Línea Ética:</span>
+          <a href="mailto:lineaetica@empresa.com" class="directory-email">lineaetica@empresa.com</a>
+        </div>
+
+        <div class="directory-item">
+          <span class="dept-label">Q-ltura:</span>
+          <a href="mailto:comunicacion@empresa.com" class="directory-email">comunicacion@empresa.com</a>
+        </div>
       </div>
     </div>
 
-    <!-- Separador 2 -->
-    <div class="divider"></div>
+  </div>
 
-    <!-- Columna 3: Contacto -->
-    <div class="footer-col contact-col">
-      <span class="col-title">Contacto</span>
-      <a href="mailto:comunicacion@empresa.com" class="contact-link">
-        comunicacion@empresa.com
-      </a>
-      <a href="tel:5512345678" class="contact-link">
-        (55) 1234 5678
-      </a>
+  <!-- Sub-barra inferior institucional -->
+  <div class="footer-bottom-bar">
+    <div class="bottom-brand">
+      <span class="q-badge">Q</span>
+      <span class="brand-text">Q-ltura © 2026 • Portal Interno Corporativo</span>
     </div>
-
+    <span class="bottom-copy">Exclusivo para colaboradores de Qualtop & SYE Software Innovators</span>
   </div>
 </footer>

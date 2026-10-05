@@ -1,12 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { RouterLink } from '@angular/router';
+import { IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
-  logoLinkedin, 
-  logoFacebook, 
-  logoInstagram, 
-  logoYoutube 
+  helpBuoyOutline,
+  shieldCheckmarkOutline,
+  mailUnreadOutline,
+  hardwareChipOutline,
+  peopleOutline,
+  appsOutline,
+  lockClosedOutline,
+  documentTextOutline,
+  ribbonOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -14,22 +20,22 @@ import {
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule
-  ]
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, RouterLink, IonIcon]
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
 
   constructor() {
     addIcons({
-      'logo-linkedin': logoLinkedin,
-      'logo-facebook': logoFacebook,
-      'logo-instagram': logoInstagram,
-      'logo-youtube': logoYoutube
+      helpBuoyOutline,
+      shieldCheckmarkOutline,
+      mailUnreadOutline,
+      hardwareChipOutline,
+      peopleOutline,
+      appsOutline,
+      lockClosedOutline,
+      documentTextOutline,
+      ribbonOutline
     });
   }
-
-  ngOnInit(): void {}
-
 }

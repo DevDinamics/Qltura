@@ -87,7 +87,6 @@
       transition: color 0.25s ease;
     }
 
-    /* CÁPSULA MODERNA DE EMPRESA (Dinámica) */
     .company-badge {
       display: inline-flex;
       align-items: center;
@@ -97,7 +96,6 @@
       border-radius: 20px;
       align-self: flex-start;
       transition: all 0.25s ease;
-      /* Aplica las variables locales según la empresa activa */
       background: var(--brand-muted);
       color: var(--brand-primary);
       border: 1px solid var(--brand-border);
@@ -178,7 +176,6 @@
 
     ion-icon { font-size: 1.2rem; }
 
-    /* Mantenemos los colores originales de los iconos estáticos */
     &.purple { background: rgba(139, 92, 246, 0.08); color: #8b5cf6; }
     &.orange { background: rgba(255, 85, 0, 0.08); color: #ff5500; }
     &.blue   { background: rgba(37, 99, 235, 0.08); color: #3b82f6; }
@@ -212,7 +209,6 @@
   }
 
   .beta-tag {
-    /* Color de tag de Beta dinámico si lo prefieres, o mantenlo en un lila neutro */
     background: var(--brand-muted);
     color: var(--brand-primary);
     border: 1px solid var(--brand-border);
@@ -258,6 +254,16 @@
   ion-icon { font-size: 1.2rem; }
   &:hover { background-color: rgba(239, 68, 68, 0.08); }
   &:active { background-color: rgba(239, 68, 68, 0.15); }
+}
+
+/* =======================================================
+   RESPONSIVE: CONTROL DE REDUNDANCIA
+   ======================================================= */
+@media (min-width: 769px) {
+  /* En computadoras se oculta el botón inferior porque ya existe en el navbar */
+  .mobile-only {
+    display: none !important;
+  }
 }
 
 @media (max-width: 640px) {
@@ -384,7 +390,7 @@
 
   .save-btn {
     margin-top: 1.25rem;
-    background: var(--brand-primary); /* Color dinámico */
+    background: var(--brand-primary);
     color: #ffffff;
     border: none;
     border-radius: 16px;

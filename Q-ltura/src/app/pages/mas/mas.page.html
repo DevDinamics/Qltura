@@ -1,7 +1,6 @@
 <div class="ion-page" #page>
   <ion-content [fullscreen]="true">
 
-
     <main class="mas-container animate-content-left">
       
       <!-- Card de Perfil del Usuario -->
@@ -104,8 +103,9 @@
           </div>
         </div>
 
-        <!-- Botón de Cierre de Sesión -->
-        <div class="menu-group">
+        <!-- BOTÓN DE CIERRE DE SESIÓN (SOLO MÓVIL) -->
+        <!-- Oculto en escritorio para evitar redundancia con el popover de la barra superior -->
+        <div class="menu-group mobile-only">
           <div class="group-card">
             <button type="button" class="logout-btn" (click)="logout()">
               <ion-icon name="log-out-outline"></ion-icon>

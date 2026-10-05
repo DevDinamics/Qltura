@@ -3,26 +3,49 @@
   width: 100%;
 }
 
+/* =======================================================
+   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
+   ======================================================= */
+:host-context(body.qualtop) {
+  --brand-primary: #ff5500;
+  --brand-muted: rgba(255, 85, 0, 0.08);
+}
+
+:host-context(body.sye) {
+  --brand-primary: #6366f1;
+  --brand-muted: rgba(99, 102, 241, 0.08);
+}
+
+:host-context(body.dark.qualtop) {
+  --brand-primary: #ff7700;
+  --brand-muted: rgba(255, 119, 0, 0.15);
+}
+
+:host-context(body.dark.sye) {
+  --brand-primary: #818cf8;
+  --brand-muted: rgba(129, 140, 248, 0.15);
+}
+
 .footer-wrapper {
   width: 100%;
   max-width: 1240px;
-  margin: 1.5rem auto 0 auto;
-  /* 1. CLAVE: Padding inferior que compensa la tab bar móvil en cualquier pantalla */
-  padding: 0 1rem calc(5rem + env(safe-area-inset-bottom)) 1rem;
+  margin: 2rem auto 0 auto;
+  /* Compensación para tab bar móvil y safe-area iOS */
+  padding: 0 1rem calc(5.5rem + env(safe-area-inset-bottom)) 1rem;
 }
 
-/* --- TARJETA PRINCIPAL DEL FOOTER --- */
+/* --- TARJETA PRINCIPAL --- */
 .footer-card {
   background: var(--bg-surface, #ffffff);
   border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
-  border-radius: 20px;
-  padding: 1.75rem 2.5rem;
+  border-radius: 24px;
+  padding: 1.75rem 2.25rem;
   box-shadow: 
     0 10px 30px -5px rgba(0, 0, 0, 0.03),
     0 0 1px rgba(0, 0, 0, 0.04);
 
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
   gap: 2rem;
   transition: background-color 0.25s ease, border-color 0.25s ease;
@@ -31,7 +54,6 @@
 /* --- DIVISORES VERTICALES --- */
 .divider {
   width: 1px;
-  height: 52px;
   background-color: var(--border-subtle, #f1f5f9);
   flex-shrink: 0;
   transition: background-color 0.25s ease;
@@ -41,114 +63,165 @@
 .footer-col {
   display: flex;
   flex-direction: column;
-
-  .col-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-main, #0f172a);
-    margin-bottom: 0.6rem;
-    transition: color 0.25s ease;
-  }
-}
-
-/* Columna 1: Brand */
-.brand-col {
-  flex-direction: row;
-  align-items: center;
-  gap: 1.25rem;
-  flex: 1.1;
-
-  .brand-logo {
-    height: 42px;
-    width: auto;
-    object-fit: contain;
-    filter: none;
-    transition: filter 0.25s ease;
-  }
-
-  .brand-slogan {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-sub, #475569);
-    line-height: 1.35;
-    margin: 0;
-    transition: color 0.25s ease;
-  }
-}
-
-/* Columna 2: Redes Sociales */
-.social-col {
   flex: 1;
-  align-items: flex-start;
 
-  .social-icons {
+  .col-header {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
 
-    .social-link {
+    .col-header-icon {
+      font-size: 1.15rem;
+      color: var(--brand-primary);
+    }
+
+    .col-title {
+      font-size: 0.9rem;
+      font-weight: 800;
       color: var(--text-main, #0f172a);
-      display: flex;
+      letter-spacing: -0.015em;
+    }
+  }
+
+  .footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer-link {
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--text-sub, #64748b);
       text-decoration: none;
-      transition: transform 0.2s ease, color 0.2s ease;
+      transition: all 0.2s ease;
 
       ion-icon {
-        font-size: 1.45rem;
+        font-size: 1rem;
+        color: var(--text-sub, #94a3b8);
+        transition: color 0.2s ease;
       }
 
       &:hover {
-        color: #ff5500;
-        transform: translateY(-2px);
+        color: var(--brand-primary);
+        transform: translateX(2px);
+
+        ion-icon {
+          color: var(--brand-primary);
+        }
       }
 
-      &:active {
-        transform: scale(0.92);
+      &.ethics-pill-link {
+        font-weight: 600;
+        color: var(--text-main, #0f172a);
+
+        &:hover {
+          color: var(--brand-primary);
+        }
       }
     }
   }
 }
 
-/* Columna 3: Contacto */
-.contact-col {
-  flex: 1;
+/* Columna 3: Directorio */
+.directory-col {
+  .directory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
-  .contact-link {
-    font-size: 0.85rem;
-    color: var(--text-sub, #475569);
-    text-decoration: none;
-    line-height: 1.5;
-    transition: color 0.2s ease;
+    .directory-item {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8rem;
 
-    &:hover {
-      color: #ff5500;
+      .dept-label {
+        font-weight: 700;
+        color: var(--text-main, #0f172a);
+        min-width: 90px;
+      }
+
+      .directory-email {
+        color: var(--text-sub, #64748b);
+        text-decoration: none;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: var(--brand-primary);
+          text-decoration: underline;
+        }
+      }
     }
   }
 }
 
-/* --- RESPONSIVE MOBILE & TABLET --- */
+/* --- SUB-BARRA INFERIOR --- */
+.footer-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0.75rem 0 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .bottom-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+
+    .q-badge {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      background: var(--brand-primary);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .brand-text {
+      font-size: 0.775rem;
+      font-weight: 700;
+      color: var(--text-sub, #64748b);
+    }
+  }
+
+  .bottom-copy {
+    font-size: 0.725rem;
+    color: var(--text-tertiary, #94a3b8);
+  }
+}
+
+/* =======================================================
+   RESPONSIVE DESIGN
+   ======================================================= */
 @media (min-width: 769px) {
-  /* En escritorio no se necesita espacio para tab bar */
   .footer-wrapper {
     padding-bottom: 2rem;
   }
 }
 
-@media (max-width: 900px) {
-  .footer-card {
-    padding: 1.5rem 1.75rem;
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 720px) {
+@media (max-width: 860px) {
   .footer-card {
     flex-direction: column;
-    align-items: flex-start;
-    padding: 1.5rem 1.25rem;
-    gap: 1.25rem;
-    border-radius: 20px;
+    padding: 1.5rem;
+    gap: 1.35rem;
   }
 
   .divider {
@@ -156,15 +229,14 @@
     height: 1px;
   }
 
-  .brand-col, 
-  .social-col, 
-  .contact-col {
-    width: 100%;
+  .footer-bottom-bar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
 /* =======================================================
-   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
+   MODO OSCURO META DARK (#242526 & #3A3B3C)
    ======================================================= */
 :host-context(body.dark) {
   .footer-card {
@@ -176,33 +248,39 @@
     background-color: rgba(255, 255, 255, 0.08) !important;
   }
 
-  .footer-col .col-title {
-    color: #f8fafc !important;
+  .footer-col {
+    .col-header .col-title {
+      color: #f8fafc !important;
+    }
+
+    .footer-links .footer-link {
+      color: #b0b3b8;
+
+      ion-icon {
+        color: #71767b;
+      }
+
+      &:hover {
+        color: var(--brand-primary) !important;
+        ion-icon { color: var(--brand-primary) !important; }
+      }
+
+      &.ethics-pill-link {
+        color: #f8fafc;
+      }
+    }
+
+    .directory-list .directory-item {
+      .dept-label { color: #f8fafc !important; }
+      .directory-email {
+        color: #b0b3b8;
+        &:hover { color: var(--brand-primary) !important; }
+      }
+    }
   }
 
-  .brand-col {
-    .brand-logo {
-      filter: none !important;
-    }
-
-    .brand-slogan {
-      color: #b0b3b8 !important;
-    }
-  }
-
-  .social-col .social-icons .social-link {
-    color: #f8fafc !important;
-
-    &:hover {
-      color: #ff5500 !important;
-    }
-  }
-
-  .contact-col .contact-link {
-    color: #b0b3b8 !important;
-
-    &:hover {
-      color: #ff5500 !important;
-    }
+  .footer-bottom-bar {
+    .bottom-brand .brand-text { color: #b0b3b8; }
+    .bottom-copy { color: #71767b; }
   }
 }

@@ -15,8 +15,7 @@ import {
   chevronBackOutline, 
   chevronForwardOutline, 
   arrowForwardOutline, 
-  sparklesOutline 
-} from 'ionicons/icons';
+  sparklesOutline, personCircleOutline } from 'ionicons/icons';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service'; // Asegúrate de tener la ruta correcta
@@ -88,12 +87,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   ];
 
   constructor() {
-    addIcons({
-      chevronBackOutline,
-      chevronForwardOutline,
-      arrowForwardOutline,
-      sparklesOutline
-    });
+    addIcons({chevronBackOutline,arrowForwardOutline,personCircleOutline,chevronForwardOutline,sparklesOutline});
   }
 
   ngOnInit(): void {

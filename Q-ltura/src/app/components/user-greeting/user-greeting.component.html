@@ -6,44 +6,50 @@
     
     <!-- Bloque de Texto (Izquierda) -->
     <div class="greeting-content">
-      <p class="greeting-eyebrow">
+      
+      <!-- Eyebrow: Fecha y Saludo Personalizado -->
+      <div class="greeting-eyebrow">
         <time [attr.datetime]="formattedDate">{{ formattedDate }}</time>
-      </p>
+        <span class="eyebrow-separator">•</span>
+        <span class="salute-pill">{{ greetingPrefix }}, <strong class="highlight-user">{{ userName }}</strong></span>
+      </div>
 
+      <!-- Titular Principal Oficial -->
       <h1 class="greeting-headline">
-        {{ greetingPrefix }}, <span class="highlight">{{ userName }}</span>
+        Tu espacio, nuestra cultura. <span class="highlight">Bienvenido a Q-ltura.</span>
       </h1>
 
+      <!-- Subtítulo Oficial -->
       <p class="greeting-subtext">
-        {{ motivationalQuote }}
+        El punto de encuentro donde conectamos equipos, celebramos logros y construimos nuestro entorno de trabajo día a día.
       </p>
+
+      <!-- Botones de Acción (CTAs) -->
+      <div class="hero-actions">
+        <button type="button" class="btn-cta primary" (click)="scrollToFeed()">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <span>Explorar Novedades</span>
+        </button>
+
+        <button type="button" class="btn-cta secondary" (click)="goToMiEspacio()">
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <span>Mi Espacio</span>
+        </button>
+      </div>
+
     </div>
 
-    <!-- WIDGET ANIMADO (Derecha) -->
-    <div class="scenic-window" [ngClass]="timePeriod">
+    <!-- Ícono Minimalista Flotante (Derecha) -->
+    <div class="scenic-icon-box" [ngClass]="timePeriod" aria-hidden="true">
       
-      <!-- ESCENA: MAÑANA -->
-      <ng-container *ngIf="timePeriod === 'morning'">
-        <div class="sun morning-sun"></div>
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-      </ng-container>
+      <!-- MAÑANA: Ícono de Amanecer -->
+      <ion-icon name="partly-sunny-outline" class="time-icon morning-icon" *ngIf="timePeriod === 'morning'"></ion-icon>
 
-      <!-- ESCENA: TARDE -->
-      <ng-container *ngIf="timePeriod === 'afternoon'">
-        <div class="sun afternoon-sun"></div>
-        <div class="cloud cloud-warm"></div>
-      </ng-container>
+      <!-- TARDE: Ícono de Sol radiante -->
+      <ion-icon name="sunny-outline" class="time-icon afternoon-icon" *ngIf="timePeriod === 'afternoon'"></ion-icon>
 
-      <!-- ESCENA: NOCHE -->
-      <ng-container *ngIf="timePeriod === 'night'">
-        <div class="moon"></div>
-        <div class="stars"></div>
-        <!-- Estrellas fugaces -->
-        <div class="shooting-star st-1"></div>
-        <div class="shooting-star st-2"></div>
-        <div class="shooting-star st-3"></div>
-      </ng-container>
+      <!-- NOCHE: Ícono de Luna y Estrellas -->
+      <ion-icon name="moon-outline" class="time-icon night-icon" *ngIf="timePeriod === 'night'"></ion-icon>
 
     </div>
 

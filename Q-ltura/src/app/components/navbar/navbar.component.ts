@@ -18,7 +18,9 @@ import {
   IonTabButton, 
   IonLabel, 
   IonPopover,
-  ToastController 
+  ToastController,
+  PopoverController,
+  AlertController // 👈 1. Importar AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
@@ -34,7 +36,12 @@ import {
   calendarOutline,
   giftOutline,
   sparklesOutline,
-  checkmarkDoneOutline
+  checkmarkDoneOutline,
+  chevronDownOutline,
+  personCircleOutline,
+  logOutOutline,
+  heartOutline,
+  ribbonOutline
 } from 'ionicons/icons';
 
 import { ThemeService } from '../../services/theme';
@@ -80,47 +87,48 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private sanityService = inject(SanityService);
   private toastCtrl = inject(ToastController);
+  private popoverCtrl = inject(PopoverController);
+  private alertCtrl = inject(AlertController); // 👈 2. Inyectar AlertController
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
   
-  // Suscripción al canal SSE en tiempo real de Sanity
   private sanityLiveSub: Subscription | null = null;
 
-  activeNav: string = 'Inicio';
+  activeNav: string = 'Comunidad & Noticias';
   isDarkMode: boolean = false;
+
+  // Popover Notificaciones
   isPopoverOpen: boolean = false;
   popoverEvent: MouseEvent | null = null;
 
-  // Bandera para disparar la animación de balanceo en la campana
-  hasNewIncomingNotification: boolean = false;
+  // Popover Menú de Usuario
+  isUserPopoverOpen: boolean = false;
+  userPopoverEvent: MouseEvent | null = null;
 
-  logoLight = 'assets/Logotipo_/SI_logotipo_color-03.svg';
-  logoDark = 'assets/Logotipo_/SI_color blanco-02.svg';
+  hasNewIncomingNotification: boolean = false;
 
   user: UserSession = {
     id: 'default',
-    name: 'Colaborador',
-    email: 'colaborador@qualtop.com',
-    role: 'Equipo TI',
-    department: 'Operaciones',
+    name: 'Ana López',
+    email: 'ana.lopez@qualtop.com',
+    role: 'Consultora Sr.',
+    department: 'TI',
     company: 'Qualtop',
     avatar: 'https://i.pravatar.cc/150?img=32'
   };
 
   navItems = [
-    { label: 'Inicio', route: '/home' },
-    { label: 'Avisos', route: '/avisos' },
-    { label: 'Plataformas', route: '/plataformas' },
-    { label: 'Denuncia', route: '/denuncia' },
-    { label: 'Más', route: '/mas' }
+    { label: 'Comunidad & Noticias', route: '/avisos' },
+    { label: 'Beneficios & Wellness', route: '/beneficios' },
+    { label: 'Reconocimientos', route: '/reconocimientos' }
   ];
 
   mobileTabs = [
-    { label: 'Inicio', route: '/home', icon: 'home-outline' },
-    { label: 'Avisos', route: '/avisos', icon: 'newspaper-outline' },
-    { label: 'Plataformas', route: '/plataformas', icon: 'grid-outline' },
+    { label: 'Comunidad', route: '/avisos', icon: 'newspaper-outline' },
+    { label: 'Beneficios', route: '/beneficios', icon: 'heart-outline' },
+    { label: 'Reconocimientos', route: '/reconocimientos', icon: 'ribbon-outline' },
     { label: 'Denuncia', route: '/denuncia', icon: 'shield-checkmark-outline' },
-    { label: 'Más', route: '/mas', icon: 'menu-outline' }
+    { label: 'Mi Espacio', route: '/mas', icon: 'person-circle-outline' }
   ];
 
   notificationsList: NotificationItem[] = [];
@@ -139,14 +147,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
       calendarOutline,
       giftOutline,
       sparklesOutline,
-      checkmarkDoneOutline
+      checkmarkDoneOutline,
+      chevronDownOutline,
+      personCircleOutline,
+      logOutOutline,
+      heartOutline,
+      ribbonOutline
     });
   }
 
   ngOnInit(): void {
     this.updateActiveTabByUrl(this.router.url);
 
-    // 1. Sincronización de ruta activa y cierre de popover en navegación
     this.router.events
       .pipe(
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
@@ -155,10 +167,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.updateActiveTabByUrl(event.urlAfterRedirects || event.url);
         this.isPopoverOpen = false;
+        this.isUserPopoverOpen = false;
         this.cdr.markForCheck();
       });
 
-    // 2. Escuchar cambios de Modo Oscuro
     this.themeService.isDarkMode$
       .pipe(takeUntil(this.destroy$))
       .subscribe(isDark => {
@@ -166,7 +178,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       });
 
-    // 3. Sincronizar usuario activo y rearmar conexión SSE de Sanity por filial
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(activeUser => {
@@ -191,9 +202,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.notificationsList.filter(n => n.unread).length;
   }
 
-  /**
-   * Carga inicial de notificaciones filtradas estrictamente por empresa
-   */
   async fetchInitialNotifications(): Promise<void> {
     try {
       const query = `*[
@@ -232,10 +240,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Conexión reactiva Server-Sent Events con Sanity
-   * Recibe publicaciones en vivo y actualiza la UI sin recargar
-   */
   private setupRealtimeSanityListener(): void {
     if (this.sanityLiveSub) {
       this.sanityLiveSub.unsubscribe();
@@ -255,7 +259,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
           if (update.transition === 'appear' && update.result) {
             const newItem = update.result;
 
-            // Evitar duplicados si el evento ya existe en la lista en memoria
             const alreadyExists = this.notificationsList.some(n => n.id === newItem._id);
             if (alreadyExists) return;
 
@@ -269,15 +272,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
               createdAt: newItem._createdAt
             };
 
-            // Inyectar en el primer puesto de la lista
             this.notificationsList = [notification, ...this.notificationsList];
-
-            // Sacudida visual de la campana
             this.triggerBellAnimation();
-
-            // Notificación discreta superior
             this.presentToast(`Nuevo aviso: ${notification.title}`);
-
             this.cdr.markForCheck();
           }
         },
@@ -309,6 +306,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       ]
     });
     await toast.present();
+  }
+
+  public openSearch(): void {
+    this.router.navigateByUrl('/plataformas');
   }
 
   public openPopover(event: MouseEvent): void {
@@ -347,6 +348,73 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  public openUserPopover(event: MouseEvent): void {
+    this.userPopoverEvent = event;
+    this.isUserPopoverOpen = true;
+    this.cdr.markForCheck();
+  }
+
+  public async navigateTo(route: string): Promise<void> {
+    this.isUserPopoverOpen = false;
+    try {
+      const top = await this.popoverCtrl.getTop();
+      if (top) await top.dismiss();
+    } catch {}
+    this.router.navigateByUrl(route);
+  }
+
+  // 👈 3. ALERTA MODAL NATIVA DE CONFIRMACIÓN (IDÉNTICA A LA CAPTURA)
+  public async confirmLogout(): Promise<void> {
+    // Primero cerramos el popover para evitar solapamientos en pantalla
+    this.isUserPopoverOpen = false;
+    this.cdr.markForCheck();
+
+    try {
+      const topPopover = await this.popoverCtrl.getTop();
+      if (topPopover) {
+        await topPopover.dismiss();
+      }
+    } catch (e) {
+      console.warn('No se encontró popover activo previo a la alerta:', e);
+    }
+
+    // Modal de confirmación estilo iOS
+    const alert = await this.alertCtrl.create({
+      header: 'Cerrar sesión',
+      message: '¿Estás seguro de que deseas salir del portal Q-ltura?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Cerrar sesión',
+          role: 'destructive',
+          handler: async () => {
+            await this.performLogout();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  // 👈 4. EJECUCIÓN DEL LOGOUT TRAS CONFIRMAR
+  private async performLogout(): Promise<void> {
+    try {
+      if (this.authService && typeof this.authService.logout === 'function') {
+        await this.authService.logout();
+      }
+    } catch (error) {
+      console.error('Error en authService.logout:', error);
+    } finally {
+      await this.router.navigate(['/login'], { replaceUrl: true });
+      this.cdr.markForCheck();
+    }
+  }
+
   private getStoredReadIds(): string[] {
     try {
       const data = localStorage.getItem(this.STORAGE_READ_KEY);
@@ -364,9 +432,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Convierte la fecha ISO de Sanity en formato amigable
-   */
   private formatRelativeTime(dateString?: string): string {
     if (!dateString) return 'Reciente';
 
@@ -387,11 +452,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private updateActiveTabByUrl(url: string): void {
-    const currentTab = this.mobileTabs.find(tab => url.startsWith(tab.route));
-    if (currentTab) {
-      this.activeNav = currentTab.label;
-    } else if (url === '/' || url.includes('/home')) {
-      this.activeNav = 'Inicio';
+    if (url.includes('/avisos')) {
+      this.activeNav = 'Comunidad & Noticias';
+    } else {
+      const currentTab = this.mobileTabs.find(tab => url.startsWith(tab.route));
+      if (currentTab) {
+        this.activeNav = currentTab.label;
+      } else if (url === '/' || url.includes('/home')) {
+        this.activeNav = 'Inicio';
+      }
     }
   }
 }

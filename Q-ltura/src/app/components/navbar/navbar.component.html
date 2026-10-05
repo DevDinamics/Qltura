@@ -3,18 +3,16 @@
   <ion-toolbar>
     <div class="navbar-wrapper">
       
-      <!-- CONTENEDOR IZQUIERDO: Logo y Menú Desktop -->
+      <!-- CONTENEDOR IZQUIERDO: Logo Q-ltura y Menú Desktop -->
       <div class="nav-left">
-        <div class="logo-section" [routerLink]="['/home']" style="cursor: pointer;">
-          <img 
-            [src]="isDarkMode ? logoDark : logoLight" 
-            alt="Software Innovators Logo" 
-            loading="lazy" 
-            decoding="async" 
-            class="brand-logo" />
+        <div class="logo-section" [routerLink]="['/home']" aria-label="Ir a Inicio Q-ltura">
+          <div class="q-logo-mark">
+            <span class="q-letter">Q</span>
+          </div>
+          <span class="brand-title">ltura</span>
         </div>
 
-        <nav class="nav-links desktop-only">
+        <nav class="nav-links desktop-only" aria-label="Navegación principal">
           <ul>
             <li *ngFor="let item of navItems">
               <a 
@@ -30,25 +28,51 @@
 
       <!-- ACCIONES DERECHA -->
       <div class="nav-actions">
-        <button class="action-btn desktop-only" aria-label="Buscar">
+        <!-- BUSCADOR CON ACCIÓN ASIGNADA -->
+        <button 
+          type="button"
+          class="action-btn desktop-only" 
+          (click)="openSearch()" 
+          aria-label="Buscar plataformas y contenidos">
           <ion-icon name="search-outline"></ion-icon>
         </button>
 
         <!-- BOTÓN DE NOTIFICACIONES CON CONTADOR NUMÉRICO -->
         <button 
-  class="action-btn notification-btn" 
-  [class.bell-ring]="hasNewIncomingNotification"
-  (click)="openPopover($event)"
-  aria-label="Notificaciones">
-  <ion-icon [name]="unreadCount > 0 ? 'notifications' : 'notifications-outline'"></ion-icon>
-  
-  <span class="notification-badge" *ngIf="unreadCount > 0">
-    {{ unreadCount > 9 ? '9+' : unreadCount }}
-    <span class="pulse-ring"></span>
-  </span>
-</button>
+          type="button"
+          class="action-btn notification-btn" 
+          [class.bell-ring]="hasNewIncomingNotification"
+          (click)="openPopover($event)"
+          aria-label="Notificaciones">
+          <ion-icon [name]="unreadCount > 0 ? 'notifications' : 'notifications-outline'"></ion-icon>
+          
+          <span class="notification-badge" *ngIf="unreadCount > 0">
+            {{ unreadCount > 9 ? '9+' : unreadCount }}
+            <span class="pulse-ring"></span>
+          </span>
+        </button>
 
-        <!-- POPOVER DE NOTIFICACIONES (APPLE GLASS) -->
+        <!-- ÁREA DE USUARIO: AVATAR + NOMBRE + FLECHA DESPLEGABLE -->
+        <div 
+          class="user-profile-trigger" 
+          (click)="openUserPopover($event)"
+          role="button"
+          tabindex="0"
+          aria-label="Menú de cuenta de usuario">
+          
+          <div 
+            class="user-avatar" 
+            [ngClass]="user.company ? user.company.toLowerCase() : 'qualtop'">
+            <img [src]="user.avatar" [alt]="user.name" />
+          </div>
+
+          <div class="user-meta desktop-only">
+            <span class="user-name">{{ user.name }}</span>
+            <ion-icon name="chevron-down-outline" class="user-chevron"></ion-icon>
+          </div>
+        </div>
+
+        <!-- POPOVER 1: NOTIFICACIONES (APPLE GLASS) -->
         <ion-popover 
           [isOpen]="isPopoverOpen" 
           [event]="popoverEvent"
@@ -96,7 +120,6 @@
                     <span class="notif-time">{{ item.time }}</span>
                   </div>
 
-                  <!-- Punto indicador de no leído -->
                   <span class="unread-dot" *ngIf="item.unread"></span>
                 </div>
 
@@ -114,20 +137,72 @@
           </ng-template>
         </ion-popover>
 
-        <!-- AVATAR CON BORDE DINÁMICO POR EMPRESA -->
-        <div 
-          class="user-avatar" 
-          [ngClass]="user.company ? user.company.toLowerCase() : 'qualtop'"
-          [routerLink]="['/mas']">
-          <img [src]="user.avatar" [alt]="user.name" />
-        </div>
+        <!-- POPOVER 2: MENÚ DESPLEGABLE DE USUARIO -->
+        <ion-popover 
+          [isOpen]="isUserPopoverOpen" 
+          [event]="userPopoverEvent"
+          (didDismiss)="isUserPopoverOpen = false"
+          side="bottom" 
+          alignment="end" 
+          mode="ios"
+          class="custom-user-popover">
+          <ng-template>
+            <div class="user-dropdown-content">
+              
+              <!-- Resumen del Usuario -->
+              <div class="user-dropdown-header">
+                <div class="user-avatar-lg">
+                  <img [src]="user.avatar" [alt]="user.name" />
+                </div>
+                <div class="user-details">
+                  <h4 class="name">{{ user.name }}</h4>
+                  <p class="role">{{ user.role }} • {{ user.department }}</p>
+                  <span class="company-tag" [ngClass]="user.company ? user.company.toLowerCase() : 'qualtop'">
+                    {{ user.company }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              <!-- Enlaces Rápidos -->
+              <nav class="user-dropdown-links">
+                <button type="button" class="menu-link-btn" (click)="navigateTo('/mas')">
+                  <div class="link-icon">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                  </div>
+                  <span>Mi Espacio / Perfil</span>
+                </button>
+
+                <button type="button" class="menu-link-btn" (click)="navigateTo('/denuncia')">
+                  <div class="link-icon">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  </div>
+                  <span>Línea de Ética & Denuncia</span>
+                </button>
+              </nav>
+
+              <div class="dropdown-divider"></div>
+
+              <!-- Cerrar Sesión (con Alerta de Confirmación) -->
+              <div class="user-dropdown-footer">
+                <button type="button" class="logout-menu-btn" (click)="confirmLogout()">
+                  <ion-icon name="log-out-outline"></ion-icon>
+                  <span>Cerrar Sesión</span>
+                </button>
+              </div>
+
+            </div>
+          </ng-template>
+        </ion-popover>
+
       </div>
 
     </div>
   </ion-toolbar>
 </ion-header>
 
-<!-- BOTTOM TAB BAR MÓVIL -->
+<!-- BOTTOM TAB BAR MÓVIL RESPONSIVO -->
 <ion-tab-bar slot="bottom" class="mobile-only custom-tab-bar">
   <ion-tab-button 
     *ngFor="let tab of mobileTabs" 

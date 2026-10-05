@@ -3,263 +3,275 @@
   width: 100%;
 }
 
+/* =======================================================
+   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
+   ======================================================= */
+:host-context(body.qualtop) {
+  --brand-primary: #ff5500;
+  --brand-muted: rgba(255, 85, 0, 0.08);
+  --brand-glow: rgba(255, 85, 0, 0.3);
+}
+
+:host-context(body.sye) {
+  --brand-primary: #6366f1;
+  --brand-muted: rgba(99, 102, 241, 0.08);
+  --brand-glow: rgba(99, 102, 241, 0.3);
+}
+
+:host-context(body.dark.qualtop) {
+  --brand-primary: #ff7700;
+  --brand-muted: rgba(255, 119, 0, 0.15);
+  --brand-glow: rgba(255, 119, 0, 0.4);
+}
+
+:host-context(body.dark.sye) {
+  --brand-primary: #818cf8;
+  --brand-muted: rgba(129, 140, 248, 0.15);
+  --brand-glow: rgba(129, 140, 248, 0.4);
+}
+
 .greeting-hero {
   width: 100%;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 1.5rem 0.5rem 1rem 0.5rem;
+  padding: 1.5rem 0.5rem 1.25rem 0.5rem;
 
   .greeting-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   .greeting-content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    flex: 1; 
+    flex: 1;
+    min-width: 0; /* Previene cortes de texto en flexbox */
   }
 
-  /* 1. Textos */
+  /* 1. Eyebrow */
   .greeting-eyebrow {
-    margin: 0 0 0.5rem 0;
-    font-size: 0.8125rem;
-    font-weight: 600;
+    margin: 0 0 0.65rem 0;
+    font-size: 0.775rem;
+    font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-tertiary, #86868b);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
 
-    &::after {
-      content: '';
-      display: inline-block;
-      width: 24px;
-      height: 1px;
-      background: var(--border-subtle, rgba(0, 0, 0, 0.12));
+    .eyebrow-separator {
+      color: var(--border-subtle, #cbd5e1);
+      font-size: 0.7rem;
+    }
+
+    .salute-pill {
+      font-weight: 600;
+      color: var(--text-sub, #64748b);
+
+      .highlight-user {
+        color: var(--brand-primary);
+        font-weight: 800;
+      }
     }
   }
 
+  /* 2. Titular Principal */
   .greeting-headline {
-    margin: 0 0 0.5rem 0;
-    font-size: clamp(1.85rem, 3.5vw, 2.75rem);
-    font-weight: 700;
+    margin: 0 0 0.65rem 0;
+    font-size: clamp(1.65rem, 3.2vw, 2.45rem);
+    font-weight: 800;
     letter-spacing: -0.03em;
-    line-height: 1.12;
-    color: var(--text-main, #1d1d1f);
+    line-height: 1.18;
+    color: var(--text-main, #0f172a);
+    word-break: normal;
+    overflow-wrap: break-word;
 
     .highlight {
-      font-weight: 800;
-      letter-spacing: -0.025em;
+      color: var(--brand-primary);
       transition: color 0.3s ease;
+      display: inline;
+      white-space: normal;
     }
   }
 
+  /* 3. Subtexto Oficial */
   .greeting-subtext {
-    margin: 0.25rem 0 0 0;
+    margin: 0 0 1.5rem 0;
     font-size: 1rem;
     font-weight: 400;
-    line-height: 1.5;
-    color: var(--text-sub, #6e6e73);
-    max-width: 640px;
+    line-height: 1.55;
+    color: var(--text-sub, #64748b);
+    max-width: 660px;
     letter-spacing: -0.01em;
-    padding-left: 0.85rem;
-    border-left: 2px solid transparent;
-    transition: border-color 0.25s ease;
   }
 
-  /* =======================================================
-     WIDGET ANIMADO (Lado Derecho)
-     ======================================================= */
-  .scenic-window {
-    width: 120px;
-    height: 120px;
-    min-width: 120px;
-    border-radius: 32px; /* Curva estilo Apple Widget */
-    position: relative;
-    overflow: hidden;
-    box-shadow: 
-      inset 0 0 0 1px rgba(255, 255, 255, 0.2),
-      0 10px 25px -5px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  /* 4. Botones de Acción (CTAs) */
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
 
-    &:hover {
-      transform: scale(1.03);
-    }
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.35rem;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
-    /* ESCENA 1: MAÑANA */
-    &.morning {
-      background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%);
-      
-      .morning-sun {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 36px;
-        height: 36px;
-        background: #fef08a;
-        border-radius: 50%;
-        box-shadow: 0 0 25px rgba(254, 240, 138, 0.8);
-        animation: pulseSun 4s infinite alternate ease-in-out;
+      ion-icon {
+        font-size: 1.15rem;
       }
 
-      .cloud {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        animation: driftLinear linear infinite;
-      }
-      .cloud-1 { width: 45px; height: 14px; top: 40px; left: -50px; animation-duration: 20s; }
-      .cloud-2 { width: 30px; height: 10px; top: 70px; left: -40px; animation-duration: 15s; animation-delay: 5s; opacity: 0.7; }
-    }
+      &.primary {
+        background: var(--brand-primary);
+        color: #ffffff;
+        box-shadow: 0 8px 20px -4px var(--brand-glow);
 
-    /* ESCENA 2: TARDE (Golden Hour) */
-    &.afternoon {
-      background: linear-gradient(135deg, #fbbf24 0%, #f43f5e 100%);
-      
-      .afternoon-sun {
-        position: absolute;
-        bottom: -10px;
-        right: 20px;
-        width: 48px;
-        height: 48px;
-        background: #fde047;
-        border-radius: 50%;
-        box-shadow: 0 0 35px rgba(253, 224, 71, 0.6);
-        animation: pulseSun 5s infinite alternate ease-in-out;
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 24px -4px var(--brand-glow);
+          filter: brightness(1.05);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
       }
 
-      .cloud-warm {
-        position: absolute;
-        background: rgba(255, 255, 255, 0.6);
-        border-radius: 20px;
-        width: 55px; height: 16px; top: 30px; left: -60px;
-        animation: driftLinear 25s linear infinite;
+      &.secondary {
+        background: var(--bg-surface, #ffffff);
+        color: var(--text-main, #0f172a);
+        border-color: var(--border-subtle, rgba(0, 0, 0, 0.1));
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+
+        &:hover {
+          transform: translateY(-2px);
+          border-color: var(--brand-primary);
+          color: var(--brand-primary);
+          background: var(--bg-hover, #f8fafc);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
       }
-    }
-
-    /* ESCENA 3: NOCHE (Estrellas y Fugaces) */
-    &.night {
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-
-      .moon {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        width: 32px;
-        height: 32px;
-        background: #e2e8f0;
-        border-radius: 50%;
-        box-shadow: 0 0 20px rgba(226, 232, 240, 0.5);
-      }
-
-      /* Puntos estáticos simulando estrellas con sombras */
-      .stars {
-        position: absolute;
-        width: 2px;
-        height: 2px;
-        background: transparent;
-        box-shadow: 
-          15px 15px #fff, 30px 40px #fff, 80px 20px #fff, 
-          100px 70px #fff, 20px 90px #fff, 60px 100px #fff;
-        opacity: 0.5;
-        animation: twinkle 3s infinite alternate;
-      }
-
-      /* Estrellas Fugaces */
-      .shooting-star {
-        position: absolute;
-        width: 2px;
-        height: 45px;
-        background: linear-gradient(to bottom, rgba(255,255,255,1), transparent);
-        border-radius: 2px;
-        transform: rotate(-45deg);
-        opacity: 0;
-      }
-
-      .st-1 { top: -20px; left: 80%; animation: shooting 6s infinite 1s; }
-      .st-2 { top: -20px; left: 40%; animation: shooting 8s infinite 4s; }
-      .st-3 { top: -20px; left: 110%; animation: shooting 7s infinite 2s; }
     }
   }
 
   /* =======================================================
-     TEMAS DE EMPRESA (Aplica a los textos)
+     ÍCONO MINIMALISTA DINÁMICO (Derecha)
      ======================================================= */
+  .scenic-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    padding-right: 2rem; /* Espacio extra para que no roce con el borde derecho en pantallas grandes */
+    
+    .time-icon {
+      font-size: 5rem;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.08));
+    }
+
+    /* Mañana: Color suave y animación ascendente */
+    &.morning .morning-icon {
+      color: #f59e0b; /* Ambar cálido */
+      animation: riseAndFloat 4s ease-in-out infinite;
+    }
+
+    /* Tarde: Color brillante y rotación muy sutil */
+    &.afternoon .afternoon-icon {
+      color: #eab308; /* Amarillo sol */
+      animation: rotateSlowly 12s linear infinite;
+    }
+
+    /* Noche: Color profundo y balanceo sutil tipo cuna */
+    &.night .night-icon {
+      color: #6366f1; /* Índigo luna */
+      animation: rockGently 5s ease-in-out infinite;
+    }
+  }
+
+  /* Temas de Empresa para Textos */
   &.qualtop {
     .highlight { color: #ff5500; }
-    .greeting-subtext { border-left-color: rgba(255, 85, 0, 0.4); }
   }
 
   &.sye {
     .highlight { color: #6366f1; }
-    .greeting-subtext { border-left-color: rgba(99, 102, 241, 0.4); }
   }
 }
 
 /* =======================================================
-   ANIMACIONES KEYFRAMES
+   ANIMACIONES MINIMALISTAS
    ======================================================= */
-@keyframes pulseSun {
-  0% { transform: scale(1); opacity: 0.9; }
-  100% { transform: scale(1.1); opacity: 1; }
+@keyframes riseAndFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
 }
 
-@keyframes driftLinear {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(200px); }
+@keyframes rotateSlowly {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-@keyframes twinkle {
-  0% { opacity: 0.3; }
-  100% { opacity: 0.8; }
-}
-
-@keyframes shooting {
-  0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
-  15% { transform: translate(-100px, 100px) rotate(-45deg); opacity: 0; }
-  100% { opacity: 0; }
+@keyframes rockGently {
+  0% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  100% { transform: rotate(-5deg); }
 }
 
 /* =======================================================
    RESPONSIVE MÓVIL
    ======================================================= */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .greeting-hero {
-    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    padding: 1rem 0.25rem 0.75rem 0.25rem;
 
     .greeting-wrapper {
+      flex-direction: column-reverse; /* El ícono pasa arriba en móviles */
+      align-items: flex-start;
       gap: 1rem;
     }
 
-    .greeting-eyebrow {
-      font-size: 0.75rem;
-      margin-bottom: 0.35rem;
+    .scenic-icon-box {
+      width: 100%;
+      height: auto;
+      padding-right: 0;
+      justify-content: flex-start;
+
+      .time-icon {
+        font-size: 3.5rem; /* Ícono más pequeño en móvil */
+      }
     }
 
     .greeting-headline {
-      font-size: 1.55rem;
+      font-size: 1.65rem;
     }
 
     .greeting-subtext {
-      font-size: 0.875rem;
-      padding-left: 0.65rem;
+      font-size: 0.885rem;
+      margin-bottom: 1.25rem;
     }
 
-    .scenic-window {
-      width: 75px;
-      height: 75px;
-      min-width: 75px;
-      border-radius: 22px;
-
-      &.morning .morning-sun { width: 24px; height: 24px; top: 10px; right: 10px; }
-      &.afternoon .afternoon-sun { width: 32px; height: 32px; bottom: -5px; right: 10px; }
-      &.night .moon { width: 22px; height: 22px; top: 10px; right: 10px; }
-      &.night .shooting-star { height: 25px; }
+    .hero-actions {
+      width: 100%;
+      .btn-cta {
+        flex: 1;
+        justify-content: center;
+      }
     }
   }
 }
@@ -270,27 +282,54 @@
 :host-context(body.dark) {
   .greeting-hero {
     .greeting-eyebrow {
-      color: #a1a1a6;
-      &::after { background: rgba(255, 255, 255, 0.15); }
+      color: #b0b3b8;
+      .salute-pill { color: #cbd5e1; }
+      .eyebrow-separator { color: rgba(255, 255, 255, 0.2); }
     }
 
-    .greeting-headline { color: #f5f5f7; }
-    .greeting-subtext { color: #a1a1a6; }
+    .greeting-headline {
+      color: #f8fafc;
+    }
 
-    /* Reducimos ligeramente el brillo del widget en modo oscuro 
-       para no encandilar la vista del usuario */
-    .scenic-window {
-      opacity: 0.9;
+    .greeting-subtext {
+      color: #b0b3b8;
+    }
+
+    .hero-actions .btn-cta.secondary {
+      background: #242526;
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f8fafc;
+
+      &:hover {
+        background: #3a3b3c;
+        border-color: var(--brand-primary);
+      }
+    }
+
+    /* Adaptación de Íconos Animados al Modo Oscuro */
+    .scenic-icon-box {
+      &.morning .morning-icon {
+        color: #fbbf24;
+        filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.3));
+      }
+
+      &.afternoon .afternoon-icon {
+        color: #fcd34d;
+        filter: drop-shadow(0 0 12px rgba(252, 211, 77, 0.3));
+      }
+
+      &.night .night-icon {
+        color: #a5b4fc; /* Luna más clara y plateada en modo oscuro */
+        filter: drop-shadow(0 0 12px rgba(165, 180, 252, 0.3));
+      }
     }
 
     &.qualtop {
       .highlight { color: #ff6a1a; }
-      .greeting-subtext { border-left-color: rgba(255, 106, 26, 0.5); }
     }
 
     &.sye {
       .highlight { color: #818cf8; }
-      .greeting-subtext { border-left-color: rgba(129, 140, 248, 0.5); }
     }
   }
 }

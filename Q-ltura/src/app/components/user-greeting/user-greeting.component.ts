@@ -1,20 +1,38 @@
-import { Component, OnInit, OnDestroy, Input, inject, ChangeDetectorRef } from '@angular/core';
+import { 
+  Component, 
+  OnInit, 
+  OnDestroy, 
+  Input, 
+  inject, 
+  ChangeDetectorRef 
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { 
+  newspaperOutline, 
+  personCircleOutline,
+  partlySunnyOutline, // Amanecer/Atardecer
+  sunnyOutline,       // Día
+  moonOutline         // Noche
+} from 'ionicons/icons';
+
 import { AuthService } from '../../services/auth.service';
 import { CompanyType } from '../../shared/models/user.model';
-import { IonIcon } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-user-greeting',
   templateUrl: './user-greeting.component.html',
   styleUrls: ['./user-greeting.component.scss'],
   standalone: true,
-  imports: [IonIcon, CommonModule]
+  imports: [CommonModule, IonIcon]
 })
 export class UserGreetingComponent implements OnInit, OnDestroy {
 
+  private router = inject(Router);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
@@ -24,27 +42,23 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
 
   formattedDate: string = '';
   greetingPrefix: string = 'Hola';
-  motivationalQuote: string = '';
-  
-  // Variable para controlar la animación del widget derecho
   timePeriod: 'morning' | 'afternoon' | 'night' = 'morning';
 
-  private quotes: string[] = [
-    'Construyamos cosas increíbles juntos hoy.',
-    'Cada día es una nueva oportunidad para innovar.',
-    'El éxito es la suma de pequeños esfuerzos repetidos día tras día.',
-    'La mejor forma de predecir el futuro es creándolo.',
-    'Haz de hoy un día extraordinario para tu equipo.',
-    'La excelencia no es un acto, es un hábito.',
-    'Tu talento y dedicación hacen la diferencia hoy.'
-  ];
+  constructor() {
+    addIcons({
+      newspaperOutline,
+      personCircleOutline,
+      partlySunnyOutline,
+      sunnyOutline,
+      moonOutline
+    });
+  }
 
   ngOnInit(): void {
     this.setFormattedDate();
     this.setGreetingByTime();
-    this.setDailyQuote();
 
-    // Sincronización en tiempo real
+    // Sincronización en tiempo real con la sesión activa
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
@@ -75,11 +89,11 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
   private setGreetingByTime(): void {
     const hour = new Date().getHours();
     
-    if (hour >= 6 && hour < 12) {
+    if (hour >= 5 && hour < 12) {
       this.greetingPrefix = 'Buenos días';
       this.timePeriod = 'morning';
-    } else if (hour >= 12 && hour < 20) {
-      this.greetingPrefix = 'Buenas tardes';
+    } else if (hour >= 12 && hour < 19) {
+      this.greetingPrefix = 'Buen día'; // "Buen día" como pediste para el transcurso de la tarde
       this.timePeriod = 'afternoon';
     } else {
       this.greetingPrefix = 'Buenas noches';
@@ -87,12 +101,20 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setDailyQuote(): void {
-    const today = new Date();
-    const dayOfYear = Math.floor(
-      (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24
-    );
-    const quoteIndex = dayOfYear % this.quotes.length;
-    this.motivationalQuote = this.quotes[quoteIndex];
+  /**
+   * CTA 1: Desplaza la vista suavemente hacia el feed de noticias
+   */
+  public scrollToFeed(): void {
+    const feedElement = document.querySelector('app-feed-dinamico') || document.querySelector('.feed-card');
+    if (feedElement) {
+      feedElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  /**
+   * CTA 2: Conduce al perfil/dashboard del colaborador
+   */
+  public goToMiEspacio(): void {
+    this.router.navigate(['/mas']);
   }
 }
