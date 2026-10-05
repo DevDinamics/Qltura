@@ -18,7 +18,7 @@
     <div class="shape shape-circle-ring ring-1"></div>
   </div>
 
-  <!-- EL VIEWPORT SE DESVANECE SUAVEMENTE AL AUTENTICAR -->
+  <!-- VIEWPORT PRINCIPAL -->
   <div class="login-viewport" [class.form-hidden]="isAuthenticating">
     
     <!-- Header de Identidad -->
@@ -32,87 +32,35 @@
 
     <!-- Tarjeta Principal Glassmorphism -->
     <main class="login-card">
-      <form (ngSubmit)="onLogin()" class="login-form">
-        
-        <!-- Campo Correo -->
-        <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <div class="input-field">
-            <ion-icon name="mail-outline" class="field-icon"></ion-icon>
-            <input 
-              id="email"
-              type="email" 
-              [(ngModel)]="email" 
-              name="email" 
-              placeholder="nombre@empresa.com" 
-              (input)="onEmailChange()"
-              autocomplete="username"
-              required />
-          </div>
+      
+      <div class="auth-box">
+        <div class="workspace-badge">
+          <ion-icon name="shield-checkmark-outline"></ion-icon>
+          <span>Acceso Único Corporativo (SSO)</span>
         </div>
 
-        <!-- Campo Contraseña -->
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-          <div class="input-field">
-            <ion-icon name="lock-closed-outline" class="field-icon"></ion-icon>
-            <input 
-              id="password"
-              type="password" 
-              [(ngModel)]="password" 
-              name="password" 
-              placeholder="••••••••" 
-              autocomplete="current-password"
-              required />
-          </div>
-        </div>
+        <p class="auth-instruction">
+          Ingresa con tu cuenta institucional de <strong>Qualtop</strong> o <strong>SYE Software Innovators</strong> para acceder a tu espacio de trabajo.
+        </p>
 
-        <!-- Selector Manual de Empresa (Visible solo si el dominio es ambiguo) -->
-        <div class="form-group company-group" *ngIf="showCompanySelector">
-          <div class="company-header-row">
-            <label>Empresa asignada</label>
-            <span class="company-hint">Selecciona tu filial</span>
+        <!-- Botón Principal de Google Workspace -->
+        <button 
+          type="button" 
+          class="google-workspace-btn-primary" 
+          (click)="loginWithGoogle()" 
+          [disabled]="isLoading || isAuthenticating">
+          <div class="google-icon-wrapper">
+            <ion-icon name="logo-google" *ngIf="!isLoading"></ion-icon>
+            <ion-spinner name="crescent" *ngIf="isLoading"></ion-spinner>
           </div>
-
-          <div class="company-pills">
-            <button 
-              type="button" 
-              class="pill-btn qualtop"
-              [class.active]="selectedCompany === 'Qualtop'"
-              (click)="selectedCompany = 'Qualtop'">
-              <ion-icon name="business-outline"></ion-icon>
-              <span>Qualtop</span>
-            </button>
-            
-            <button 
-              type="button" 
-              class="pill-btn sye"
-              [class.active]="selectedCompany === 'SYE'"
-              (click)="selectedCompany = 'SYE'">
-              <ion-icon name="business-outline"></ion-icon>
-              <span>SYE</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Botón de Envío -->
-        <button type="submit" class="cta-submit-btn" [disabled]="isLoading || isAuthenticating">
-          <span *ngIf="!isLoading">Ingresar al portal</span>
-          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
-          <ion-icon *ngIf="!isLoading" name="arrow-forward-outline"></ion-icon>
+          <span>{{ isLoading ? 'Conectando con Google...' : 'Continuar con Google Workspace' }}</span>
         </button>
 
-        <div class="form-divider">
-          <span>o accede con</span>
-        </div>
-
-        <!-- Botón Integrado con GCP / Google Workspace -->
-        <button type="button" class="google-workspace-btn" (click)="loginWithGoogle()" [disabled]="isLoading || isAuthenticating">
-          <ion-icon name="logo-google"></ion-icon>
-          <span>Continuar con Google</span>
-        </button>
-
-      </form>
+        <span class="security-note">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          Autenticación segura con Google Identity Services
+        </span>
+      </div>
 
       <!-- ACCESO RÁPIDO DEMO POR PERFIL / EMPRESA -->
       <div class="demo-access-section">
@@ -154,12 +102,12 @@
     </main>
 
     <footer class="login-footer">
-      <p>© 2026 Q-ltura • Todos los derechos reservados</p>
+      <p>© 2026 Q-ltura • Portal Exclusivo para Colaboradores</p>
     </footer>
 
   </div>
 
-  <!-- OVERLAY DE BIENVENIDA CINEMATOGRÁFICO CON COLORIMETRÍA DINÁMICA -->
+  <!-- OVERLAY DE BIENVENIDA CINEMATOGRÁFICO -->
   <aside 
     class="welcome-overlay" 
     *ngIf="isAuthenticating" 
