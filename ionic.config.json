@@ -1,7 +1,5 @@
 {
-  "name": "Q-ltura",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
+  "name": "New Ionic App",
+  "integrations": {},
+  "type": "angular"
 }
