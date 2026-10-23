@@ -3,9 +3,7 @@
   width: 100%;
 }
 
-/* =======================================================
-   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
-   ======================================================= */
+// Variables corporativas por tenant
 :host-context(body.qualtop) {
   --brand-primary: #ff5500;
   --brand-muted: rgba(255, 85, 0, 0.1);
@@ -26,9 +24,7 @@
   --brand-muted: rgba(129, 140, 248, 0.15);
 }
 
-/* =======================================================
-   1. FIX DEL FOOTER (Empuja el footer hacia abajo)
-   ======================================================= */
+// Estructura y contenedor
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -51,7 +47,7 @@
   }
 }
 
-/* HEADER Y TITULOS */
+// Cabecera y switch de vista
 .page-header {
   display: flex;
   flex-direction: column;
@@ -85,7 +81,6 @@
   }
 }
 
-/* VIEW SWITCHER APPLE STYLE */
 .view-switcher {
   width: 100%;
   background: var(--bg-surface, #f1f5f9);
@@ -120,7 +115,7 @@
   }
 }
 
-/* FILTROS RÁPIDOS */
+// Filtros por categoria
 .category-filters {
   display: flex;
   align-items: center;
@@ -157,7 +152,7 @@
   }
 }
 
-/* LISTADO DE TARJETAS DE EVENTO */
+// Listado de eventos
 .events-feed {
   display: flex;
   flex-direction: column;
@@ -181,7 +176,6 @@
     padding: 1.75rem;
   }
 
-  /* Bloque Fecha */
   .event-date-badge {
     width: 64px;
     height: 68px;
@@ -208,7 +202,6 @@
     }
   }
 
-  /* Bloque Contenido */
   .event-content {
     display: flex;
     flex-direction: column;
@@ -287,7 +280,6 @@
     }
   }
 
-  /* Bloque Botón Recordatorio */
   .event-action {
     grid-column: 1 / -1;
 
@@ -326,9 +318,7 @@
   }
 }
 
-/* =======================================================
-   2. CONTROLES DE PAGINACIÓN MINIMALISTA TIPO META
-   ======================================================= */
+// Paginacion
 .meta-pagination {
   display: flex;
   align-items: center;
@@ -400,9 +390,7 @@
   }
 }
 
-/* =======================================================
-   3. SKELETON LOADER (Efecto Shimmer)
-   ======================================================= */
+// Skeleton loading
 @keyframes shimmer {
   0% { background-position: -800px 0; }
   100% { background-position: 800px 0; }
@@ -461,7 +449,7 @@
   }
 }
 
-/* ESTADO VACÍO (Empty State) */
+// Estado vacio
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -481,7 +469,7 @@
   }
 }
 
-/* VISTA MES PLACEHOLDER */
+// Vista mensual
 .month-grid-card {
   background: var(--bg-surface, #ffffff);
   border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
@@ -527,9 +515,7 @@
   }
 }
 
-/* =======================================================
-   4. RESPALDO MODO OSCURO META DARK
-   ======================================================= */
+// Modo oscuro
 :host-context(body.dark) {
   .page-header .page-title { color: #f8fafc !important; }
 

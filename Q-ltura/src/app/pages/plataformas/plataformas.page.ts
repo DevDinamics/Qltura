@@ -1,19 +1,21 @@
 import { 
   Component, 
   OnInit, 
+  OnDestroy,
   ChangeDetectionStrategy, 
   ChangeDetectorRef, 
   inject 
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   searchOutline, 
+  closeCircle,
   giftOutline, 
   layersOutline, 
   gitNetworkOutline, 
@@ -25,6 +27,9 @@ import {
   starOutline,
   sparklesOutline
 } from 'ionicons/icons';
+
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 export interface Plataforma {
   id: string;
@@ -43,28 +48,33 @@ export interface Plataforma {
   templateUrl: './plataformas.page.html',
   styleUrls: ['./plataformas.page.scss'],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush, // ⚡ Renderizado ultra fluido sin trabajo extra
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonContent,
+    IonIcon,
     NavbarComponent,
     FooterComponent
   ]
 })
-export class PlataformasPage implements OnInit {
+export class PlataformasPage implements OnInit, OnDestroy {
+
+  private readonly STORAGE_FAVORITES_KEY = 'q_ltura_fav_platforms';
 
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
+  private destroy$ = new Subject<void>();
 
   private _searchTerm: string = '';
   selectedCategory: string = 'Todas';
 
-  categories: string[] = ['Todas', 'Frecuentes', 'Herramientas', 'Recursos Humanos'];
+  readonly categories: string[] = ['Todas', 'Favoritos', 'Frecuentes', 'Herramientas', 'Recursos Humanos'];
 
-  // Arreglo de tarjetas filtradas pre-calculadas en memoria
   filteredPlataformas: Plataforma[] = [];
 
+  // Catalogo base de herramientas
   plataformas: Plataforma[] = [
     {
       id: 'q-rewards',
@@ -74,7 +84,7 @@ export class PlataformasPage implements OnInit {
       icon: 'gift-outline',
       colorTheme: 'orange',
       url: 'https://rewards.empresa.com',
-      isFavorite: true,
+      isFavorite: false,
       status: 'online'
     },
     {
@@ -85,7 +95,7 @@ export class PlataformasPage implements OnInit {
       icon: 'layers-outline',
       colorTheme: 'blue',
       url: 'https://jira.empresa.com',
-      isFavorite: true,
+      isFavorite: false,
       status: 'online'
     },
     {
@@ -118,7 +128,7 @@ export class PlataformasPage implements OnInit {
       icon: 'book-outline',
       colorTheme: 'purple',
       url: '/politicas',
-      isFavorite: true,
+      isFavorite: false,
       status: 'online'
     },
     {
@@ -137,6 +147,7 @@ export class PlataformasPage implements OnInit {
   constructor() {
     addIcons({
       searchOutline,
+      closeCircle,
       giftOutline,
       layersOutline,
       gitNetworkOutline,
@@ -151,10 +162,23 @@ export class PlataformasPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateFilteredPlataformas();
+    this.syncFavoritesFromStorage();
+
+    // Sincronizacion con parametro de busqueda del navbar (?q=...)
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        const query = params['q'] || '';
+        this._searchTerm = query;
+        this.updateFilteredPlataformas();
+      });
   }
 
-  // Getter y Setter para recalcular el filtro solo al cambiar la búsqueda
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   get searchTerm(): string {
     return this._searchTerm;
   }
@@ -164,38 +188,80 @@ export class PlataformasPage implements OnInit {
     this.updateFilteredPlataformas();
   }
 
-  filterByCategory(category: string): void {
+  public clearSearch(): void {
+    this.searchTerm = '';
+  }
+
+  public filterByCategory(category: string): void {
     this.selectedCategory = category;
     this.updateFilteredPlataformas();
   }
 
-  toggleFavorite(event: Event, item: Plataforma): void {
+  // Alternar estado favorito y persistir
+  public toggleFavorite(event: Event, item: Plataforma): void {
     event.stopPropagation();
     item.isFavorite = !item.isFavorite;
-    this.cdr.markForCheck();
+    this.saveFavoritesToStorage();
+    this.updateFilteredPlataformas();
   }
 
-  openPlatform(item: Plataforma): void {
+  public openPlatform(item: Plataforma): void {
     if (item.url.startsWith('http')) {
       window.open(item.url, '_blank', 'noopener,noreferrer');
     } else {
-      this.router.navigateByUrl(item.url); // 🚀 Navegación SPA nativa de Angular
+      this.router.navigateByUrl(item.url);
     }
   }
 
-  // Lógica centralizada de filtrado sin sobrecargar el hilo principal
+  // Filtrado centralizado por busqueda, categoria o favoritos
   private updateFilteredPlataformas(): void {
     const term = this._searchTerm.toLowerCase().trim();
-    
+
     this.filteredPlataformas = this.plataformas.filter(item => {
-      const matchesCategory = this.selectedCategory === 'Todas' || item.category === this.selectedCategory;
+      let matchesCategory = true;
+
+      if (this.selectedCategory === '⭐ Favoritos') {
+        matchesCategory = !!item.isFavorite;
+      } else if (this.selectedCategory !== 'Todas') {
+        matchesCategory = item.category === this.selectedCategory;
+      }
+
       const matchesSearch = !term || 
                             item.name.toLowerCase().includes(term) ||
                             item.description.toLowerCase().includes(term);
+
       return matchesCategory && matchesSearch;
     });
 
     this.cdr.markForCheck();
   }
 
+  // Persistencia local
+  private syncFavoritesFromStorage(): void {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_FAVORITES_KEY);
+      const favIds: string[] = stored ? JSON.parse(stored) : ['q-rewards', 'jira'];
+
+      this.plataformas.forEach(p => {
+        p.isFavorite = favIds.includes(p.id);
+      });
+    } catch {
+      // Fallback a favoritos por defecto si falla el storage
+      this.plataformas[0].isFavorite = true;
+      this.plataformas[1].isFavorite = true;
+    }
+  }
+
+  private saveFavoritesToStorage(): void {
+    const favIds = this.plataformas.filter(p => p.isFavorite).map(p => p.id);
+    localStorage.setItem(this.STORAGE_FAVORITES_KEY, JSON.stringify(favIds));
+  }
+
+  public trackByPlatform(index: number, item: Plataforma): string {
+    return item.id;
+  }
+
+  public trackByCategory(index: number, category: string): string {
+    return category;
+  }
 }

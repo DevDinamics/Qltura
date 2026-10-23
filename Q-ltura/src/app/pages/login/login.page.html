@@ -1,16 +1,15 @@
 <ion-content class="login-content-wrapper" [fullscreen]="true">
   
-  <!-- ORBES DE LUZ AMBIENTAL -->
+  <!-- Orbes ambientales -->
   <div class="ambient-glow glow-orange"></div>
   <div class="ambient-glow glow-blue"></div>
   <div class="ambient-glow glow-amber"></div>
 
-  <!-- PATRONES GEOMÉTRICOS DE FONDO -->
+  <!-- Patrones geometricos -->
   <div class="tech-bg-patterns">
     <div class="geo-pattern pattern-dots-top-left"></div>
     <div class="geo-pattern pattern-dots-bottom-right"></div>
     
-    <!-- Figuras decorativas sutiles -->
     <span class="shape shape-cross cross-1">+</span>
     <span class="shape shape-cross cross-2">+</span>
     <span class="shape shape-triangle triangle-1">▲</span>
@@ -18,10 +17,10 @@
     <div class="shape shape-circle-ring ring-1"></div>
   </div>
 
-  <!-- VIEWPORT PRINCIPAL -->
+  <!-- Contenedor principal -->
   <div class="login-viewport" [class.form-hidden]="isAuthenticating">
     
-    <!-- Header de Identidad -->
+    <!-- Encabezado de marca -->
     <header class="brand-header">
       <div class="logo-wrapper">
         <img src="assets/Logotipo_/SI_logotipo_color-03.svg" alt="Software Innovators" class="brand-logo" />
@@ -30,7 +29,7 @@
       <p class="portal-tagline">Conectando talento, cultura e innovación</p>
     </header>
 
-    <!-- Tarjeta Principal Glassmorphism -->
+    <!-- Tarjeta de autenticacion -->
     <main class="login-card">
       
       <div class="auth-box">
@@ -43,7 +42,7 @@
           Ingresa con tu cuenta institucional de <strong>Qualtop</strong> o <strong>SYE Software Innovators</strong> para acceder a tu espacio de trabajo.
         </p>
 
-        <!-- Botón Principal de Google Workspace -->
+        <!-- Boton de autenticacion Google Workspace -->
         <button 
           type="button" 
           class="google-workspace-btn-primary" 
@@ -62,7 +61,7 @@
         </span>
       </div>
 
-      <!-- ACCESO RÁPIDO DEMO POR PERFIL / EMPRESA -->
+      <!-- Acceso rapido demo -->
       <div class="demo-access-section">
         <div class="demo-divider">
           <span>Acceso Rápido Demo</span>
@@ -71,7 +70,7 @@
         <p class="demo-hint">Selecciona un perfil de prueba para explorar la plataforma:</p>
 
         <div class="demo-buttons-grid">
-          <!-- ANA LÓPEZ -> QUALTOP (Naranja) -->
+          <!-- Perfil Qualtop -->
           <button 
             type="button" 
             class="demo-card-btn qualtop"
@@ -84,7 +83,7 @@
             </div>
           </button>
 
-          <!-- CARLOS MENDOZA -> SYE (Lila) -->
+          <!-- Perfil SYE -->
           <button 
             type="button" 
             class="demo-card-btn sye"
@@ -107,7 +106,7 @@
 
   </div>
 
-  <!-- OVERLAY DE BIENVENIDA CINEMATOGRÁFICO -->
+  <!-- Overlay de bienvenida -->
   <aside 
     class="welcome-overlay" 
     *ngIf="isAuthenticating" 

@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-// ⚡ IMPORTACIONES STANDALONE INDIVIDUALES DE IONIC (Resuelve el error de producción)
 import { 
   IonContent, 
   IonHeader, 
@@ -18,18 +16,12 @@ import {
   IonIcon,
   AlertController 
 } from '@ionic/angular/standalone';
-
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { ThemeService } from '../../services/theme';
-import { AuthService } from '../../services/auth.service';
-import { UserSession } from '../../shared/models/user.model';
 import { addIcons } from 'ionicons';
 import { 
   personOutline, 
   notificationsOutline, 
   moon, 
   sunnyOutline,
-  helpCircleOutline, 
   headsetOutline, 
   shieldCheckmarkOutline, 
   logOutOutline, 
@@ -38,6 +30,10 @@ import {
   lockClosedOutline
 } from 'ionicons/icons';
 
+import { ThemeService } from '../../services/theme';
+import { AuthService } from '../../services/auth.service';
+import { UserSession } from '../../shared/models/user.model';
+
 export interface MenuItem {
   id: string;
   label: string;
@@ -45,6 +41,7 @@ export interface MenuItem {
   colorClass: 'purple' | 'orange' | 'blue' | 'green' | 'red' | 'dark';
   badge?: string;
   isBeta?: boolean;
+  externalUrl?: string;
 }
 
 export interface MenuGroup {
@@ -60,8 +57,6 @@ export interface MenuGroup {
   imports: [
     CommonModule,
     FormsModule,
-    NavbarComponent,
-    // ⚡ LISTA DE COMPONENTES DE IONIC REGISTRADOS DIRECTAMENTE
     IonContent,
     IonHeader,
     IonToolbar,
@@ -88,7 +83,6 @@ export class MasPage implements OnInit, OnDestroy {
   isDarkMode: boolean = false;
   desktopNotificationsEnabled: boolean = false;
 
-  // 👤 Usuario activo cargado reactivamente desde el AuthService
   user: UserSession = {
     id: 'default',
     name: 'Ana López',
@@ -116,8 +110,13 @@ export class MasPage implements OnInit, OnDestroy {
     {
       title: 'SOPORTE Y AYUDA',
       items: [
-        { id: 'soporte', label: 'Mesa de ayuda TI / Soporte', icon: 'headset-outline', colorClass: 'blue', isBeta: true },
-        { id: 'faq', label: 'Preguntas frecuentes', icon: 'help-circle-outline', colorClass: 'green', isBeta: true }
+        { 
+          id: 'soporte', 
+          label: 'Mesa de ayuda TI / Soporte', 
+          icon: 'headset-outline', 
+          colorClass: 'blue',
+          externalUrl: 'https://qsupport.qualtop.com/login.html'
+        }
       ]
     },
     {
@@ -135,7 +134,6 @@ export class MasPage implements OnInit, OnDestroy {
       notificationsOutline,
       moon,
       sunnyOutline,
-      helpCircleOutline,
       headsetOutline,
       shieldCheckmarkOutline,
       logOutOutline,
@@ -146,7 +144,7 @@ export class MasPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // 1. Escuchar cambios de Modo Oscuro
+    // Sincronizacion de tema
     this.themeService.isDarkMode$
       .pipe(takeUntil(this.destroy$))
       .subscribe(isDark => {
@@ -154,7 +152,7 @@ export class MasPage implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       });
 
-    // 2. CONEXIÓN DIRECTA CON CARLOS Y ANA: Escuchar la sesión activa del AuthService
+    // Suscripcion a sesion activa
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(activeUser => {
@@ -165,7 +163,7 @@ export class MasPage implements OnInit, OnDestroy {
         }
       });
 
-    // 3. Permisos de notificaciones del navegador
+    // Validacion de permisos de notificaciones de escritorio
     if ('Notification' in window) {
       this.desktopNotificationsEnabled = Notification.permission === 'granted';
     }
@@ -176,11 +174,11 @@ export class MasPage implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  async canDismiss(data?: undefined, role?: string) {
+  async canDismiss(data?: undefined, role?: string): Promise<boolean> {
     return role !== 'gesture';
   }
 
-  openAccountModal(id: string) {
+  openAccountModal(id: string): void {
     if (id === 'perfil') {
       this.editUser = { ...this.user };
       this.profileModal.present();
@@ -189,14 +187,13 @@ export class MasPage implements OnInit, OnDestroy {
     }
   }
 
-  // ⚡ Método seguro de cambio de tema compatible con eventos nativos e Ionic CustomEvent
-  onThemeToggleChange(event: any) {
+  onThemeToggleChange(event: any): void {
     const isChecked = event?.detail?.checked ?? event?.target?.checked ?? false;
     this.themeService.setDarkMode(isChecked);
     this.cdr.markForCheck();
   }
 
-  async toggleDesktopNotifications(event: any) {
+  async toggleDesktopNotifications(event: any): Promise<void> {
     const isChecked = event?.detail?.checked ?? event?.target?.checked ?? false;
 
     if (isChecked) {
@@ -225,12 +222,17 @@ export class MasPage implements OnInit, OnDestroy {
     }
   }
 
-  saveProfile(modal: IonModal) {
+  saveProfile(modal: IonModal): void {
     this.user.name = this.editUser.name;
     modal.dismiss();
   }
 
-  async onItemClick(item: MenuItem) {
+  async onItemClick(item: MenuItem): Promise<void> {
+    if (item.externalUrl) {
+      window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
     if (item.isBeta) {
       await this.mostrarPropuestaBeta(item.label);
     }
@@ -260,7 +262,7 @@ export class MasPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  private async mostrarAlerta(header: string, message: string) {
+  private async mostrarAlerta(header: string, message: string): Promise<void> {
     const alert = await this.alertController.create({
       header,
       message,
@@ -270,11 +272,11 @@ export class MasPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  private async mostrarPropuestaBeta(tituloSeccion: string) {
+  private async mostrarPropuestaBeta(tituloSeccion: string): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Módulo en desarrollo',
-      subHeader: `${tituloSeccion} • Módulo Beta`,
-      message: `Estamos diseñando un canal centralizado para gestionar requerimientos de TI y agilizar la atención entre equipos.`,
+      subHeader: tituloSeccion,
+      message: 'Estamos diseñando un canal centralizado para gestionar requerimientos de TI y agilizar la atención entre equipos.',
       mode: 'ios',
       buttons: [{ text: 'Entendido', role: 'cancel' }]
     });

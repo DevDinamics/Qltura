@@ -1,11 +1,10 @@
 <ion-content [fullscreen]="true">
   
-  <!-- Wrapper principal para forzar al footer al fondo de la pantalla -->
   <div class="page-wrapper">
     
     <main class="calendar-container animate-content-left">
       
-      <!-- Subheader Principal con Switcher -->
+      <!-- Cabecera y selector de vista -->
       <header class="page-header">
         <div class="header-titles">
           <span class="page-tag">CALENDARIO CORPORATIVO</span>
@@ -28,7 +27,7 @@
         </div>
       </header>
 
-      <!-- FILTROS DE CATEGORÍA RÁPIDOS -->
+      <!-- Filtros por categoria -->
       <section class="category-filters" *ngIf="activeView === 'agenda'">
         <button 
           type="button" 
@@ -66,10 +65,10 @@
         </button>
       </section>
 
-      <!-- LISTADO DE EVENTOS (VISTA AGENDA) -->
+      <!-- Listado de eventos -->
       <section *ngIf="activeView === 'agenda'" class="events-feed">
         
-        <!-- ESTADO DE CARGA: SKELETON LOADER -->
+        <!-- Estado de carga skeleton -->
         <ng-container *ngIf="isLoading">
           <article *ngFor="let i of skeletonArray" class="event-card skeleton-card">
             <div class="event-date-badge skeleton-box"></div>
@@ -88,7 +87,7 @@
           </article>
         </ng-container>
 
-        <!-- DATOS REALES PAGINADOS (Cuando ya cargó) -->
+        <!-- Listado principal -->
         <ng-container *ngIf="!isLoading">
           <article *ngFor="let event of paginatedEvents" class="event-card" [ngClass]="event.type">
             
@@ -135,7 +134,7 @@
             </div>
           </article>
 
-          <!-- CONTROLES DE PAGINACIÓN MINIMALISTA TIPO META -->
+          <!-- Paginacion -->
           <nav class="meta-pagination" *ngIf="totalPages > 1" aria-label="Navegación de páginas">
             <button 
               type="button" 
@@ -162,7 +161,7 @@
             </button>
           </nav>
 
-          <!-- Estado vacío cuando no hay avisos para la empresa/filtro -->
+          <!-- Estado vacio -->
           <div class="empty-state" *ngIf="filteredEvents.length === 0">
             <ion-icon name="calendar-outline"></ion-icon>
             <p>No hay actividades programadas en esta categoría para tu filial.</p>
@@ -171,7 +170,7 @@
 
       </section>
 
-      <!-- VISTA MES (PLACEHOLDER) -->
+      <!-- Vista de calendario mensual -->
       <section *ngIf="activeView === 'mes'" class="month-grid-card">
         <div class="grid-header">
           <h3>Calendario Corporativo</h3>
@@ -186,7 +185,7 @@
 
     </main>
 
-    <!-- Footer empujado al fondo -->
+    <!-- Footer -->
     <app-footer></app-footer>
 
   </div>

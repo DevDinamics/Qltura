@@ -36,7 +36,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/mas/mas.page').then((m) => m.MasPage),
     data: { animation: 'MasPage' }
   },
-  // 👇 AQUÍ: antes del comodín
+
   {
     path: 'reconocimientos',
     loadComponent: () => import('./pages/reconocimientos/reconocimientos.page').then((m) => m.ReconocimientosPage),

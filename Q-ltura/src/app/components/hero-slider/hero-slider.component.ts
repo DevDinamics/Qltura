@@ -15,23 +15,27 @@ import {
   chevronBackOutline, 
   chevronForwardOutline, 
   arrowForwardOutline, 
-  sparklesOutline, personCircleOutline } from 'ionicons/icons';
-import { Subject } from 'rxjs';
+  sparklesOutline, 
+  personCircleOutline 
+} from 'ionicons/icons';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthService } from '../../services/auth.service'; // Asegúrate de tener la ruta correcta
+import { AuthService } from '../../services/auth.service';
+import { SanityService } from '../../services/sanity.service';
 
 export interface Slide {
-  id: number;
+  id: string | number;
   tag: string;
   title: string;
   highlightText?: string;
   description: string;
   buttonText: string;
   buttonUrl?: string;
-  badgeCompany?: 'Qualtop' | 'SYE' | 'Q-ltura';
+  badgeCompany?: 'Qualtop' | 'SYE' | 'Ambas';
   imageSrc: string;
   imageAlt?: string;
   accentTheme?: 'orange' | 'purple' | 'blue';
+  order?: number;
 }
 
 @Component({
@@ -46,18 +50,20 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
   private authService = inject(AuthService);
+  private sanityService = inject(SanityService);
   private destroy$ = new Subject<void>();
+  private sanityLiveSub: Subscription | null = null;
 
   public currentIndex = 0;
-  public currentCompany: string = 'qualtop'; // Clase CSS por defecto
-  public slides: Slide[] = []; // Slides filtrados que se mostrarán
+  public currentCompany: string = 'qualtop';
+  public slides: Slide[] = [];
 
-  private autoPlayInterval: any;
+  private autoPlayInterval: ReturnType<typeof setInterval> | null = null;
   private touchStartX = 0;
   private touchEndX = 0;
 
-  // Tu base de datos estática
-  private allSlides: Slide[] = [
+  // Fallback estatico en caso de fallo de red
+  private readonly fallbackSlides: Slide[] = [
     {
       id: 1,
       tag: 'CULTURA Y EVENTOS',
@@ -87,42 +93,107 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   ];
 
   constructor() {
-    addIcons({chevronBackOutline,arrowForwardOutline,personCircleOutline,chevronForwardOutline,sparklesOutline});
+    addIcons({
+      chevronBackOutline,
+      arrowForwardOutline,
+      personCircleOutline,
+      chevronForwardOutline,
+      sparklesOutline
+    });
   }
 
   ngOnInit(): void {
-    // Escuchar qué usuario inició sesión
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
-        if (user && user.company) {
-          // Guardamos 'qualtop' o 'sye' en minúsculas para inyectarlo como clase CSS
-          this.currentCompany = user.company.toLowerCase(); 
-          
-          // Filtramos el arreglo estático para que solo vea los de su empresa (o los globales si tuvieras)
-          this.slides = this.allSlides.filter(
-            slide => slide.badgeCompany?.toLowerCase() === this.currentCompany
-          );
-        } else {
-          this.slides = this.allSlides; // Fallback
-        }
+        const companyName = user?.company || 'Qualtop';
+        this.currentCompany = companyName.toLowerCase();
         
-        this.currentIndex = 0;
-        this.cdr.markForCheck();
-        this.resetAutoPlay();
+        this.loadSlidesFromSanity(companyName);
+        this.setupRealtimeListener(companyName);
       });
   }
 
   ngOnDestroy(): void {
     this.stopAutoPlay();
+    if (this.sanityLiveSub) {
+      this.sanityLiveSub.unsubscribe();
+    }
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   get currentSlide(): Slide {
-    return this.slides[this.currentIndex];
+    return this.slides[this.currentIndex] || this.fallbackSlides[0];
   }
 
+  // Carga de slides desde Sanity
+  private async loadSlidesFromSanity(company: string): Promise<void> {
+    try {
+      const query = `*[
+        _type == "slide" && 
+        !(_id in path("drafts.**")) && 
+        (company == $company || company == "Ambas")
+      ] | order(order asc) {
+        "id": _id,
+        title,
+        highlightText,
+        "badgeCompany": company,
+        tag,
+        description,
+        buttonText,
+        buttonUrl,
+        accentTheme,
+        "imageSrc": image.asset->url,
+        order
+      }`;
+
+      const data = await this.sanityService.fetchQuery<Slide[]>(query, { company });
+
+      if (data && data.length > 0) {
+        this.slides = data;
+      } else {
+        this.applyFallback(company);
+      }
+    } catch {
+      this.applyFallback(company);
+    } finally {
+      this.currentIndex = 0;
+      this.cdr.markForCheck();
+      this.resetAutoPlay();
+    }
+  }
+
+  // Suscripcion en tiempo real a cambios en Sanity
+  private setupRealtimeListener(company: string): void {
+    if (this.sanityLiveSub) {
+      this.sanityLiveSub.unsubscribe();
+    }
+
+    const query = `*[
+      _type == "slide" && 
+      !(_id in path("drafts.**")) && 
+      (company == $company || company == "Ambas")
+    ]`;
+
+    this.sanityLiveSub = this.sanityService
+      .listenQuery(query, { company })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.loadSlidesFromSanity(company);
+        }
+      });
+  }
+
+  // Filtrado de respaldo
+  private applyFallback(company: string): void {
+    this.slides = this.fallbackSlides.filter(
+      s => !s.badgeCompany || s.badgeCompany === 'Ambas' || s.badgeCompany.toLowerCase() === company.toLowerCase()
+    );
+  }
+
+  // Controles de navegacion
   private changeSlide(delta: number): void {
     if (this.slides.length <= 1) return;
     this.currentIndex = (this.currentIndex + delta + this.slides.length) % this.slides.length;
@@ -145,6 +216,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     this.resetAutoPlay();
   }
 
+  // Gestos tactiles
   public onTouchStart(event: TouchEvent): void {
     this.touchStartX = event.changedTouches[0].screenX;
   }
@@ -163,6 +235,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Reproduccion automatica
   private startAutoPlay(): void {
     this.stopAutoPlay();
     if (this.slides.length <= 1) return;
@@ -179,6 +252,7 @@ export class HeroSliderComponent implements OnInit, OnDestroy {
   private stopAutoPlay(): void {
     if (this.autoPlayInterval) {
       clearInterval(this.autoPlayInterval);
+      this.autoPlayInterval = null;
     }
   }
 

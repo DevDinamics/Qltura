@@ -1,34 +1,42 @@
-<ion-content [fullscreen]="true">
-
-
-  <!-- 2. Transición horizontal aplicada únicamente al contenedor de plataformas -->
-  <main class="plataformas-container animate-content-left">
+<ion-content [fullscreen]="true" class="main-bg">
+  <main class="page-container animate-content-left">
     
-    <!-- Hero / Header -->
-    <header class="page-header">
-      <div class="header-text">
-        <span class="page-tag">
-          <ion-icon name="sparkles-outline"></ion-icon> ECOSISTEMA DIGITAL
-        </span>
-        <h1 class="page-title">Ecosistema & Accesos Rápidos</h1>
-        <p class="page-subtitle">Accede en un solo toque a las herramientas y aplicaciones de trabajo diario.</p>
+    <!-- Encabezado de seccion -->
+    <header class="section-header">
+      <div class="header-pill">
+        <ion-icon name="sparkles-outline"></ion-icon>
+        <span>ECOSISTEMA DIGITAL</span>
       </div>
+      
+      <h1 class="headline">Ecosistema & Accesos Rápidos</h1>
+      
+      <p class="subline">
+        Accede en un solo toque a las herramientas y aplicaciones de trabajo diario.
+      </p>
 
-      <!-- Buscador Minimalista -->
+      <!-- Buscador integrado -->
       <div class="search-box">
         <ion-icon name="search-outline"></ion-icon>
         <input 
           type="text" 
           placeholder="Buscar aplicación o plataforma..." 
-          [(ngModel)]="searchTerm" />
+          [(ngModel)]="searchTerm" 
+          aria-label="Buscar aplicacion o plataforma" />
+        <button 
+          type="button" 
+          class="clear-search-btn" 
+          *ngIf="searchTerm" 
+          (click)="clearSearch()">
+          <ion-icon name="close-circle"></ion-icon>
+        </button>
       </div>
     </header>
 
-    <!-- Filtro de Categorías / Chips estilo Apple -->
+    <!-- Filtro de categorias -->
     <section class="filters-section">
       <div class="chips-wrapper">
         <button 
-          *ngFor="let cat of categories" 
+          *ngFor="let cat of categories; trackBy: trackByCategory" 
           type="button" 
           class="chip-btn" 
           [class.active]="selectedCategory === cat"
@@ -38,21 +46,22 @@
       </div>
     </section>
 
-    <!-- Grid de Apps estilo Bento iOS -->
+    <!-- Grid de plataformas -->
     <section class="apps-grid">
       
-      <!-- Estado Vacío -->
+      <!-- Estado vacio -->
       <div *ngIf="filteredPlataformas.length === 0" class="empty-state">
-        <p>No se encontraron herramientas con ese nombre.</p>
+        <ion-icon [name]="selectedCategory === 'Favoritos' ? 'star-outline' : 'search-outline'"></ion-icon>
+        <p *ngIf="selectedCategory === 'Favoritos'">Aún no has agregado herramientas a tus favoritos. Haz clic en la estrella de cualquier plataforma para fijarla aquí.</p>
+        <p *ngIf="selectedCategory !== 'Favoritos'">No se encontraron herramientas con el término "{{ searchTerm }}".</p>
       </div>
 
-      <!-- Tarjeta App Launcher -->
+      <!-- Tarjeta de plataforma -->
       <article 
-        *ngFor="let item of filteredPlataformas" 
+        *ngFor="let item of filteredPlataformas; trackBy: trackByPlatform" 
         class="app-card"
         (click)="openPlatform(item)">
         
-        <!-- Header de la App Card (Icono + Botón Favorito) -->
         <div class="app-card-top">
           <div class="app-icon-box" [ngClass]="item.colorTheme">
             <ion-icon [name]="item.icon"></ion-icon>
@@ -68,18 +77,16 @@
           </button>
         </div>
 
-        <!-- Info de la App -->
         <div class="app-card-content">
-          <h2 class="app-title">
-            {{ item.name }}
-          </h2>
+          <span class="category-tag">{{ item.category }}</span>
+          <h2 class="app-title">{{ item.name }}</h2>
           <p class="app-description">{{ item.description }}</p>
         </div>
 
-        <!-- Footer / Launcher Action -->
         <div class="app-card-footer">
           <span class="status-indicator" [ngClass]="item.status">
-            <span class="dot"></span> {{ item.status === 'online' ? 'Disponible' : 'Mantenimiento' }}
+            <span class="dot"></span>
+            <span>{{ item.status === 'online' ? 'Disponible' : 'Mantenimiento' }}</span>
           </span>
 
           <div class="open-action">

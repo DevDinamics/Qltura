@@ -3,22 +3,18 @@
   width: 100%;
 }
 
-/* =======================================================
-   SISTEMA DE VARIABLES POR EMPRESA
-   ======================================================= */
+// Variables por empresa
 .hero-slider-section {
   width: 100%;
   max-width: 1200px;
   margin: 1.5rem auto 2.5rem auto;
   padding: 0 1rem;
 
-  /* VARIABLES POR DEFECTO (QUALTOP - NARANJA) */
   --theme-main: #ff5500;
   --theme-gradient: linear-gradient(135deg, #ff6600 0%, #ff3300 100%);
   --theme-glow: rgba(255, 85, 0, 0.4);
   --theme-muted: rgba(255, 85, 0, 0.08);
 
-  /* MODIFICADOR SYE (LILA/PÚRPURA) */
   &.sye {
     --theme-main: #6366f1;
     --theme-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
@@ -34,7 +30,7 @@
   justify-content: center;
 }
 
-/* --- TARJETA PRINCIPAL --- */
+// Tarjeta principal
 .hero-card {
   position: relative;
   width: 100%;
@@ -54,7 +50,6 @@
   touch-action: pan-y;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Orbe ambiental sutil de fondo */
   .ambient-mesh-glow {
     position: absolute;
     top: -30%;
@@ -65,12 +60,12 @@
     filter: blur(90px);
     opacity: 0.12;
     pointer-events: none;
-    background: var(--theme-main); /* Toma el color de la empresa */
+    background: var(--theme-main);
     transition: background 0.5s ease;
   }
 }
 
-/* --- CONTENIDO DE TEXTO --- */
+// Contenido textual
 .hero-content {
   display: flex;
   flex-direction: column;
@@ -160,7 +155,7 @@
   }
 }
 
-/* --- MULTIMEDIA --- */
+// Multimedia
 .hero-media {
   display: flex;
   justify-content: center;
@@ -191,7 +186,7 @@
   }
 }
 
-/* --- PAGINACIÓN --- */
+// Paginacion
 .hero-pagination {
   position: absolute;
   bottom: 1.35rem;
@@ -219,7 +214,7 @@
   }
 }
 
-/* --- BOTONES NAVEGACIÓN FLOTANTES --- */
+// Botones de navegacion
 .nav-btn {
   position: absolute;
   top: 50%;
@@ -253,7 +248,7 @@
   &.next-btn { right: -20px; }
 }
 
-/* --- ANIMACIONES --- */
+// Animaciones
 @keyframes appleSlideIn {
   from { opacity: 0; transform: cubic-bezier(0.16, 1, 0.3, 1) translate3d(0, 12px, 0); }
   to { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -264,7 +259,7 @@
   to { opacity: 1; }
 }
 
-/* --- RESPONSIVE MOBILE & TABLET --- */
+// Responsive
 @media (max-width: 900px) {
   .hero-card {
     padding: 2.5rem 2rem 3.5rem 2rem;
@@ -294,9 +289,7 @@
   }
 }
 
-/* =======================================================
-   SOPORTE MODO OSCURO (META DARK) 
-   ======================================================= */
+// Modo oscuro
 :host-context(body.dark) {
   .hero-slider-section {
     &.qualtop {

@@ -1,6 +1,6 @@
 <div class="feed-card">
   
-  <!-- Encabezado Editorial Oficial -->
+  <!-- Encabezado editorial -->
   <header class="feed-header">
     <div class="feed-header-titles">
       <span class="feed-eyebrow">CONEXIÓN & NOTICIAS INTERNAS</span>
@@ -11,7 +11,7 @@
     </div>
   </header>
 
-  <!-- Navegación por pestañas (Tabs con pestaña de recordatorios) -->
+  <!-- Navegacion por pestanas -->
   <div class="feed-tabs" role="tablist">
     <button 
       type="button" 
@@ -42,7 +42,7 @@
     </button>
   </div>
 
-  <!-- VISTA 1 & 2: Publicaciones Generales (Oficial / Q-Experience) -->
+  <!-- Publicaciones generales (Oficial / Q-Experience) -->
   <div class="feed-list" *ngIf="activeTab !== 'recordatorios'">
     <article 
       *ngFor="let item of currentItems" 
@@ -69,7 +69,7 @@
     </article>
   </div>
 
-  <!-- VISTA 3: Recordatorios Activos Guardados por el Usuario -->
+  <!-- Recordatorios activos del usuario -->
   <div class="reminders-feed" *ngIf="activeTab === 'recordatorios'">
     
     <!-- Esqueleto de carga -->
@@ -85,7 +85,7 @@
         [class.is-today]="reminder.isToday"
         (click)="goToAvisos()">
 
-        <!-- Barra superior del recordatorio: Insignia de tiempo + Quitar -->
+        <!-- Estado superior: Insignia de tiempo y accion quitar -->
         <div class="reminder-top-row">
           
           <div class="countdown-badge" [class.today-glow]="reminder.isToday">
@@ -93,7 +93,7 @@
             <span class="badge-text">{{ reminder.daysRemainingText }}</span>
           </div>
 
-          <!-- Insignia en vivo / Sesión online -->
+          <!-- Indicador de sesion remota -->
           <div class="live-indicator-pill" *ngIf="reminder.isOnline">
             <span class="live-radar"></span>
             <span>En Línea</span>
@@ -108,7 +108,7 @@
           </button>
         </div>
 
-        <!-- Contenido principal -->
+        <!-- Detalle del evento -->
         <div class="reminder-body">
           <h3 class="reminder-title">{{ reminder.title }}</h3>
           <p class="reminder-motivational">{{ reminder.motivationalText }}</p>
@@ -121,7 +121,7 @@
           </div>
         </div>
 
-        <!-- Botón de acceso a la sesión (si es en línea y cuenta con enlace) -->
+        <!-- Acceso a sala virtual -->
         <div class="reminder-action-bar" *ngIf="reminder.isOnline && reminder.meetingUrl">
           <button 
             type="button" 
@@ -135,7 +135,7 @@
 
       </article>
 
-      <!-- Estado vacío si no hay recordatorios -->
+      <!-- Estado vacio de recordatorios -->
       <div class="empty-reminders" *ngIf="reminderEvents.length === 0">
         <div class="empty-icon-box">
           <ion-icon name="notifications-outline"></ion-icon>
@@ -151,7 +151,7 @@
 
   </div>
 
-  <!-- Pie de la tarjeta -->
+  <!-- Pie de tarjeta -->
   <footer class="feed-footer">
     <button type="button" class="view-all-btn" (click)="goToAvisos()">
       <span>Ver todos los comunicados</span>

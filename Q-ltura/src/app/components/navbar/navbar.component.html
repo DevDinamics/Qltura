@@ -1,15 +1,11 @@
-<!-- HEADER SUPERIOR -->
 <ion-header class="ion-no-border">
   <ion-toolbar>
     <div class="navbar-wrapper">
       
-      <!-- CONTENEDOR IZQUIERDO: Logo Q-ltura y Menú Desktop -->
+      <!-- Logo Q-ltura, navegacion desktop -->
       <div class="nav-left">
         <div class="logo-section" [routerLink]="['/home']" aria-label="Ir a Inicio Q-ltura">
-          <div class="q-logo-mark">
-            <span class="q-letter">Q</span>
-          </div>
-          <span class="brand-title">ltura</span>
+          <span class="q-brand-letter">Q</span><span class="brand-title">ltura</span>
         </div>
 
         <nav class="nav-links desktop-only" aria-label="Navegación principal">
@@ -26,18 +22,31 @@
         </nav>
       </div>
 
-      <!-- ACCIONES DERECHA -->
+      <div class="nav-center desktop-only">
+        <div class="search-input-wrapper" (click)="openSearch()">
+          <ion-icon name="search-outline" class="search-icon"></ion-icon>
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="executeSearch()"
+            placeholder="Buscar plataformas, beneficios o trámites..." 
+            aria-label="Buscar en la plataforma" />
+          <kbd class="search-kbd">⌘K</kbd>
+        </div>
+      </div>
+
+      <!-- Acciones de cabecera -->
       <div class="nav-actions">
-        <!-- BUSCADOR CON ACCIÓN ASIGNADA -->
+        <!-- (trigger) -->
         <button 
           type="button"
-          class="action-btn desktop-only" 
-          (click)="openSearch()" 
+          class="action-btn mobile-only" 
+          (click)="toggleMobileSearch()" 
           aria-label="Buscar plataformas y contenidos">
-          <ion-icon name="search-outline"></ion-icon>
+          <ion-icon [name]="isMobileSearchOpen ? 'close-outline' : 'search-outline'"></ion-icon>
         </button>
 
-        <!-- BOTÓN DE NOTIFICACIONES CON CONTADOR NUMÉRICO -->
+        <!-- Notificaciones -->
         <button 
           type="button"
           class="action-btn notification-btn" 
@@ -52,7 +61,7 @@
           </span>
         </button>
 
-        <!-- ÁREA DE USUARIO: AVATAR + NOMBRE + FLECHA DESPLEGABLE -->
+        <!-- usuario -->
         <div 
           class="user-profile-trigger" 
           (click)="openUserPopover($event)"
@@ -72,7 +81,7 @@
           </div>
         </div>
 
-        <!-- POPOVER 1: NOTIFICACIONES (APPLE GLASS) -->
+        <!-- Notificaciones -->
         <ion-popover 
           [isOpen]="isPopoverOpen" 
           [event]="popoverEvent"
@@ -101,7 +110,6 @@
                 </button>
               </div>
 
-              <!-- Lista de notificaciones -->
               <div class="notif-list">
                 <div 
                   *ngFor="let item of notificationsList" 
@@ -137,7 +145,7 @@
           </ng-template>
         </ion-popover>
 
-        <!-- POPOVER 2: MENÚ DESPLEGABLE DE USUARIO -->
+        <!-- Cuenta de usuario -->
         <ion-popover 
           [isOpen]="isUserPopoverOpen" 
           [event]="userPopoverEvent"
@@ -149,7 +157,6 @@
           <ng-template>
             <div class="user-dropdown-content">
               
-              <!-- Resumen del Usuario -->
               <div class="user-dropdown-header">
                 <div class="user-avatar-lg">
                   <img [src]="user.avatar" [alt]="user.name" />
@@ -165,7 +172,6 @@
 
               <div class="dropdown-divider"></div>
 
-              <!-- Enlaces Rápidos -->
               <nav class="user-dropdown-links">
                 <button type="button" class="menu-link-btn" (click)="navigateTo('/mas')">
                   <div class="link-icon">
@@ -184,7 +190,6 @@
 
               <div class="dropdown-divider"></div>
 
-              <!-- Cerrar Sesión (con Alerta de Confirmación) -->
               <div class="user-dropdown-footer">
                 <button type="button" class="logout-menu-btn" (click)="confirmLogout()">
                   <ion-icon name="log-out-outline"></ion-icon>
@@ -199,10 +204,30 @@
       </div>
 
     </div>
+
+    <!-- busqueda desplegable en movil -->
+    <div class="mobile-search-bar" *ngIf="isMobileSearchOpen">
+      <div class="search-input-wrapper mobile">
+        <ion-icon name="search-outline" class="search-icon"></ion-icon>
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          (keyup.enter)="executeSearch()"
+          placeholder="Buscar plataformas, beneficios..." 
+          autofocus />
+        <button 
+          type="button" 
+          class="search-clear-btn" 
+          *ngIf="searchQuery" 
+          (click)="searchQuery = ''">
+          <ion-icon name="close-circle"></ion-icon>
+        </button>
+      </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<!-- BOTTOM TAB BAR MÓVIL RESPONSIVO -->
+<!-- Navegacion inferior para dispositivos moviles -->
 <ion-tab-bar slot="bottom" class="mobile-only custom-tab-bar">
   <ion-tab-button 
     *ngFor="let tab of mobileTabs" 

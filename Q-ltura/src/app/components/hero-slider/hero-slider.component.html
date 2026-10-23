@@ -1,9 +1,9 @@
-<!-- La clase dinámica pinta todo de Naranja (Qualtop) o Lila (SYE) -->
+<!-- Seccion principal con tema corporativo -->
 <section class="hero-slider-section" [ngClass]="currentCompany">
   
   <div class="hero-container" *ngIf="slides.length > 0">
     
-    <!-- Botón Navegación Izquierda -->
+    <!-- Navegacion anterior desktop -->
     <button 
       *ngIf="slides.length > 1"
       type="button"
@@ -13,16 +13,15 @@
       <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
     </button>
 
-    <!-- Card Principal Glass/Minimalist -->
+    <!-- Tarjeta de contenido -->
     <article 
       class="hero-card" 
       (touchstart)="onTouchStart($event)"
       (touchend)="onTouchEnd($event)">
       
-      <!-- Fondo de Luz Ambiental Estilo Apple Mesh -->
       <div class="ambient-mesh-glow"></div>
 
-      <!-- 1. Contenido de Texto -->
+      <!-- Informacion textual -->
       <div class="hero-content">
         
         <div class="meta-row">
@@ -59,7 +58,7 @@
         </button>
       </div>
 
-      <!-- 2. Ilustración / Foto de Portada -->
+      <!-- Soporte multimedia -->
       <div class="hero-media">
         <div class="image-stage">
           <img 
@@ -71,7 +70,7 @@
         </div>
       </div>
 
-      <!-- 3. Paginador de Indicadores -->
+      <!-- Indicadores de paginacion -->
       <nav class="hero-pagination" aria-label="Navegación de diapositivas" *ngIf="slides.length > 1">
         <button 
           *ngFor="let slide of slides; let i = index" 
@@ -85,7 +84,7 @@
 
     </article>
 
-    <!-- Botón Navegación Derecha -->
+    <!-- Navegacion siguiente desktop -->
     <button 
       *ngIf="slides.length > 1"
       type="button"

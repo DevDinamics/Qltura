@@ -10,9 +10,7 @@
   overflow: hidden;
 }
 
-/* =======================================================
-   1. ORBES DE LUZ Y MESH GRADIENT
-   ======================================================= */
+// Orbes ambientales
 .ambient-glow {
   position: absolute;
   border-radius: 50%;
@@ -45,9 +43,7 @@
   }
 }
 
-/* =======================================================
-   2. PATRONES Y FIGURAS GEOMÉTRICAS TECH
-   ======================================================= */
+// Patrones geometricos
 .tech-bg-patterns {
   position: absolute;
   inset: 0;
@@ -131,9 +127,7 @@
   }
 }
 
-/* =======================================================
-   3. ESTRUCTURA Y TARJETA GLASSMORPHISM
-   ======================================================= */
+// Estructura y tarjeta principal
 .login-viewport {
   min-height: 100vh;
   display: flex;
@@ -245,7 +239,6 @@
       }
     }
 
-    /* Botón Principal Google Workspace */
     .google-workspace-btn-primary {
       width: 100%;
       background: #ffffff;
@@ -267,7 +260,7 @@
 
         ion-icon {
           font-size: 1.35rem;
-          color: #ea4335; // Rojo Google
+          color: #ea4335;
         }
 
         ion-spinner {
@@ -315,9 +308,7 @@
   }
 }
 
-/* =======================================================
-   4. ESTILOS ACCESO RÁPIDO DEMO
-   ======================================================= */
+// Acceso rapido demo
 .demo-access-section {
   margin-top: 1.75rem;
   padding-top: 1.25rem;
@@ -412,7 +403,7 @@
   }
 }
 
-/* Keyframes Animaciones */
+// Animaciones base
 @keyframes floatShape {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-12px) rotate(10deg); }
@@ -423,9 +414,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* =======================================================
-   5. OVERLAY DE BIENVENIDA CINEMATOGRÁFICO
-   ======================================================= */
+// Overlay de bienvenida
 .welcome-overlay {
   position: fixed;
   inset: 0;
@@ -534,6 +523,7 @@
   100% { transform: scale(1); opacity: 1; }
 }
 
+// Media queries y soporte oscuro
 @media (min-width: 769px) {
   .login-viewport {
     max-width: 480px;

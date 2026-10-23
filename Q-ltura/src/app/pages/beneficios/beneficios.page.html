@@ -1,12 +1,9 @@
-
-
 <ion-content [fullscreen]="true" class="main-bg">
   <main class="page-container" [ngClass]="currentCompany ? currentCompany.toLowerCase() : 'qualtop'">
     
-    <!-- Encabezado con Empresa Dinámica -->
+    <!-- Encabezado con empresa dinamica -->
     <header class="section-header">
       <div class="header-pill">
-        
         <span>VENTAJAS & BIENESTAR • {{ currentCompany | uppercase }}</span>
       </div>
       
@@ -19,7 +16,7 @@
 
     <!-- Grid de tarjetas filtradas por empresa -->
     <section class="benefits-grid">
-      <article *ngFor="let item of currentBenefits" class="benefit-card">
+      <article *ngFor="let item of currentBenefits; trackBy: trackByBenefit" class="benefit-card">
         
         <div class="card-top">
           <div class="icon-bubble">

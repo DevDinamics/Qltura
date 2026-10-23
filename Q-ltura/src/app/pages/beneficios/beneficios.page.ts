@@ -1,4 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
+import { 
+  Component, 
+  OnInit, 
+  OnDestroy, 
+  ChangeDetectionStrategy, 
+  ChangeDetectorRef, 
+  inject 
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -48,9 +55,8 @@ export class BeneficiosPage implements OnInit, OnDestroy {
 
   currentCompany: string = 'Qualtop';
 
-  // Catálogo completo categorizado por empresa
-  allBenefits: BenefitCard[] = [
-    // --- BENEFICIOS EXCLUSIVOS QUALTOP ---
+  // Catalogo de prestaciones por empresa
+  readonly allBenefits: BenefitCard[] = [
     {
       icon: 'medkit-outline',
       category: 'Salud & Gastos Médicos',
@@ -83,8 +89,6 @@ export class BeneficiosPage implements OnInit, OnDestroy {
       tag: 'Flexibilidad',
       company: 'Qualtop'
     },
-
-    // --- BENEFICIOS EXCLUSIVOS SYE (SOFTWARE INNOVATORS) ---
     {
       icon: 'desktop-outline',
       category: 'Equipamiento & Remoto',
@@ -102,7 +106,7 @@ export class BeneficiosPage implements OnInit, OnDestroy {
       company: 'SYE'
     },
     {
-      icon: 'timeOutline',
+      icon: 'time-outline',
       category: 'Cultura Laboral',
       title: 'Viernes Corto (Short Fridays)',
       description: 'Jornada reducida los viernes para proyectos que cumplan sus sprints y entregables a tiempo.',
@@ -110,17 +114,15 @@ export class BeneficiosPage implements OnInit, OnDestroy {
       company: 'SYE'
     },
     {
-      icon: 'giftOutline',
+      icon: 'gift-outline',
       category: 'Reconocimiento Tech',
       title: 'Hackathons & Innovation Pool',
       description: 'Premios en tecnología, gadgets y bonos por iniciativas innovadoras dentro de los proyectos de SYE.',
       tag: 'Innovación',
       company: 'SYE'
     },
-
-    // --- BENEFICIOS COMPARTIDOS (AMBAS EMPRESAS) ---
     {
-      icon: 'cafeOutline',
+      icon: 'cafe-outline',
       category: 'Balance de Vida',
       title: 'Día Libre por Cumpleaños',
       description: 'Disfruta tu día de cumpleaños completamente libre para festejar con tu familia y amigos.',
@@ -170,11 +172,16 @@ export class BeneficiosPage implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // Filtra los beneficios de la empresa en sesión + los globales compartidos
+  // Filtrado reactivo por empresa en sesion
   get currentBenefits(): BenefitCard[] {
     const userCompany = (this.currentCompany || 'Qualtop').toLowerCase();
     return this.allBenefits.filter(item => 
       item.company === 'Ambas' || item.company.toLowerCase() === userCompany
     );
+  }
+
+  // Optimizacion de renderizado para ngFor
+  public trackByBenefit(index: number, item: BenefitCard): string {
+    return item.title;
   }
 }

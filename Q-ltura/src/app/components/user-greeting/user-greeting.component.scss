@@ -3,9 +3,7 @@
   width: 100%;
 }
 
-/* =======================================================
-   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
-   ======================================================= */
+
 :host-context(body.qualtop) {
   --brand-primary: #ff5500;
   --brand-muted: rgba(255, 85, 0, 0.08);
@@ -48,7 +46,7 @@
     flex-direction: column;
     align-items: flex-start;
     flex: 1;
-    min-width: 0; /* Previene cortes de texto en flexbox */
+    min-width: 0; 
   }
 
   /* 1. Eyebrow */
@@ -168,42 +166,36 @@
     }
   }
 
-  /* =======================================================
-     ÍCONO MINIMALISTA DINÁMICO (Derecha)
-     ======================================================= */
+
   .scenic-icon-box {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 80px;
     height: 80px;
-    padding-right: 2rem; /* Espacio extra para que no roce con el borde derecho en pantallas grandes */
-    
+    padding-right: 2rem; 
+
     .time-icon {
       font-size: 5rem;
       filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.08));
     }
 
-    /* Mañana: Color suave y animación ascendente */
     &.morning .morning-icon {
-      color: #f59e0b; /* Ambar cálido */
+      color: #f59e0b; 
       animation: riseAndFloat 4s ease-in-out infinite;
     }
 
-    /* Tarde: Color brillante y rotación muy sutil */
     &.afternoon .afternoon-icon {
-      color: #eab308; /* Amarillo sol */
+      color: #eab308; 
       animation: rotateSlowly 12s linear infinite;
     }
 
-    /* Noche: Color profundo y balanceo sutil tipo cuna */
     &.night .night-icon {
-      color: #6366f1; /* Índigo luna */
+      color: #6366f1; 
       animation: rockGently 5s ease-in-out infinite;
     }
   }
 
-  /* Temas de Empresa para Textos */
   &.qualtop {
     .highlight { color: #ff5500; }
   }
@@ -213,9 +205,7 @@
   }
 }
 
-/* =======================================================
-   ANIMACIONES MINIMALISTAS
-   ======================================================= */
+
 @keyframes riseAndFloat {
   0% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -241,7 +231,7 @@
     padding: 1rem 0.25rem 0.75rem 0.25rem;
 
     .greeting-wrapper {
-      flex-direction: column-reverse; /* El ícono pasa arriba en móviles */
+      flex-direction: column-reverse; 
       align-items: flex-start;
       gap: 1rem;
     }
@@ -253,7 +243,7 @@
       justify-content: flex-start;
 
       .time-icon {
-        font-size: 3.5rem; /* Ícono más pequeño en móvil */
+        font-size: 3.5rem; 
       }
     }
 
@@ -276,9 +266,7 @@
   }
 }
 
-/* =======================================================
-   MODO OSCURO (Apple Minimal Dark)
-   ======================================================= */
+
 :host-context(body.dark) {
   .greeting-hero {
     .greeting-eyebrow {
@@ -306,7 +294,6 @@
       }
     }
 
-    /* Adaptación de Íconos Animados al Modo Oscuro */
     .scenic-icon-box {
       &.morning .morning-icon {
         color: #fbbf24;
@@ -319,7 +306,7 @@
       }
 
       &.night .night-icon {
-        color: #a5b4fc; /* Luna más clara y plateada en modo oscuro */
+        color: #a5b4fc; 
         filter: drop-shadow(0 0 12px rgba(165, 180, 252, 0.3));
       }
     }

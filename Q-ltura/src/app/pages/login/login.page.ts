@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { 
@@ -22,6 +22,7 @@ import {
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule, 
     IonContent, 
@@ -54,13 +55,14 @@ export class LoginPage implements ViewWillEnter {
     });
   }
 
+  // Restablecimiento de estado al enfocar la vista
   ionViewWillEnter(): void {
     this.isAuthenticating = false;
     this.isLoading = false;
     this.cdr.markForCheck();
   }
 
-  // 1. Acceso Principal mediante Google Workspace SSO
+  // Autenticacion institucional con Google Workspace
   async loginWithGoogle(): Promise<void> {
     this.isLoading = true;
     this.cdr.markForCheck();
@@ -72,7 +74,7 @@ export class LoginPage implements ViewWillEnter {
         user.company, 
         user.avatar || 'https://i.pravatar.cc/150?img=32'
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error Google Auth:', error);
       this.presentToast('Error al conectar con Google Workspace', 'warning');
     } finally {
@@ -81,7 +83,7 @@ export class LoginPage implements ViewWillEnter {
     }
   }
 
-  // 2. Acceso Rápido Demo (Ana -> Qualtop | Carlos -> SYE)
+  // Acceso de prueba segmentado por tenant
   quickDemoLogin(profile: 'ana' | 'carlos' | string): void {
     this.isLoading = true;
     const user = this.authService.loginAsDemo(profile as 'ana' | 'carlos');
@@ -96,6 +98,7 @@ export class LoginPage implements ViewWillEnter {
     }, 250);
   }
 
+  // Animacion de entrada y navegacion al dashboard
   private triggerWelcomeTransition(name: string, company: CompanyType, avatar: string): void {
     this.authUserData = { name, company, avatar };
     this.isAuthenticating = true;

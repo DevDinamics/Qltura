@@ -58,7 +58,6 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
     this.setFormattedDate();
     this.setGreetingByTime();
 
-    // Sincronización en tiempo real con la sesión activa
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
@@ -93,7 +92,7 @@ export class UserGreetingComponent implements OnInit, OnDestroy {
       this.greetingPrefix = 'Buenos días';
       this.timePeriod = 'morning';
     } else if (hour >= 12 && hour < 19) {
-      this.greetingPrefix = 'Buen día'; // "Buen día" como pediste para el transcurso de la tarde
+      this.greetingPrefix = 'Buen día'; 
       this.timePeriod = 'afternoon';
     } else {
       this.greetingPrefix = 'Buenas noches';

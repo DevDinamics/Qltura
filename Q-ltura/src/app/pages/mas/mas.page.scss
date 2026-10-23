@@ -3,9 +3,7 @@
   width: 100%;
 }
 
-/* =======================================================
-   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
-   ======================================================= */
+// Variables corporativas por tenant
 :host-context(body.qualtop) {
   --brand-primary: #ff5500;
   --brand-glow: rgba(255, 85, 0, 0.35);
@@ -40,7 +38,7 @@
   gap: 1.75rem;
 }
 
-/* PROFILE CARD */
+// Profile card
 .profile-card {
   background: var(--bg-surface, #ffffff);
   border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
@@ -112,7 +110,7 @@
   }
 }
 
-/* GRUPOS DE MENÚ ESTILO iOS */
+// Grupos de navegacion
 .menu-groups {
   display: flex;
   flex-direction: column;
@@ -235,7 +233,7 @@
   }
 }
 
-/* LOGOUT */
+// Cierre de sesion
 .logout-btn {
   width: 100%;
   background: transparent;
@@ -256,11 +254,8 @@
   &:active { background-color: rgba(239, 68, 68, 0.15); }
 }
 
-/* =======================================================
-   RESPONSIVE: CONTROL DE REDUNDANCIA
-   ======================================================= */
+// Responsive
 @media (min-width: 769px) {
-  /* En computadoras se oculta el botón inferior porque ya existe en el navbar */
   .mobile-only {
     display: none !important;
   }
@@ -271,9 +266,7 @@
   .profile-card { padding: 1.25rem; border-radius: 20px; }
 }
 
-/* =======================================================
-   ESTILOS INTERNOS DE MODALES - APPLE PREMIUM UI
-   ======================================================= */
+// Modales
 .modal-body-custom {
   --background: var(--bg-main, #f8fafc);
   padding: 1.5rem 1.25rem 2.5rem 1.25rem;
@@ -474,9 +467,7 @@
   }
 }
 
-/* =======================================================
-   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
-   ======================================================= */
+// Modo oscuro
 :host-context(body.dark) {
   .profile-card {
     background: #242526 !important;

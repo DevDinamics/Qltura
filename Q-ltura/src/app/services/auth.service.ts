@@ -14,7 +14,7 @@ export interface UserSession {
   token?: string;
 }
 
-// Alias para mantener compatibilidad con login.page.ts
+// Alias de compatibilidad para vistas dependientes
 export type AppUser = UserSession;
 
 @Injectable({
@@ -26,7 +26,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<UserSession | null>(null);
   public currentUser$: Observable<UserSession | null> = this.currentUserSubject.asObservable();
 
-  // 👥 USUARIOS DE MUESTRA PRECONFIGURADOS PARA LA DEMO
+  // Usuarios preconfigurados para entorno demo
   public readonly demoUsers: UserSession[] = [
     {
       id: 'demo-qualtop-01',
@@ -52,9 +52,7 @@ export class AuthService {
     this.loadInitialSession();
   }
 
-  /**
-   * Carga la sesión guardada desde localStorage al iniciar la app
-   */
+  // Carga de sesion persistida en almacenamiento local
   private loadInitialSession(): void {
     try {
       const saved = localStorage.getItem(this.STORAGE_KEY);
@@ -69,17 +67,12 @@ export class AuthService {
     }
   }
 
-  /**
-   * Retorna el valor actual síncrono del usuario autenticado
-   */
+  // Obtencion sincronica del estado de usuario activo
   public get currentUserValue(): UserSession | null {
     return this.currentUserSubject.value;
   }
 
-  /**
-   * Inicia sesión seleccionando una cuenta de prueba rápida.
-   * Acepta tanto el ID ('demo-qualtop-01') como alias simples ('ana', 'carlos').
-   */
+  // Autenticacion rapida por identificador demo
   public loginAsDemo(key: string): UserSession {
     const search = key.toLowerCase();
     const user = this.demoUsers.find(u => 
@@ -92,9 +85,7 @@ export class AuthService {
     return user;
   }
 
-  /**
-   * Inicia sesión con correo y empresa seleccionados manualmente.
-   */
+  // Autenticacion manual con resolucion de perfil
   public login(email: string, company: CompanyType): UserSession {
     const existingDemo = this.demoUsers.find(
       u => u.email.toLowerCase() === email.trim().toLowerCase()
@@ -123,43 +114,32 @@ export class AuthService {
     return customUser;
   }
 
-  /**
-   * Alias de login() requerido por login.page.ts
-   */
+  // Metodo puente para flujo de acceso con correo
   public loginWithEmail(email: string, company: CompanyType = 'Qualtop'): UserSession {
     return this.login(email, company);
   }
 
-  /**
-   * Conector asíncrono preparado para Google Cloud Platform / Firebase Auth
-   */
+  // Integracion asincrona con Google Workspace
   public async loginWithGoogleWorkspace(googleCredential?: any): Promise<UserSession> {
-    // Al conectar GCP, aquí se procesará el token OAuth de Google Workspace
     const mockEmail = 'diego.delgado@qualtop.com';
     return this.login(mockEmail, 'Qualtop');
   }
 
-  /**
-   * Guarda la sesión, aplica la colorimetría en <body> y notifica suscriptores
-   */
+  // Persistencia de sesion y actualizacion de estado
   private saveSession(session: UserSession): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(session));
     this.applyThemeToDom(session.company);
     this.currentUserSubject.next(session);
   }
 
-  /**
-   * Inyecta la clase corporativa al body (.qualtop o .sye)
-   */
+  // Inyeccion de clase de marca en el contenedor raiz
   private applyThemeToDom(company: CompanyType): void {
     const body = document.body;
     body.classList.remove('qualtop', 'sye');
     body.classList.add(company.toLowerCase());
   }
 
-  /**
-   * Cierra la sesión activa y limpia las clases de color del DOM
-   */
+  // Cierre de sesion y restablecimiento de variables globales
   public logout(): void {
     localStorage.removeItem(this.STORAGE_KEY);
     document.body.classList.remove('qualtop', 'sye');

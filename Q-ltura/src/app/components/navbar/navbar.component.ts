@@ -4,9 +4,11 @@ import {
   OnDestroy, 
   ChangeDetectionStrategy, 
   ChangeDetectorRef, 
+  HostListener,
   inject 
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -20,11 +22,12 @@ import {
   IonPopover,
   ToastController,
   PopoverController,
-  AlertController // 👈 1. Importar AlertController
-} from '@ionic/angular/standalone';
+  AlertController, IonContent } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { 
   searchOutline, 
+  closeOutline,
+  closeCircle,
   notificationsOutline, 
   notifications,
   notificationsOffOutline,
@@ -41,8 +44,7 @@ import {
   personCircleOutline,
   logOutOutline,
   heartOutline,
-  ribbonOutline
-} from 'ionicons/icons';
+  ribbonOutline, openOutline } from 'ionicons/icons';
 
 import { ThemeService } from '../../services/theme';
 import { AuthService } from '../../services/auth.service';
@@ -65,8 +67,9 @@ export interface NotificationItem {
   styleUrls: ['./navbar.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
+  imports: [IonContent, 
     CommonModule, 
+    FormsModule,
     RouterLink,
     RouterLinkActive, 
     IonLabel, 
@@ -88,7 +91,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private sanityService = inject(SanityService);
   private toastCtrl = inject(ToastController);
   private popoverCtrl = inject(PopoverController);
-  private alertCtrl = inject(AlertController); // 👈 2. Inyectar AlertController
+  private alertCtrl = inject(AlertController);
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
   
@@ -97,11 +100,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   activeNav: string = 'Comunidad & Noticias';
   isDarkMode: boolean = false;
 
-  // Popover Notificaciones
+  // Estado del buscador
+  searchQuery: string = '';
+  isMobileSearchOpen: boolean = false;
+
+  // Control de popovers
   isPopoverOpen: boolean = false;
   popoverEvent: MouseEvent | null = null;
 
-  // Popover Menú de Usuario
   isUserPopoverOpen: boolean = false;
   userPopoverEvent: MouseEvent | null = null;
 
@@ -117,13 +123,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     avatar: 'https://i.pravatar.cc/150?img=32'
   };
 
-  navItems = [
+  readonly navItems = [
     { label: 'Comunidad & Noticias', route: '/avisos' },
     { label: 'Beneficios & Wellness', route: '/beneficios' },
     { label: 'Reconocimientos', route: '/reconocimientos' }
   ];
 
-  mobileTabs = [
+  readonly mobileTabs = [
     { label: 'Comunidad', route: '/avisos', icon: 'newspaper-outline' },
     { label: 'Beneficios', route: '/beneficios', icon: 'heart-outline' },
     { label: 'Reconocimientos', route: '/reconocimientos', icon: 'ribbon-outline' },
@@ -134,26 +140,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   notificationsList: NotificationItem[] = [];
 
   constructor() {
-    addIcons({ 
-      searchOutline, 
-      notificationsOutline, 
-      notifications,
-      notificationsOffOutline,
-      homeOutline, 
-      newspaperOutline, 
-      gridOutline, 
-      shieldCheckmarkOutline, 
-      menuOutline,
-      calendarOutline,
-      giftOutline,
-      sparklesOutline,
-      checkmarkDoneOutline,
-      chevronDownOutline,
-      personCircleOutline,
-      logOutOutline,
-      heartOutline,
-      ribbonOutline
-    });
+    addIcons({sparklesOutline,searchOutline,closeCircle,openOutline,closeOutline,notificationsOutline,notifications,notificationsOffOutline,homeOutline,newspaperOutline,gridOutline,shieldCheckmarkOutline,menuOutline,calendarOutline,giftOutline,checkmarkDoneOutline,chevronDownOutline,personCircleOutline,logOutOutline,heartOutline,ribbonOutline});
+  }
+
+  // Atajo de teclado (Cmd+K o Ctrl+K) para invocar el buscador
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardShortcut(event: KeyboardEvent): void {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      this.openSearch();
+    }
   }
 
   ngOnInit(): void {
@@ -168,6 +164,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.updateActiveTabByUrl(event.urlAfterRedirects || event.url);
         this.isPopoverOpen = false;
         this.isUserPopoverOpen = false;
+        this.isMobileSearchOpen = false;
         this.cdr.markForCheck();
       });
 
@@ -202,7 +199,32 @@ export class NavbarComponent implements OnInit, OnDestroy {
     return this.notificationsList.filter(n => n.unread).length;
   }
 
-  async fetchInitialNotifications(): Promise<void> {
+  // Navegacion y consulta del buscador
+  public openSearch(): void {
+    this.router.navigate(['/plataformas'], {
+      queryParams: this.searchQuery ? { q: this.searchQuery.trim() } : {}
+    });
+  }
+
+  public executeSearch(): void {
+    if (!this.searchQuery.trim()) {
+      this.router.navigate(['/plataformas']);
+      return;
+    }
+    this.router.navigate(['/plataformas'], {
+      queryParams: { q: this.searchQuery.trim() }
+    });
+    this.isMobileSearchOpen = false;
+    this.cdr.markForCheck();
+  }
+
+  public toggleMobileSearch(): void {
+    this.isMobileSearchOpen = !this.isMobileSearchOpen;
+    this.cdr.markForCheck();
+  }
+
+  // Notificaciones
+  public async fetchInitialNotifications(): Promise<void> {
     try {
       const query = `*[
         _type == "activity" && 
@@ -236,7 +258,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
       this.cdr.markForCheck();
     } catch (e) {
-      console.error('Error al sincronizar notificaciones iniciales con Sanity:', e);
+      console.error('Error al sincronizar notificaciones iniciales:', e);
     }
   }
 
@@ -258,7 +280,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         next: (update) => {
           if (update.transition === 'appear' && update.result) {
             const newItem = update.result;
-
             const alreadyExists = this.notificationsList.some(n => n.id === newItem._id);
             if (alreadyExists) return;
 
@@ -278,7 +299,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
           }
         },
-        error: (err) => console.error('Error en listener SSE de Sanity:', err)
+        error: (err) => console.error('Error en listener SSE:', err)
       });
   }
 
@@ -306,10 +327,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       ]
     });
     await toast.present();
-  }
-
-  public openSearch(): void {
-    this.router.navigateByUrl('/plataformas');
   }
 
   public openPopover(event: MouseEvent): void {
@@ -363,22 +380,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(route);
   }
 
-  // 👈 3. ALERTA MODAL NATIVA DE CONFIRMACIÓN (IDÉNTICA A LA CAPTURA)
+  // Confirmacion y ejecucion de logout
   public async confirmLogout(): Promise<void> {
-    // Primero cerramos el popover para evitar solapamientos en pantalla
     this.isUserPopoverOpen = false;
     this.cdr.markForCheck();
 
     try {
       const topPopover = await this.popoverCtrl.getTop();
-      if (topPopover) {
-        await topPopover.dismiss();
-      }
-    } catch (e) {
-      console.warn('No se encontró popover activo previo a la alerta:', e);
-    }
+      if (topPopover) await topPopover.dismiss();
+    } catch {}
 
-    // Modal de confirmación estilo iOS
     const alert = await this.alertCtrl.create({
       header: 'Cerrar sesión',
       message: '¿Estás seguro de que deseas salir del portal Q-ltura?',
@@ -401,14 +412,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  // 👈 4. EJECUCIÓN DEL LOGOUT TRAS CONFIRMAR
   private async performLogout(): Promise<void> {
     try {
       if (this.authService && typeof this.authService.logout === 'function') {
         await this.authService.logout();
       }
     } catch (error) {
-      console.error('Error en authService.logout:', error);
+      console.error('Error durante el cierre de sesión:', error);
     } finally {
       await this.router.navigate(['/login'], { replaceUrl: true });
       this.cdr.markForCheck();

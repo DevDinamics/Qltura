@@ -2,9 +2,7 @@
   display: block;
 }
 
-/* =======================================================
-   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
-   ======================================================= */
+// Variables corporativas por tenant
 :host-context(body.qualtop) {
   --brand-primary: #ff5500;
   --brand-glow: rgba(255, 85, 0, 0.25);
@@ -29,7 +27,6 @@
   --brand-muted: rgba(129, 140, 248, 0.15);
 }
 
-
 .denuncia-container {
   width: 100%;
   max-width: 1240px;
@@ -40,7 +37,7 @@
   gap: 2rem;
 }
 
-/* Hero & Cards */
+// Tarjeta hero
 .hero-denuncia-card {
   background: var(--bg-surface, #ffffff);
   border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
@@ -62,8 +59,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: var(--brand-muted); /* Fondo dinámico basado en la empresa */
-    color: var(--brand-primary);    /* Texto dinámico basado en la empresa */
+    background: var(--brand-muted);
+    color: var(--brand-primary);
     padding: 0.35rem 0.85rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -79,7 +76,9 @@
     margin: 0 0 1rem 0;
     transition: color 0.25s ease;
 
-    .accent-text { color: var(--brand-primary); } /* Acento en el título dinámico */
+    .accent-text { 
+      color: var(--brand-primary); 
+    }
   }
 
   .hero-subtitle {
@@ -94,7 +93,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--brand-primary); /* Fondo del botón dinámico */
+    background: var(--brand-primary);
     color: #ffffff;
     border: none;
     padding: 0.9rem 1.75rem;
@@ -102,7 +101,7 @@
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 8px 24px var(--brand-glow); /* Sombra del botón dinámica */
+    box-shadow: 0 8px 24px var(--brand-glow);
     transition: transform 0.2s ease, opacity 0.2s ease;
 
     &:hover { 
@@ -112,6 +111,7 @@
   }
 }
 
+// Pilares y garantias
 .garantias-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -137,7 +137,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--brand-primary); /* Icono de la garantía dinámico */
+    color: var(--brand-primary);
     font-size: 1.3rem;
     transition: background-color 0.25s ease;
   }
@@ -159,7 +159,7 @@
   }
 }
 
-/* --- MODAL Y CONTAINER DEL IFRAME --- */
+// Modal e iframe
 ion-modal.iframe-modal {
   --width: 92%;
   --max-width: 900px;
@@ -178,7 +178,6 @@ ion-modal.iframe-modal {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
 
-  /* Barra estilo Mac OS Safari */
   .modal-header {
     background: #0f172a;
     padding: 0.85rem 1.25rem;
@@ -229,7 +228,6 @@ ion-modal.iframe-modal {
     }
   }
 
-  /* Contenedor del Iframe con Scroll Suave */
   .iframe-container {
     flex: 1;
     width: 100%;
@@ -253,16 +251,14 @@ ion-modal.iframe-modal {
   }
 }
 
-/* =======================================================
-   RESPALDO DE MODO OSCURO META DARK (#242526 & #3A3B3C)
-   ======================================================= */
+// Modo oscuro
 :host-context(body.dark) {
   .hero-denuncia-card {
     background: #242526 !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
 
     .hero-badge {
-      background: var(--brand-muted) !important; /* Mantenemos consistencia con la empresa en dark mode */
+      background: var(--brand-muted) !important;
       color: var(--brand-primary) !important;
     }
 

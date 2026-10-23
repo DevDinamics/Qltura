@@ -1,3 +1,4 @@
+// Variables corporativas por tenant
 :host-context(body.qualtop) .page-container {
   --brand-primary: #ff5500;
   --brand-muted: rgba(255, 85, 0, 0.08);
@@ -29,6 +30,7 @@ ion-content.main-bg {
   padding: 2.5rem 1.5rem 4rem 1.5rem;
 }
 
+// Encabezado
 .section-header {
   text-align: center;
   max-width: 680px;
@@ -43,7 +45,6 @@ ion-content.main-bg {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--brand-primary);
-    background: var(--brand-muted);
     padding: 0.35rem 0.85rem;
     border-radius: 20px;
     margin-bottom: 0.85rem;
@@ -69,12 +70,14 @@ ion-content.main-bg {
   }
 }
 
+// Grid de beneficios
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
 }
 
+// Tarjeta individual
 .benefit-card {
   background: var(--bg-surface, #ffffff);
   border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
@@ -171,9 +174,7 @@ ion-content.main-bg {
   }
 }
 
-/* =======================================================
-   MODO OSCURO
-   ======================================================= */
+// Modo oscuro
 :host-context(body.dark) {
   .section-header {
     .headline { color: #f8fafc !important; }

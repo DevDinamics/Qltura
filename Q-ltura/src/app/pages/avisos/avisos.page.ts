@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { IonContent, IonIcon, ToastController } from '@ionic/angular/standalone';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -55,7 +55,8 @@ export interface CalendarEvent {
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonContent,
+    IonIcon,
     FooterComponent
   ]
 })
@@ -74,9 +75,9 @@ export class AvisosPage implements OnInit, OnDestroy {
 
   events: CalendarEvent[] = [];
   isLoading: boolean = true; 
-  skeletonArray = [1, 2, 3]; 
+  readonly skeletonArray = [1, 2, 3]; 
 
-  // --- CONFIGURACIÓN DE PAGINACIÓN MINIMALISTA ---
+  // Paginacion
   readonly pageSize: number = 5;
   currentPage: number = 1;
 
@@ -97,17 +98,17 @@ export class AvisosPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // 1. Escuchar la sesión activa (filtra por filial: Qualtop o SYE)
+    // Sesion activa y filtrado por filial
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
-        if (user && user.company) {
+        if (user?.company) {
           this.currentCompany = user.company;
         }
         this.fetchActivitiesFromSanity();
       });
 
-    // 2. Sincronización bidireccional de recordatorios con el Feed Dinámico
+    // Sincronizacion de recordatorios
     this.reminderService.reminderIds$
       .pipe(takeUntil(this.destroy$))
       .subscribe((ids) => {
@@ -125,12 +126,14 @@ export class AvisosPage implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // Conexion con Sanity CMS: extraccion de actividades por filial
   async fetchActivitiesFromSanity(): Promise<void> {
     this.isLoading = true;
     this.currentPage = 1;
     this.cdr.markForCheck();
 
     try {
+      // Consulta GROQ: omite borradores y filtra por empresa o eventos compartidos
       const query = `*[
         _type == "activity" && 
         !(_id in path("drafts.**")) && 
@@ -172,7 +175,6 @@ export class AvisosPage implements OnInit, OnDestroy {
             badgeLabel: item.badgeLabel || 'Actividad Corporativa',
             company: item.company || 'Ambas',
             isVirtual: item.isVirtual ?? false,
-            // Consulta el estado guardado en ReminderService
             isConfirmed: this.reminderService.isReminded(item.id)
           };
         });
@@ -183,14 +185,12 @@ export class AvisosPage implements OnInit, OnDestroy {
       console.error('Error al cargar actividades desde Sanity:', error);
       this.events = [];
     } finally {
-      setTimeout(() => {
-        this.isLoading = false;
-        this.cdr.markForCheck();
-      }, 500);
+      this.isLoading = false;
+      this.cdr.markForCheck();
     }
   }
 
-  // --- FILTRADO Y PAGINACIÓN ---
+  // Filtrado y paginacion
   get filteredEvents(): CalendarEvent[] {
     if (this.selectedFilter === 'ALL') {
       return this.events;
@@ -233,8 +233,8 @@ export class AvisosPage implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // Gestion de recordatorios y feedback visual
   async toggleConfirmEvent(event: CalendarEvent): Promise<void> {
-    // Guarda o remueve en ReminderService y sincroniza el Feed dinámico
     const isNowConfirmed = this.reminderService.toggleReminder(event.id);
     event.isConfirmed = isNowConfirmed;
     this.cdr.markForCheck();

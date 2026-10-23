@@ -3,7 +3,7 @@
 
     <main class="mas-container animate-content-left">
       
-      <!-- Card de Perfil del Usuario -->
+      <!-- Card de perfil del usuario -->
       <section class="profile-card" *ngIf="user">
         <div class="avatar-wrapper">
           <img 
@@ -17,7 +17,7 @@
           <h1 class="user-name">{{ user.name }}</h1>
           <p class="user-role">{{ user.role }} • {{ user.department }}</p>
           
-          <!-- Cápsula Responsiva de Empresa (QUALTOP / SYE) -->
+          <!-- Badge de empresa -->
           <div class="company-badge" [ngClass]="user.company ? user.company.toLowerCase() : 'qualtop'">
             <ion-icon name="business-outline"></ion-icon>
             <span>Empresa: <strong>{{ user.company }}</strong></span>
@@ -25,16 +25,16 @@
         </div>
       </section>
 
-      <!-- Menús Agrupados Estilo iOS / Settings -->
+      <!-- Grupos de navegacion y configuracion -->
       <section class="menu-groups">
         
-        <!-- GRUPO CONFIGURACIÓN CON SWITCH DE TEMA TIPO APPLE -->
+        <!-- Configuracion y apariencia -->
         <div class="menu-group">
           <span class="group-title">CONFIGURACIÓN</span>
 
           <div class="group-card">
             
-            <!-- Fila de Apariencia con Switcher tipo iOS -->
+            <!-- Selector de modo oscuro -->
             <div class="menu-item theme-switch-item">
               <div class="item-left">
                 <div class="icon-box dark">
@@ -52,7 +52,7 @@
               </div>
             </div>
 
-            <!-- Items de cuenta con modales asignados -->
+            <!-- Accesos a modales de cuenta -->
             <div 
               *ngFor="let item of accountItems; let last = last" 
               class="menu-item"
@@ -75,7 +75,7 @@
           </div>
         </div>
 
-        <!-- OTROS GRUPOS (Soporte, Organización) -->
+        <!-- Secciones adicionales -->
         <div *ngFor="let group of menuGroups" class="menu-group">
           <span class="group-title">{{ group.title }}</span>
 
@@ -103,8 +103,7 @@
           </div>
         </div>
 
-        <!-- BOTÓN DE CIERRE DE SESIÓN (SOLO MÓVIL) -->
-        <!-- Oculto en escritorio para evitar redundancia con el popover de la barra superior -->
+        <!-- Cierre de sesion en movil -->
         <div class="menu-group mobile-only">
           <div class="group-card">
             <button type="button" class="logout-btn" (click)="logout()">
@@ -118,7 +117,7 @@
 
     </main>
 
-    <!-- MODAL 1: PERFIL Y MI CUENTA -->
+    <!-- Modal: Perfil y cuenta -->
     <ion-modal #profileModal [canDismiss]="canDismiss" [presentingElement]="page">
       <ng-template>
         <ion-header mode="ios">
@@ -163,7 +162,7 @@
       </ng-template>
     </ion-modal>
 
-    <!-- MODAL 2: NOTIFICACIONES Y ALERTAS -->
+    <!-- Modal: Notificaciones y alertas -->
     <ion-modal #notificationsModal [canDismiss]="canDismiss" [presentingElement]="page">
       <ng-template>
         <ion-header mode="ios">

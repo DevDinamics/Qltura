@@ -50,11 +50,11 @@ export class AppComponent implements OnInit {
       .subscribe((user) => {
         const body = document.body;
 
-        // Limpia clases anteriores
+      
         body.classList.remove('qualtop', 'sye');
 
         if (user && user.company) {
-          // Inyecta 'qualtop' o 'sye' según la empresa del usuario
+          
           body.classList.add(user.company.toLowerCase());
         }
       });

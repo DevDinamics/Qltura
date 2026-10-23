@@ -3,9 +3,7 @@
   width: 100%;
 }
 
-/* =======================================================
-   RESPALDO DE VARIABLES CORPORATIVAS (QUALTOP / SYE)
-   ======================================================= */
+
 :host-context(body.qualtop) {
   --brand-primary: #ff5500;
   --brand-muted: rgba(255, 85, 0, 0.08);
@@ -30,7 +28,7 @@
   width: 100%;
   max-width: 1240px;
   margin: 2rem auto 0 auto;
-  /* Compensación para tab bar móvil y safe-area iOS */
+ 
   padding: 0 1rem calc(5.5rem + env(safe-area-inset-bottom)) 1rem;
 }
 
@@ -235,9 +233,7 @@
   }
 }
 
-/* =======================================================
-   MODO OSCURO META DARK (#242526 & #3A3B3C)
-   ======================================================= */
+
 :host-context(body.dark) {
   .footer-card {
     background: #242526 !important;

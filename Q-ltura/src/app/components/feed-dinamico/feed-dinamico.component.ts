@@ -82,48 +82,10 @@ export class FeedDinamicoComponent implements OnInit, OnDestroy {
 
   reminderEvents: ReminderFeedItem[] = [];
   isLoadingReminders: boolean = false;
+  isLoadingFeed: boolean = false;
 
-  oficialItems: FeedItem[] = [
-    {
-      id: 'post-oficial-1',
-      icon: 'people-outline',
-      title: 'Cambio de personal en el equipo de Delivery',
-      category: 'Área: Delivery',
-      date: '19 may 2025',
-      priority: 'high',
-      targetTab: 'oficiales'
-    },
-    {
-      id: 'post-oficial-2',
-      icon: 'calendar-outline',
-      title: 'Días de asueto – Junio 2025',
-      category: 'RRHH',
-      date: '18 may 2025',
-      priority: 'medium',
-      targetTab: 'oficiales'
-    },
-    {
-      id: 'post-oficial-3',
-      icon: 'cloud-outline',
-      title: 'Comunicado SGI – Actualización de políticas',
-      category: 'SGI',
-      date: '17 may 2025',
-      priority: 'info',
-      targetTab: 'oficiales'
-    }
-  ];
-
-  experienceItems: FeedItem[] = [
-    {
-      id: 'post-1',
-      icon: 'trophy-outline',
-      title: '¡Nos vemos el martes! Celebremos a los cumpleañeros del mes',
-      category: 'Cultura & Eventos',
-      date: 'Hace 2 horas',
-      priority: 'info',
-      targetTab: 'feed'
-    }
-  ];
+  oficialItems: FeedItem[] = [];
+  experienceItems: FeedItem[] = [];
 
   constructor() {
     addIcons({
@@ -146,16 +108,18 @@ export class FeedDinamicoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Escuchar sesion activa y disparar sincronizaciones
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         if (user?.company) {
           this.currentCompany = user.company;
         }
+        this.fetchRecentAvisos();
         this.syncReminders();
       });
 
-    // Escuchar adición o eliminación de recordatorios en tiempo real
+    // Escuchar cambios en los recordatorios locales
     this.reminderService.reminderIds$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
@@ -180,6 +144,53 @@ export class FeedDinamicoComponent implements OnInit, OnDestroy {
     return this.reminderEvents.length;
   }
 
+  // Consulta los 3 avisos mas recientes desde Sanity
+  async fetchRecentAvisos(): Promise<void> {
+    this.isLoadingFeed = true;
+    this.cdr.markForCheck();
+
+    try {
+      const query = `*[
+        _type in ["comunicado", "activity"] && 
+        !(_id in path("drafts.**")) && 
+        (lower(company) == lower($company) || company == "Ambas")
+      ] | order(_createdAt desc)[0...3] {
+        "id": _id,
+        title,
+        "category": coalesce(categoryLabel, category, "General"),
+        _createdAt,
+        "priority": coalesce(priority, "info"),
+        "icon": coalesce(icon, ""),
+        _type
+      }`;
+
+      const raw = await this.sanityService.fetchQuery<any[]>(query, {
+        company: this.currentCompany
+      });
+
+      if (raw && raw.length > 0) {
+        this.oficialItems = raw.map(item => ({
+          id: item.id,
+          icon: this.resolveItemIcon(item.icon, item.category),
+          title: item.title,
+          category: `Área: ${item.category}`,
+          date: this.formatItemDate(item._createdAt),
+          priority: this.resolvePriority(item.priority),
+          targetTab: item._type === 'activity' ? 'feed' : 'oficiales'
+        }));
+      } else {
+        this.oficialItems = [];
+      }
+    } catch (error) {
+      console.error('Error al sincronizar avisos en Feed Dinamico:', error);
+      this.oficialItems = [];
+    } finally {
+      this.isLoadingFeed = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  // Sincroniza recordatorios activos del colaborador
   async syncReminders(): Promise<void> {
     const ids = this.reminderService.reminderIds;
     if (!ids || ids.length === 0) {
@@ -238,12 +249,34 @@ export class FeedDinamicoComponent implements OnInit, OnDestroy {
         this.reminderEvents = [];
       }
     } catch (e) {
-      console.error('Error al sincronizar recordatorios en Feed Dinámico:', e);
+      console.error('Error al sincronizar recordatorios en Feed Dinamico:', e);
       this.reminderEvents = [];
     } finally {
       this.isLoadingReminders = false;
       this.cdr.markForCheck();
     }
+  }
+
+  private resolveItemIcon(customIcon?: string, category?: string): string {
+    if (customIcon) return customIcon;
+    const cat = (category || '').toLowerCase();
+    if (cat.includes('delivery') || cat.includes('equipo')) return 'people-outline';
+    if (cat.includes('rrhh') || cat.includes('fecha')) return 'calendar-outline';
+    if (cat.includes('sgi') || cat.includes('politica')) return 'cloud-outline';
+    return 'information-circle-outline';
+  }
+
+  private resolvePriority(priorityStr?: string): 'high' | 'medium' | 'info' {
+    const p = (priorityStr || '').toLowerCase();
+    if (p === 'high' || p === 'alta') return 'high';
+    if (p === 'medium' || p === 'media') return 'medium';
+    return 'info';
+  }
+
+  private formatItemDate(dateStr?: string): string {
+    if (!dateStr) return 'Reciente';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
   private calculateDaysRemaining(eventDateStr: string): { 
